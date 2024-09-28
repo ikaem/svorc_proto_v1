@@ -1,4 +1,5 @@
 import 'package:drift/drift.dart';
+import 'package:svorc_proto_v1/src/wrappers/drift/migrations/schema_versions/schema_versions.dart';
 
 class DriftAppDatabaseMigrator {
   final MigrationStrategy migrationStrategy = MigrationStrategy(
@@ -12,5 +13,10 @@ class DriftAppDatabaseMigrator {
     // onUpgrade: (m, from, to) async {
     //   // SOME MIGRATIONS IF NEEDED
     // },
+    onUpgrade: stepByStep(
+      from1To2: (m, schema) async {
+        await m.createTable(schema.periodDailyBudgetLocalEntity);
+      },
+    ),
   );
 }
