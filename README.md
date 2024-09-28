@@ -274,4 +274,8 @@ enum Period {
 
 
 
-2. and now need to do migration
+2. and now need to setup and do migration
+- add table to database
+- increase schema version
+- run commands from readme
+- add new migration to migrator
