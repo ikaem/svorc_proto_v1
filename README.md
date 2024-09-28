@@ -283,3 +283,55 @@ enum Period {
 - increase schema version
 - run commands from readme
 - add new migration to migrator
+
+
+import 'package:drift/drift.dart';
+import 'package:svorc_proto_v1/src/wrappers/drift/migrations/schema_versions/schema_versions.dart';
+
+class DriftAppDatabaseMigrator {
+  final MigrationStrategy migrationStrategy = MigrationStrategy(
+    onCreate: (m) async {
+      await m.createAll();
+    },
+    beforeOpen: (details) async {
+      // SOME POPULATE THINGS IF NEEDED
+    },
+    // TODO this will be generated for us
+    // onUpgrade: (m, from, to) async {
+    //   // SOME MIGRATIONS IF NEEDED
+    // },
+    onUpgrade: stepByStep(
+      from1To2: (m, schema) async {
+        await m.createTable(schema.periodDailyBudgetLocalEntity);
+      },
+    ),
+  );
+}
+
+3. now need to add test database
+- we will have a new wrapper for that
+- to make sure we can do crazy stuff
+
+
+import 'package:svorc_proto_v1/src/wrappers/drift/drift_database_wrapper.dart';
+
+class TestDatabaseWrapper {
+  TestDatabaseWrapper(this._databaseWrapper);
+
+  final DriftDatabaseWrapper _databaseWrapper;
+  DriftDatabaseWrapper get databaseWrapper => _databaseWrapper;
+
+  static TestDatabaseWrapper getInitializedTestDatabaseWrapper() {
+    final databaseWrapper = DriftDatabaseWrapper(
+      NativeDatabase.memory(),
+    );
+    databaseWrapper.initialize();
+
+    final testDatabaseWrapper = TestDatabaseWrapper(databaseWrapper);
+
+    return testDatabaseWrapper;
+  }
+}
+
+
+4. now lets write a data source for this

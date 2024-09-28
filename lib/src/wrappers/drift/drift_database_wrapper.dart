@@ -24,13 +24,16 @@ class DriftDatabaseWrapper {
     return initializedDatabase;
   }
 
-  Future<void> initialize() async {
+  // Future<void> initialize() async {
+  void initialize() {
     try {
       final database = DriftAppDatabase(_executor);
 
-      final currentTime = database.current_timestamp();
-      log("Current time: $currentTime");
+      // TODO because of this, we have to await the initialization of the database - lets remove it for now
+      // final currentTime = await database.current_timestamp().get();
+      // log("Current time: $currentTime");
 
+      // final currentTime = await database.current_timestamp().get();
       _database = database;
     } catch (e) {
       log("Error initializing database: $e");
