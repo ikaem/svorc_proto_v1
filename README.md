@@ -218,6 +218,10 @@ class DriftDatabaseWrapper {
   }
 }
 
+1. now create first migration
+- just to havde vdeersion 1
+- run makefile migration commands
+
 1. now create table
    1. for period daily budget for period
    2. no need for any references 
