@@ -33,6 +33,31 @@ void main() {
     "$PeriodDailyBudgetLocalDataSource",
     () {
       group(
+        "getPeriodDailyBudgetByDateAndPeriod",
+        () {
+          // dont return period daily budget for given date and period
+
+          // return period daily budget for given date and period
+          test(
+            "given <pre-condition to the test>"
+            "when <behavior we are specifying>"
+            "then should <state we expect to happen>",
+            () async {
+              // setup
+
+              // given
+
+              // when
+
+              // then
+
+              // cleanup
+            },
+          );
+        },
+      );
+
+      group(
         ".updatePeriodDailyBudget",
         () {
           test(

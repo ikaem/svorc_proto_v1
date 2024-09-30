@@ -8,6 +8,7 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 import 'package:intl/intl.dart';
 import 'package:svorc_proto_v1/src/features/expenses/presentation/expenses_screen.dart';
+import 'package:svorc_proto_v1/src/features/period_daily_budget/utils/helpers/period_extremes_moments_calculator.dart';
 import 'package:svorc_proto_v1/src/features/reports/presentation/screens/balance_report_screen.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -1087,33 +1088,48 @@ class _HomeScreenMonthSelectorState extends State<_HomeScreenMonthSelector> {
             children: List.generate(12, (index) {
               final month = index + 1;
 
-              final monthDate = DateTime(currentSelectedYear, month, 1);
+              // TODO old implementation start
+              // final monthDate = DateTime(currentSelectedYear, month, 1);
 
-              // need first moment of the month
-              final firstMillisecondOfTheMonth =
-                  monthDate.millisecondsSinceEpoch;
+              // // need first moment of the month
+              // final firstMillisecondOfTheMonth =
+              //     monthDate.millisecondsSinceEpoch;
 
-              // need last moment of the month
-              // first find first millisecond of the next month
-              final firstMillisecondOfTheNextMonth = DateTime(
-                currentSelectedYear,
-                month + 1,
-                1,
-              ).millisecondsSinceEpoch;
+              // // need last moment of the month
+              // // first find first millisecond of the next month
+              // final firstMillisecondOfTheNextMonth = DateTime(
+              //   currentSelectedYear,
+              //   month + 1,
+              //   1,
+              // ).millisecondsSinceEpoch;
 
-              // then subtract 1 millisecond
-              final lastMillisecondOfTheMonth =
-                  firstMillisecondOfTheNextMonth - 1;
+              // // then subtract 1 millisecond
+              // final lastMillisecondOfTheMonth =
+              //     firstMillisecondOfTheNextMonth - 1;
 
-              // ok, now lets get the name of this month
-              final monthName = DateFormat(DateFormat.MONTH).format(monthDate);
+              // // ok, now lets get the name of this month
+              // final monthName = DateFormat(DateFormat.MONTH).format(monthDate);
+              // final selectedMonth = SelectedMonth(
+              //   year: currentSelectedYear,
+              //   month: month,
+              //   monthName: monthName,
+              //   firstMillisecondOfTheMonth: firstMillisecondOfTheMonth,
+              //   lastMillisecondOfTheMonth: lastMillisecondOfTheMonth,
+              // );
+              // TODO old implementation end
+
+              final monthMoments =
+                  PeriodExtremesMomentsCalculator.calculateMonthMoments(
+                      monthIndex: month, year: currentSelectedYear);
 
               final selectedMonth = SelectedMonth(
-                year: currentSelectedYear,
-                month: month,
-                monthName: monthName,
-                firstMillisecondOfTheMonth: firstMillisecondOfTheMonth,
-                lastMillisecondOfTheMonth: lastMillisecondOfTheMonth,
+                firstMillisecondOfTheMonth:
+                    monthMoments.periodStart.millisecondsSinceEpoch,
+                lastMillisecondOfTheMonth:
+                    monthMoments.periodEnd.millisecondsSinceEpoch,
+                month: monthMoments.periodIndex,
+                monthName: monthMoments.periodName,
+                year: monthMoments.year,
               );
 
               return GestureDetector(
@@ -1134,7 +1150,8 @@ class _HomeScreenMonthSelectorState extends State<_HomeScreenMonthSelector> {
                     ),
                     child: Center(
                       child: Text(
-                        monthName.toUpperCase(),
+                        // monthName.toUpperCase(),
+                        selectedMonth.monthName.toUpperCase(),
                         style: TextStyle(
                           color: _selectedMonth == selectedMonth
                               ? Colors.white
