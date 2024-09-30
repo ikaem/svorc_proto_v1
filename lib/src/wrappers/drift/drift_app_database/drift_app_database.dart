@@ -1,5 +1,5 @@
 import 'package:drift/drift.dart';
-import 'package:svorc_proto_v1/src/features/period_daily_budget/presentation/data/entities/local/period_daily_budget/period_daily_budget_local_entity.dart';
+import 'package:svorc_proto_v1/src/features/period_daily_budget/data/entities/local/period_daily_budget/period_daily_budget_local_entity.dart';
 import 'package:svorc_proto_v1/src/wrappers/drift/migrations/drift_app_database_migrator.dart';
 
 part 'drift_app_database.g.dart';

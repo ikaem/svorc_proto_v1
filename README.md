@@ -335,3 +335,9 @@ class TestDatabaseWrapper {
 
 
 4. now lets write a data source for this
+- for now we have 
+- store
+- get 
+
+- and we will create value objects 
+- we dont want to depend on data returned by the tool
