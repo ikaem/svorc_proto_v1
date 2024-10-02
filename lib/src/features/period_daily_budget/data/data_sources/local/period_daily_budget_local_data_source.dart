@@ -14,13 +14,13 @@ abstract interface class PeriodDailyBudgetLocalDataSource {
   });
 
 // get period daily budget
-  Future<PeriodDailyBudgetLocalEntityValue>
+  Future<PeriodDailyBudgetLocalEntityValue?>
       getPeriodDailyBudgetByDateAndPeriod({
     required DateTime date,
     required Period period,
   });
 
-  Future<PeriodDailyBudgetLocalEntityValue> getPeriodDailyBudgetById({
+  Future<PeriodDailyBudgetLocalEntityValue?> getPeriodDailyBudgetById({
     required int id,
   });
 }
