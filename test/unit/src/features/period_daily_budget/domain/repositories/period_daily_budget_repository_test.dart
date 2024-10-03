@@ -1,19 +1,19 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:svorc_proto_v1/src/features/period_daily_budget/data/data_sources/local/period_daily_budget_local_data_source.dart';
-import 'package:svorc_proto_v1/src/features/period_daily_budget/data/entities/local/period_daily_budget/period_daily_budget_local_entity.dart';
-import 'package:svorc_proto_v1/src/features/period_daily_budget/domain/models/period_daily_budget_model.dart';
-import 'package:svorc_proto_v1/src/features/period_daily_budget/domain/repositories/period_daily_budget_repository.dart';
-import 'package:svorc_proto_v1/src/features/period_daily_budget/domain/repositories/period_daily_budget_repository_impl.dart';
-import 'package:svorc_proto_v1/src/features/period_daily_budget/domain/values/new_period_daily_budget_local_value.dart';
-import 'package:svorc_proto_v1/src/features/period_daily_budget/domain/values/period_daily_budget_local_entity_value.dart';
+import 'package:svorc_proto_v1/src/features/period_daily_budgets/data/data_sources/local/period_daily_budgets_local_data_source.dart';
+import 'package:svorc_proto_v1/src/features/period_daily_budgets/data/entities/local/period_daily_budget/period_daily_budget_local_entity.dart';
+import 'package:svorc_proto_v1/src/features/period_daily_budgets/domain/models/period_daily_budget_model.dart';
+import 'package:svorc_proto_v1/src/features/period_daily_budgets/domain/repositories/period_daily_budgets_repository.dart';
+import 'package:svorc_proto_v1/src/features/period_daily_budgets/domain/repositories/period_daily_budgets_repository_impl.dart';
+import 'package:svorc_proto_v1/src/features/period_daily_budgets/domain/values/new_period_daily_budget_local_value.dart';
+import 'package:svorc_proto_v1/src/features/period_daily_budgets/domain/values/period_daily_budget_local_entity_value.dart';
 
 void main() {
   final periodDailyBudgetLocalDataSource =
       _MockPeriodDailyBudgetLocalDataSource();
 
   // tested cass
-  final repository = PeriodDailyBudgetRepositoryImpl(
+  final repository = PeriodDailyBudgetsRepositoryImpl(
     periodDailyBudgetLocalDataSource: periodDailyBudgetLocalDataSource,
   );
 
@@ -31,7 +31,7 @@ void main() {
   );
 
   group(
-    "$PeriodDailyBudgetRepository",
+    "$PeriodDailyBudgetsRepository",
     () {
       group(
         "createPeriodDailyBudget",
@@ -242,7 +242,7 @@ void main() {
 }
 
 class _MockPeriodDailyBudgetLocalDataSource extends Mock
-    implements PeriodDailyBudgetLocalDataSource {}
+    implements PeriodDailyBudgetsLocalDataSource {}
 
 class _FakeNewPeriodDailyBudgetLocalValue extends Fake
     implements NewPeriodDailyBudgetLocalValue {}

@@ -1,16 +1,16 @@
-import 'package:svorc_proto_v1/src/features/period_daily_budget/data/data_sources/local/period_daily_budget_local_data_source.dart';
-import 'package:svorc_proto_v1/src/features/period_daily_budget/data/entities/local/period_daily_budget/period_daily_budget_local_entity.dart';
-import 'package:svorc_proto_v1/src/features/period_daily_budget/domain/models/period_daily_budget_model.dart';
-import 'package:svorc_proto_v1/src/features/period_daily_budget/domain/repositories/period_daily_budget_repository.dart';
-import 'package:svorc_proto_v1/src/features/period_daily_budget/domain/values/new_period_daily_budget_local_value.dart';
-import 'package:svorc_proto_v1/src/features/period_daily_budget/utils/converters/period_daily_budget_converters.dart';
+import 'package:svorc_proto_v1/src/features/period_daily_budgets/data/data_sources/local/period_daily_budgets_local_data_source.dart';
+import 'package:svorc_proto_v1/src/features/period_daily_budgets/data/entities/local/period_daily_budget/period_daily_budget_local_entity.dart';
+import 'package:svorc_proto_v1/src/features/period_daily_budgets/domain/models/period_daily_budget_model.dart';
+import 'package:svorc_proto_v1/src/features/period_daily_budgets/domain/repositories/period_daily_budgets_repository.dart';
+import 'package:svorc_proto_v1/src/features/period_daily_budgets/domain/values/new_period_daily_budget_local_value.dart';
+import 'package:svorc_proto_v1/src/features/period_daily_budgets/utils/converters/period_daily_budget_converters.dart';
 
-class PeriodDailyBudgetRepositoryImpl implements PeriodDailyBudgetRepository {
-  PeriodDailyBudgetRepositoryImpl({
-    required PeriodDailyBudgetLocalDataSource periodDailyBudgetLocalDataSource,
+class PeriodDailyBudgetsRepositoryImpl implements PeriodDailyBudgetsRepository {
+  PeriodDailyBudgetsRepositoryImpl({
+    required PeriodDailyBudgetsLocalDataSource periodDailyBudgetLocalDataSource,
   }) : _periodDailyBudgetLocalDataSource = periodDailyBudgetLocalDataSource;
 
-  final PeriodDailyBudgetLocalDataSource _periodDailyBudgetLocalDataSource;
+  final PeriodDailyBudgetsLocalDataSource _periodDailyBudgetLocalDataSource;
 
   @override
   Future<int> createPeriodDailyBudget({

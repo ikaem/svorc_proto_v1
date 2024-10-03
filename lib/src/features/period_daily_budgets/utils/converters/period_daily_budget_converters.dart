@@ -1,8 +1,8 @@
 // TODO this needs testing too
 
-import 'package:svorc_proto_v1/src/features/period_daily_budget/domain/models/period_daily_budget_model.dart';
-import 'package:svorc_proto_v1/src/features/period_daily_budget/domain/values/period_daily_budget_local_entity_value.dart';
-import 'package:svorc_proto_v1/src/features/period_daily_budget/utils/extensions/date_time_extensions.dart';
+import 'package:svorc_proto_v1/src/features/period_daily_budgets/domain/models/period_daily_budget_model.dart';
+import 'package:svorc_proto_v1/src/features/period_daily_budgets/domain/values/period_daily_budget_local_entity_value.dart';
+import 'package:svorc_proto_v1/src/features/period_daily_budgets/utils/extensions/date_time_extensions.dart';
 import 'package:svorc_proto_v1/src/wrappers/drift/drift_app_database/drift_app_database.dart';
 
 abstract class PeriodDailyBudgetConverters {

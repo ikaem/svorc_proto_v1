@@ -19,6 +19,8 @@ class PeriodDailyBudgetLocalEntity extends Table {
       ];
 }
 
+// TODO move this somewhere, and make this a what? model? Value? some kind of constant? entity? Think about it?
+// PeriodSingle PeriodUnit? So maybe units? or some kind of indicator? or identifier?
 enum Period {
   year, // 0
   month, // 1

@@ -8,7 +8,7 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 import 'package:intl/intl.dart';
 import 'package:svorc_proto_v1/src/features/expenses/presentation/expenses_screen.dart';
-import 'package:svorc_proto_v1/src/features/period_daily_budget/utils/helpers/period_extremes_moments_calculator.dart';
+import 'package:svorc_proto_v1/src/features/period_daily_budgets/utils/helpers/period_extremes_moments_calculator.dart';
 import 'package:svorc_proto_v1/src/features/reports/presentation/screens/balance_report_screen.dart';
 
 class HomeScreen extends StatelessWidget {

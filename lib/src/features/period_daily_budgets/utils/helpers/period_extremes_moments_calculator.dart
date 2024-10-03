@@ -1,7 +1,7 @@
 // TODO this needs testing
 
 import 'package:intl/intl.dart';
-import 'package:svorc_proto_v1/src/features/period_daily_budget/data/entities/local/period_daily_budget/period_daily_budget_local_entity.dart';
+import 'package:svorc_proto_v1/src/features/period_daily_budgets/data/entities/local/period_daily_budget/period_daily_budget_local_entity.dart';
 
 abstract class PeriodExtremesMomentsCalculator {
   static PeriodExtremesMoments calculateMonthMoments({

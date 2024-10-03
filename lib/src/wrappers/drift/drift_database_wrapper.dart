@@ -27,6 +27,7 @@ class DriftDatabaseWrapper {
   // $Period get periodDailyBudgetsRepo => database.periodDail
   $PeriodDailyBudgetLocalEntityTable get periodDailyBudgetRepo =>
       database.periodDailyBudgetLocalEntity;
+  $CategoryLocalEntityTable get categoryRepo => database.categoryLocalEntity;
 
   // Future<void> initialize() async {
   void initialize() {

@@ -341,3 +341,44 @@ class TestDatabaseWrapper {
 
 - and we will create value objects 
 - we dont want to depend on data returned by the tool
+
+
+5. ok, now we want to insert some categories into db initially
+- for this, we first have to create the whole category table
+- it would have only fiew fields 
+  - id 
+  - name - this can be unique
+  - created
+  - updated
+- and then we want to create a migration for this
+- and then we want to crete "general" category initially when the app first runs
+- but we only want to insert this if it does not exist - so we basically want to upsert 
+
+- ok, we will make this as a categories feature - or should it be core. because cateogries are core to the app. lets make it its own feature
+
+- ok, we now need to insert data into database on database start
+
+- for this, we need to rework the migrator
+- it needs to accept database
+- we need to make fields lazy late initialized 
+- and we then insert data in
+
+  Future<void> _onBeforeOpen(OpeningDetails details) async {
+    // SOME POPULATE THINGS IF NEEDED
+    // _database
+
+    final generalCategoryCompanion = CategoryLocalEntityCompanion.insert(
+      name: "general",
+    );
+
+    // await _database
+    //     .into(_database.categoryLocalEntity)
+    //     .insertOnConflictUpdate(
+    //       generalCategoryCompanion,
+    //     );
+
+    await _database.categoryLocalEntity.insertOne(
+      generalCategoryCompanion,
+      onConflict: DoNothing(),
+    );
+  }

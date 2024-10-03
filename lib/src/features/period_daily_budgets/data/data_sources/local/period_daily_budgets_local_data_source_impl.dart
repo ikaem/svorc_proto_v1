@@ -1,15 +1,15 @@
 import 'package:drift/drift.dart';
-import 'package:svorc_proto_v1/src/features/period_daily_budget/data/data_sources/local/period_daily_budget_local_data_source.dart';
-import 'package:svorc_proto_v1/src/features/period_daily_budget/domain/values/new_period_daily_budget_local_value.dart';
-import 'package:svorc_proto_v1/src/features/period_daily_budget/domain/values/period_daily_budget_local_entity_value.dart';
-import 'package:svorc_proto_v1/src/features/period_daily_budget/data/entities/local/period_daily_budget/period_daily_budget_local_entity.dart';
-import 'package:svorc_proto_v1/src/features/period_daily_budget/utils/converters/period_daily_budget_converters.dart';
+import 'package:svorc_proto_v1/src/features/period_daily_budgets/data/data_sources/local/period_daily_budgets_local_data_source.dart';
+import 'package:svorc_proto_v1/src/features/period_daily_budgets/domain/values/new_period_daily_budget_local_value.dart';
+import 'package:svorc_proto_v1/src/features/period_daily_budgets/domain/values/period_daily_budget_local_entity_value.dart';
+import 'package:svorc_proto_v1/src/features/period_daily_budgets/data/entities/local/period_daily_budget/period_daily_budget_local_entity.dart';
+import 'package:svorc_proto_v1/src/features/period_daily_budgets/utils/converters/period_daily_budget_converters.dart';
 import 'package:svorc_proto_v1/src/wrappers/drift/drift_app_database/drift_app_database.dart';
 import 'package:svorc_proto_v1/src/wrappers/drift/drift_database_wrapper.dart';
 
-class PeriodDailyBudgetLocalDataSourceImpl
-    implements PeriodDailyBudgetLocalDataSource {
-  PeriodDailyBudgetLocalDataSourceImpl({
+class PeriodDailyBudgetsLocalDataSourceImpl
+    implements PeriodDailyBudgetsLocalDataSource {
+  PeriodDailyBudgetsLocalDataSourceImpl({
     required DriftDatabaseWrapper databaseWrapper,
   }) : _databaseWrapper = databaseWrapper;
 
