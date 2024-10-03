@@ -1,6 +1,6 @@
 import 'package:drift/drift.dart';
 import 'package:svorc_proto_v1/src/features/period_daily_budget/data/data_sources/local/period_daily_budget_local_data_source.dart';
-import 'package:svorc_proto_v1/src/features/period_daily_budget/domain/values/new_period_daily_budget_local_entity_value.dart';
+import 'package:svorc_proto_v1/src/features/period_daily_budget/domain/values/new_period_daily_budget_local_value.dart';
 import 'package:svorc_proto_v1/src/features/period_daily_budget/domain/values/period_daily_budget_local_entity_value.dart';
 import 'package:svorc_proto_v1/src/features/period_daily_budget/data/entities/local/period_daily_budget/period_daily_budget_local_entity.dart';
 import 'package:svorc_proto_v1/src/features/period_daily_budget/utils/converters/period_daily_budget_converters.dart';
@@ -18,7 +18,7 @@ class PeriodDailyBudgetLocalDataSourceImpl
 // store period daily budget
   @override
   Future<int> createPeriodDailyBudget({
-    required NewPeriodDailyBudgetLocalEntityValue newPeriodDailyBudget,
+    required NewPeriodDailyBudgetLocalValue newPeriodDailyBudget,
   }) async {
     final companion = PeriodDailyBudgetLocalEntityCompanion.insert(
       periodStart: newPeriodDailyBudget.periodStart,
@@ -38,20 +38,22 @@ class PeriodDailyBudgetLocalDataSourceImpl
   // update period daily budget
   @override
   Future<int> updatePeriodDailyBudget({
-    required PeriodDailyBudgetLocalEntityValue periodDailyBudget,
+    // required PeriodDailyBudgetLocalEntityValue periodDailyBudget,
+    required int amount,
+    required int id,
   }) async {
     // throw UnimplementedError();
     final companion = PeriodDailyBudgetLocalEntityCompanion(
       // only need amount to be updated
-      amount: Value(periodDailyBudget.amount),
+      // amount: Value(periodDailyBudget.amount),
+      amount: Value(amount),
     );
 
     final update = _databaseWrapper.periodDailyBudgetRepo.update();
-    final updateBudget = update
-      ..where((tbl) => tbl.id.equals(periodDailyBudget.id));
+    final updateBudget = update..where((tbl) => tbl.id.equals(id));
 
-    final id = await updateBudget.write(companion);
-    return id;
+    final updatedId = await updateBudget.write(companion);
+    return updatedId;
   }
 
 // get period daily budget

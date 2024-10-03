@@ -4,7 +4,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:svorc_proto_v1/src/features/period_daily_budget/data/data_sources/local/period_daily_budget_local_data_source.dart';
 import 'package:svorc_proto_v1/src/features/period_daily_budget/data/data_sources/local/period_daily_budget_local_data_source_impl.dart';
 import 'package:svorc_proto_v1/src/features/period_daily_budget/data/entities/local/period_daily_budget/period_daily_budget_local_entity.dart';
-import 'package:svorc_proto_v1/src/features/period_daily_budget/domain/values/new_period_daily_budget_local_entity_value.dart';
+import 'package:svorc_proto_v1/src/features/period_daily_budget/domain/values/new_period_daily_budget_local_value.dart';
 import 'package:svorc_proto_v1/src/features/period_daily_budget/domain/values/period_daily_budget_local_entity_value.dart';
 import 'package:svorc_proto_v1/src/features/period_daily_budget/utils/converters/period_daily_budget_converters.dart';
 import 'package:svorc_proto_v1/src/features/period_daily_budget/utils/extensions/date_time_extensions.dart';
@@ -14,8 +14,8 @@ import 'package:svorc_proto_v1/src/wrappers/drift/drift_app_database/drift_app_d
 import '../../../../../../../utils/database/test_database_wrapper.dart';
 
 void main() {
-  late final TestDatabaseWrapper testDatabaseWrapper;
-  late final PeriodDailyBudgetLocalDataSource periodDailyBudgetLocalDataSource;
+  late TestDatabaseWrapper testDatabaseWrapper;
+  late PeriodDailyBudgetLocalDataSource periodDailyBudgetLocalDataSource;
 
   setUp(() {
     testDatabaseWrapper =
@@ -241,7 +241,7 @@ void main() {
                 days: 30,
               ));
 
-              final value = NewPeriodDailyBudgetLocalEntityValue(
+              final value = NewPeriodDailyBudgetLocalValue(
                 amount: 100,
                 period: Period.month,
                 periodStart: periodStart,
@@ -260,16 +260,18 @@ void main() {
                   .insertOne(companion);
 
               // when
-              final updatedValue = PeriodDailyBudgetLocalEntityValue(
-                id: id,
-                periodStart: value.periodStart,
-                periodEnd: value.periodEnd,
-                amount: 200,
-                period: value.period,
-              );
+              // final updatedValue = PeriodDailyBudgetLocalEntityValue(
+              //   id: id,
+              //   periodStart: value.periodStart,
+              //   periodEnd: value.periodEnd,
+              //   amount: 200,
+              //   period: value.period,
+              // );
 
               await periodDailyBudgetLocalDataSource.updatePeriodDailyBudget(
-                periodDailyBudget: updatedValue,
+                // periodDailyBudget: updatedValue,
+                amount: 200,
+                id: id,
               );
 
               // then
@@ -315,7 +317,7 @@ void main() {
               ));
 
               // given
-              final value = NewPeriodDailyBudgetLocalEntityValue(
+              final value = NewPeriodDailyBudgetLocalValue(
                 amount: 100,
                 period: Period.month,
                 periodStart: periodStart,
@@ -365,7 +367,7 @@ void main() {
                 days: 30,
               ));
 
-              final value = NewPeriodDailyBudgetLocalEntityValue(
+              final value = NewPeriodDailyBudgetLocalValue(
                 amount: 100,
                 period: Period.month,
                 periodStart: periodStart,
