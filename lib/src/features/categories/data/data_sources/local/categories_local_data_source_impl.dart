@@ -3,6 +3,7 @@ import 'package:svorc_proto_v1/src/features/categories/data/data_sources/local/c
 import 'package:svorc_proto_v1/src/features/categories/domain/values/category_local_entity_value.dart';
 import 'package:svorc_proto_v1/src/features/categories/domain/values/new_category_local_value.dart';
 import 'package:svorc_proto_v1/src/features/categories/utils/converters/category_converters.dart';
+import 'package:svorc_proto_v1/src/wrappers/drift/drift_app_database/drift_app_database.dart';
 import 'package:svorc_proto_v1/src/wrappers/drift/drift_database_wrapper.dart';
 
 class CategoriesLocalDataSourceImpl implements CategoriesLocalDataSource {
@@ -15,8 +16,13 @@ class CategoriesLocalDataSourceImpl implements CategoriesLocalDataSource {
   @override
   Future<int> createCategory(
       {required NewCategoryLocalValue newCategory}) async {
-    // TODO: implement createCategory
-    throw UnimplementedError();
+    final companion = CategoryLocalEntityCompanion.insert(
+      name: newCategory.name,
+    );
+
+    final id = await _databaseWrapper.categoryRepo.insertOne(companion);
+
+    return id;
   }
 
   @override
@@ -35,7 +41,17 @@ class CategoriesLocalDataSourceImpl implements CategoriesLocalDataSource {
 
   @override
   Future<CategoryLocalEntityValue?> getCategoryById({required int id}) async {
-    // TODO: implement getCategoryById
-    throw UnimplementedError();
+    final select = _databaseWrapper.categoryRepo.select();
+    final categorySelect = select..where((tbl) => tbl.id.equals(id));
+
+    final entityData = await categorySelect.getSingleOrNull();
+    if (entityData == null) {
+      return null;
+    }
+
+    final entityValue =
+        CategoryConverters.toEntityValueFromEntityData(entityData: entityData);
+
+    return entityValue;
   }
 }

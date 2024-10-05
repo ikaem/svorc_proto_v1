@@ -314,7 +314,7 @@ void main() {
           test(
             "given [NewPeriodDailyBudgetLocalEntityValue]"
             "when [.createPeriodDailyBudget] is called"
-            "then should add new [PeriodDailyBudgetLocalEntity] to database",
+            "then should add new [PeriodDailyBudgetLocalEntity] to database and return expected id",
             () async {
               // setup
               final periodStart = DateTime.now();
@@ -356,16 +356,18 @@ void main() {
               );
 
               expect(entityValue, expectedEntityValue);
+              expect(id, equals(1));
 
               // cleanup
             },
           );
 
-          // given new value with same date time periods as existing, it will throw error
+          // TODO should return expected id - missing test
+
           test(
             "given existing [PeriodDailyBudgetLocalEntity]"
             "when [.createPeriodDailyBudget] is called with same [periodStart] and [periodEnd]"
-            "then should throw error",
+            "then should throw expected exception",
             () async {
               // setup
               final periodStart = DateTime.now();
