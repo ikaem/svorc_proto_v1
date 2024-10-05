@@ -2,6 +2,7 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:svorc_proto_v1/src/features/categories/domain/models/category_model.dart';
 import 'package:svorc_proto_v1/src/features/core/presentation/screens/home/home_screen.dart';
 
 class ExpensesScreen extends StatelessWidget {
@@ -226,21 +227,6 @@ class _ExpensesScreenEditExpensesFilter extends StatefulWidget {
   @override
   State<_ExpensesScreenEditExpensesFilter> createState() =>
       _ExpensesScreenEditExpensesFilterState();
-}
-
-// TODO move below or to values
-
-class CategoryModel extends Equatable {
-  const CategoryModel({
-    required this.id,
-    required this.name,
-  });
-
-  final int id;
-  final String name;
-
-  @override
-  List<Object> get props => [id, name];
 }
 
 class _ExpensesScreenEditExpensesFilterState

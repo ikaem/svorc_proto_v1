@@ -1,11 +1,11 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:svorc_proto_v1/src/features/categories/data/data_sources/local/categories_local_data_source.dart';
+import 'package:svorc_proto_v1/src/features/categories/domain/models/category_model.dart';
 import 'package:svorc_proto_v1/src/features/categories/domain/repositories/categories_repository.dart';
 import 'package:svorc_proto_v1/src/features/categories/domain/repositories/categories_repository_impl.dart';
 import 'package:svorc_proto_v1/src/features/categories/domain/values/category_local_entity_value.dart';
 import 'package:svorc_proto_v1/src/features/categories/domain/values/new_category_local_value.dart';
-import 'package:svorc_proto_v1/src/features/expenses/presentation/expenses_screen.dart';
 
 void main() {
   final categoryLocalDataSource = _MockCategoriesLocalDataSource();
