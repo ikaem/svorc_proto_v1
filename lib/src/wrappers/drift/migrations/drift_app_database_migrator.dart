@@ -12,6 +12,9 @@ class DriftAppDatabaseMigrator {
   late final MigrationStrategy migrationStrategy = MigrationStrategy(
     onCreate: (m) async {
       await m.createAll();
+      // TODO apparetnly, data insertion should be done here, according to docs
+      // https://drift.simonbinder.eu/faq/#how-can-i-inspect-generated-sql
+      // with this, we dont need to pass instance of the database because we have migrator variable here
     },
     beforeOpen: _onBeforeOpen,
     // beforeOpen: (details) async {

@@ -64,6 +64,7 @@ class DriftDatabaseWrapper {
   }
 
   Future<void> close() async {
+    // TODO check when is this supposed to be called, and is it needed to close it when the app closes
     await database.close();
   }
 }

@@ -15,6 +15,8 @@ import '../../../../../../../utils/database/test_database_wrapper.dart';
 
 void main() {
   late TestDatabaseWrapper testDatabaseWrapper;
+
+  // tested class
   late PeriodDailyBudgetsLocalDataSource periodDailyBudgetLocalDataSource;
 
   setUp(() {
@@ -247,6 +249,7 @@ void main() {
                 days: 30,
               ));
 
+// TODO this is unused
               final value = NewPeriodDailyBudgetLocalValue(
                 amount: 100,
                 period: Period.month,
