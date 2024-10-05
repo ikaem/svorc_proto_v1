@@ -2,6 +2,7 @@ import 'package:drift/drift.dart';
 import 'package:svorc_proto_v1/src/features/expenses/data/data_sources/local/expenses_local_data_source.dart';
 import 'package:svorc_proto_v1/src/features/expenses/domain/values/expense_local_entity_value.dart';
 import 'package:svorc_proto_v1/src/features/expenses/domain/values/new_expense_local_value.dart';
+import 'package:svorc_proto_v1/src/features/expenses/utils/converters/expenses_converters.dart';
 import 'package:svorc_proto_v1/src/wrappers/drift/drift_app_database/drift_app_database.dart';
 import 'package:svorc_proto_v1/src/wrappers/drift/drift_database_wrapper.dart';
 
@@ -32,6 +33,12 @@ class ExpensesLocalDataSourceImpl implements ExpensesLocalDataSource {
 
   @override
   Future<int> deleteExpense({required int id}) async {
+    final delete = _databaseWrapper.database.expenseLocalEntity.delete();
+    final deleteExpense = delete..where((tbl) => tbl.id.equals(id));
+
+    final deletedId = await deleteExpense.go();
+
+    return deletedId;
 /* 
 
 
@@ -52,8 +59,17 @@ class ExpensesLocalDataSourceImpl implements ExpensesLocalDataSource {
 
   @override
   Future<ExpenseLocalEntityValue?> getExpenseById({required int id}) async {
-    // TODO: implement getExpenseById
-    throw UnimplementedError();
+    final select = _databaseWrapper.database.expenseLocalEntity.select();
+    final expenseSelect = select..where((tbl) => tbl.id.equals(id));
+
+    final entityData = await expenseSelect.getSingleOrNull();
+    if (entityData == null) {
+      return null;
+    }
+
+    final entityValue =
+        ExpensesConverters.toEntityValueFromEntityData(entityData: entityData);
+    return entityValue;
   }
 
   @override

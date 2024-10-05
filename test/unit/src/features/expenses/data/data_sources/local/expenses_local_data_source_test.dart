@@ -1,4 +1,4 @@
-import 'package:drift/drift.dart';
+import 'package:drift/drift.dart' hide isNull;
 import 'package:flutter_test/flutter_test.dart';
 import 'package:svorc_proto_v1/src/features/expenses/data/data_sources/local/expenses_local_data_source.dart';
 import 'package:svorc_proto_v1/src/features/expenses/data/data_sources/local/expenses_local_data_source_impl.dart';
@@ -162,6 +162,109 @@ void main() {
           );
 
           // TODO test that when passing null values, those fields will not be updated - this only makes sense for note, but lets pass null for all
+        },
+      );
+
+      group(
+        "getExpenseById",
+        () {
+          test(
+            "given matching [ExpenseLocalEntity] exists in database"
+            "when [.getExpenseById] is called"
+            "then should return expected [ExpenseLocalEntityValue]",
+            () async {
+              // setup
+              final companion = ExpenseLocalEntityCompanion.insert(
+                date: DateTime.now(),
+                amount: 100,
+                categoryId: 2,
+                note: const Value("note"),
+              );
+
+              // given
+              final id = await testDatabaseWrapper.databaseWrapper.expenseRepo
+                  .insertOne(companion);
+
+              // when
+              final entityValue = await expensesLocalDataSource.getExpenseById(
+                id: id,
+              );
+
+              // then
+              final expectedEntityValue = ExpenseLocalEntityValue(
+                id: id,
+                amount: 100,
+                date: companion.date.value.normalizedToSeconds,
+                categoryId: 2,
+                note: "note",
+              );
+
+              expect(entityValue, equals(expectedEntityValue));
+
+              // cleanup
+            },
+          );
+
+          test(
+            "given no matching [ExpenseLocalEntity] exists in database"
+            "when [.getExpenseById] is called"
+            "then should return null",
+            () async {
+              // setup
+
+              // given
+
+              // when
+              final entityValue = await expensesLocalDataSource.getExpenseById(
+                id: 1,
+              );
+
+              // then
+              expect(entityValue, isNull);
+
+              // cleanup
+            },
+          );
+        },
+      );
+
+      group(
+        "deleteExpense",
+        () {
+          test(
+            "given an existing [ExpenseLocalEntity] in database"
+            "when [.deleteExpense] is called"
+            "then should delete the [ExpenseLocalEntity] and return expected id",
+            () async {
+              // setup
+              final companion = ExpenseLocalEntityCompanion.insert(
+                date: DateTime.now(),
+                amount: 100,
+                categoryId: 2,
+                note: const Value("note"),
+              );
+
+              // given
+              final id = await testDatabaseWrapper.databaseWrapper.expenseRepo
+                  .insertOne(companion);
+
+              // when
+              final deletedId =
+                  await expensesLocalDataSource.deleteExpense(id: id);
+
+              // then
+              final select =
+                  testDatabaseWrapper.databaseWrapper.expenseRepo.select();
+              final expenseSelect = select..where((tbl) => tbl.id.equals(id));
+
+              final entityData = await expenseSelect.getSingleOrNull();
+
+              expect(entityData, isNull);
+              expect(deletedId, equals(id));
+
+              // cleanup
+            },
+          );
         },
       );
     },

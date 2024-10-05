@@ -44,10 +44,10 @@ void main() {
             "then should return expected [PeriodDailyBudgetLocalEntity]",
             () async {
               // TODO test only
-              final selectCategories =
-                  testDatabaseWrapper.databaseWrapper.categoryRepo.select();
+              // final selectCategories =
+              //     testDatabaseWrapper.databaseWrapper.categoryRepo.select();
 
-              final categories = await selectCategories.get();
+              // final categories = await selectCategories.get();
 
               // setup
               const year = 2024;
@@ -93,7 +93,7 @@ void main() {
           test(
             "given non matching existing [PeriodDailyBudgetLocalEntity]"
             "when [.getPeriodDailyBudgetById] is called"
-            "then should return expected [PeriodDailyBudgetLocalEntity]",
+            "then should return expected null]",
             () async {
               // setup
               const year = 2024;
