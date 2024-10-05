@@ -1,4 +1,5 @@
 import 'package:svorc_proto_v1/src/features/categories/domain/values/category_local_entity_value.dart';
+import 'package:svorc_proto_v1/src/features/expenses/presentation/expenses_screen.dart';
 import 'package:svorc_proto_v1/src/wrappers/drift/drift_app_database/drift_app_database.dart';
 
 abstract class CategoryConverters {
@@ -13,15 +14,14 @@ abstract class CategoryConverters {
     return value;
   }
 
-  // static CategoryModel toModelFromEntityValue({
-  //   required CategoryLocalEntityValue entityValue,
-  // }) {
-  //   final CategoryModel model = CategoryModel(
-  //     id: entityValue.id,
-  //     name: entityValue.name,
-  //     description: entityValue.description,
-  //   );
+  static CategoryModel toModelFromEntityValue({
+    required CategoryLocalEntityValue entityValue,
+  }) {
+    final CategoryModel model = CategoryModel(
+      id: entityValue.id,
+      name: entityValue.name,
+    );
 
-  //   return model;
-  // }
+    return model;
+  }
 }

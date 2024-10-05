@@ -127,7 +127,7 @@ void main() {
           test(
             "given [id]"
             "when [getPeriodDailyBudgetById] is called "
-            "then should call [PeriodDailyBudgetLocalDataSource.getPeriodDailyBudgetById] with expected arguments and return expected valuue",
+            "then should call [PeriodDailyBudgetLocalDataSource.getPeriodDailyBudgetById] with expected arguments and return expected value",
             () async {
               // setup
               final entityValue = PeriodDailyBudgetLocalEntityValue(
