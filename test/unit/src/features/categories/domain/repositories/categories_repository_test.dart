@@ -21,6 +21,12 @@ void main() {
     },
   );
 
+  tearDown(
+    () {
+      reset(categoryLocalDataSource);
+    },
+  );
+
   group(
     "$CategoriesRepository",
     () {

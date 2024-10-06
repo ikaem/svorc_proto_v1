@@ -1,5 +1,6 @@
 import 'package:drift/drift.dart' hide isNull;
 import 'package:flutter_test/flutter_test.dart';
+import 'package:svorc_proto_v1/src/features/categories/domain/values/category_local_entity_value.dart';
 import 'package:svorc_proto_v1/src/features/expenses/data/data_sources/local/expenses_local_data_source.dart';
 import 'package:svorc_proto_v1/src/features/expenses/data/data_sources/local/expenses_local_data_source_impl.dart';
 import 'package:svorc_proto_v1/src/features/expenses/domain/values/expense_local_entity_value.dart';
@@ -45,7 +46,7 @@ void main() {
               final date = DateTime.now();
               // TODO just test if this is going to throw an error because category with id 2 does not exist
               // TODO come back to this - this does not seem to throw in test database when category does not exist
-              const categoryId = 2;
+              const categoryId = 1;
               const note = "note";
 
               // given
@@ -67,20 +68,34 @@ void main() {
               final expenseSelect = select..where((tbl) => tbl.id.equals(1));
 
               final entityData = await expenseSelect.getSingle();
-              final entityValue =
-                  ExpensesConverters.toEntityValueFromEntityData(
-                entityData: entityData,
-              );
+              // final entityValue =
+              //     ExpensesConverters.toEntityValueFromEntityData(
+              //   expenseEntityData: entityData,
 
-              final expectedEntityValue = ExpenseLocalEntityValue(
-                id: 1,
-                amount: amount,
-                date: date.normalizedToSeconds,
-                categoryId: categoryId,
-                note: note,
-              );
+              // );
+              // final expectedEntityData = ExpenseLocalEntityData(
+              //   id: 1,
+              //   amount: amount,
+              //   date: date.normalizedToSeconds,
+              //   categoryId: categoryId,
+              // );
 
-              expect(entityValue, equals(expectedEntityValue));
+              // final expectedEntityValue = ExpenseLocalEntityValue(
+              //   id: 1,
+              //   amount: amount,
+              //   date: date.normalizedToSeconds,
+              //   category: const CategoryLocalEntityValue(
+              //     id: 1,
+              //     name: "general",
+              //   ),
+              //   note: note,
+              // );
+
+              // expect(entityValue, equals(expectedEntityValue));
+              expect(entityData.amount, equals(amount));
+              expect(entityData.date, equals(date.normalizedToSeconds));
+              expect(entityData.categoryId, equals(categoryId));
+              expect(entityData.note, equals(note));
               expect(id, equals(1));
 
               // cleanup
@@ -141,20 +156,27 @@ void main() {
               final expenseSelect = select..where((tbl) => tbl.id.equals(id));
 
               final entityData = await expenseSelect.getSingle();
-              final entityValue =
-                  ExpensesConverters.toEntityValueFromEntityData(
-                entityData: entityData,
-              );
+              // final entityValue =
+              //     ExpensesConverters.toEntityValueFromEntityData(
+              //   expenseEntityData: entityData,
+              // );
 
-              final expectedEntityValue = ExpenseLocalEntityValue(
-                id: id,
-                amount: updatedAmount,
-                date: updatedDate.normalizedToSeconds,
-                categoryId: updatedCategoryId,
-                note: updatedNote,
-              );
+              // final expectedEntityValue = ExpenseLocalEntityValue(
+              //   id: id,
+              //   amount: updatedAmount,
+              //   date: updatedDate.normalizedToSeconds,
+              //   category: const CategoryLocalEntityValue(
+              //     id: 1,
+              //     name: "general",
+              //   ),
+              //   note: updatedNote,
+              // );
 
-              expect(entityValue, equals(expectedEntityValue));
+              // expect(entityValue, equals(expectedEntityValue));
+              expect(entityData.amount, equals(updatedAmount));
+              expect(entityData.date, equals(updatedDate.normalizedToSeconds));
+              expect(entityData.categoryId, equals(updatedCategoryId));
+              expect(entityData.note, equals(updatedNote));
               expect(updatedId, equals(id));
 
               // cleanup
@@ -177,7 +199,7 @@ void main() {
               final companion = ExpenseLocalEntityCompanion.insert(
                 date: DateTime.now(),
                 amount: 100,
-                categoryId: 2,
+                categoryId: 1,
                 note: const Value("note"),
               );
 
@@ -195,7 +217,11 @@ void main() {
                 id: id,
                 amount: 100,
                 date: companion.date.value.normalizedToSeconds,
-                categoryId: 2,
+                // categoryId: 2,
+                category: const CategoryLocalEntityValue(
+                  id: 1,
+                  name: "general",
+                ),
                 note: "note",
               );
 
@@ -229,6 +255,56 @@ void main() {
       );
 
       group(
+        "getExpenses",
+        () {
+          // TODO this needs to be tested
+
+          test(
+            "given [ExpenseLocalEntity]s exists in database"
+            "when [.getExpenses] is called"
+            "then should return expected [List<ExpenseLocalEntityValue>]",
+            () async {
+              // setup
+              final companions = List.generate(3, (index) {
+                return ExpenseLocalEntityCompanion.insert(
+                  id: Value(index + 1),
+                  date: DateTime.now(),
+                  amount: (index + 1) * 100,
+                  categoryId: 1,
+                  note: Value("note ${index + 1}"),
+                );
+              });
+
+              // given
+              await testDatabaseWrapper.databaseWrapper.expenseRepo
+                  .insertAll(companions);
+
+              // when
+              final entityValues = await expensesLocalDataSource.getExpenses();
+
+              // then
+              final expectedEntityValues = companions.map(
+                (e) => ExpenseLocalEntityValue(
+                  id: e.id.value,
+                  amount: e.amount.value,
+                  date: e.date.value.normalizedToSeconds,
+                  category: const CategoryLocalEntityValue(
+                    id: 1,
+                    name: "general",
+                  ),
+                  note: e.note.value,
+                ),
+              );
+
+              expect(entityValues, equals(expectedEntityValues));
+
+              // cleanup
+            },
+          );
+        },
+      );
+
+      group(
         "deleteExpense",
         () {
           test(
@@ -240,7 +316,7 @@ void main() {
               final companion = ExpenseLocalEntityCompanion.insert(
                 date: DateTime.now(),
                 amount: 100,
-                categoryId: 2,
+                categoryId: 1,
                 note: const Value("note"),
               );
 

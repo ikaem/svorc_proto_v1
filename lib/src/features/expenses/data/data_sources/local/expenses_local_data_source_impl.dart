@@ -54,11 +54,41 @@ class ExpensesLocalDataSourceImpl implements ExpensesLocalDataSource {
 
  */
 
-    throw UnimplementedError();
+    // throw UnimplementedError();
   }
 
   @override
   Future<ExpenseLocalEntityValue?> getExpenseById({required int id}) async {
+    final select = _databaseWrapper.expenseRepo.select();
+    final joinedSelect = select.join([
+      leftOuterJoin(
+        _databaseWrapper.categoryRepo,
+        _databaseWrapper.categoryRepo.id.equalsExp(
+          _databaseWrapper.expenseRepo.categoryId,
+        ),
+      )
+    ]);
+
+    final findExpenseSelect = joinedSelect
+      ..where(_databaseWrapper.expenseRepo.id.equals(id));
+
+    final result = await findExpenseSelect.get();
+
+    if (result.isEmpty) return null;
+
+    final expenseData = result.first.readTable(_databaseWrapper.expenseRepo);
+    final categoryData = result.first.readTable(_databaseWrapper.categoryRepo);
+
+    final entityValue = ExpensesConverters.toEntityValueFromEntityData(
+      expenseEntityData: expenseData,
+      categoryEntityData: categoryData,
+    );
+
+    return entityValue;
+
+/*     
+
+// TODO this works for getting single entity, but we no joined category
     final select = _databaseWrapper.database.expenseLocalEntity.select();
     final expenseSelect = select..where((tbl) => tbl.id.equals(id));
 
@@ -69,13 +99,36 @@ class ExpensesLocalDataSourceImpl implements ExpensesLocalDataSource {
 
     final entityValue =
         ExpensesConverters.toEntityValueFromEntityData(entityData: entityData);
-    return entityValue;
+    return entityValue; */
   }
 
   @override
   Future<List<ExpenseLocalEntityValue>> getExpenses() async {
-    // TODO: implement getExpenses
-    throw UnimplementedError();
+    final select = _databaseWrapper.expenseRepo.select();
+    final joinedSelect = select.join([
+      leftOuterJoin(
+        _databaseWrapper.categoryRepo,
+        _databaseWrapper.categoryRepo.id.equalsExp(
+          _databaseWrapper.expenseRepo.categoryId,
+        ),
+      )
+    ]);
+
+    // final result = await joinedSelect.get();
+
+    final entityValues = await joinedSelect.map((row) {
+      final expenseData = row.readTable(_databaseWrapper.expenseRepo);
+      final categoryData = row.readTable(_databaseWrapper.categoryRepo);
+
+      final entityValue = ExpensesConverters.toEntityValueFromEntityData(
+        expenseEntityData: expenseData,
+        categoryEntityData: categoryData,
+      );
+
+      return entityValue;
+    }).get();
+
+    return entityValues;
   }
 
   @override
@@ -118,3 +171,82 @@ class ExpensesLocalDataSourceImpl implements ExpensesLocalDataSource {
 
 // delete expense
 }
+
+
+/* 
+
+
+
+    final select = _databaseWrapper.matchesRepo.select();
+    final joinedSelect = select.join([
+      leftOuterJoin(
+        _databaseWrapper.playerMatchParticipationsRepo,
+        _databaseWrapper.playerMatchParticipationsRepo.matchId.equalsExp(
+          _databaseWrapper.matchesRepo.id,
+        ),
+      ),
+      leftOuterJoin(
+        _databaseWrapper.playersRepo,
+        _databaseWrapper.playersRepo.id.equalsExp(
+          _databaseWrapper.playerMatchParticipationsRepo.playerId,
+        ),
+      ),
+    ]);
+
+    final findMatchSelect = joinedSelect
+      ..where(_databaseWrapper.matchesRepo.id.equals(matchId));
+
+    // final match = await findMatchSelect.getSingleOrNull();
+
+    final result = await findMatchSelect.get();
+
+    if (result.isEmpty) {
+      return null;
+    }
+
+    final matchData = result.first.readTable(_databaseWrapper.matchesRepo);
+
+    final participationsData = result.map(
+      (row) {
+        // TODO we cal assem entity value here, and insert nickname here
+        final participationData =
+            // row.readTable(_databaseWrapper.playerMatchParticipationsRepo);
+            row.readTableOrNull(_databaseWrapper.playerMatchParticipationsRepo);
+
+        if (participationData == null) {
+          return null;
+        }
+
+        // final playerData = row.readTable(_databaseWrapper.playersRepo);
+        final playerData = row.readTableOrNull(_databaseWrapper.playersRepo);
+
+        // TODO not sure if in theory we could have particpation without player?
+        // TODO lets return null, and then we will see
+        if (playerData == null) {
+          return null;
+        }
+
+        final participationEntityValue = PlayerMatchParticipationEntityValue(
+          id: participationData.id,
+          createdAt: participationData.createdAt,
+          updatedAt: participationData.updatedAt,
+          status: participationData.status,
+          playerId: participationData.playerId,
+          matchId: participationData.matchId,
+          playerNickname: playerData.nickname,
+        );
+
+        return participationEntityValue;
+      },
+    ).toList();
+
+
+
+
+
+
+
+
+
+
+ */

@@ -150,7 +150,7 @@ void main() {
               const id = 1;
 
               // when
-              final entity = await repository.getPeriodDailyBudgetById(
+              final model = await repository.getPeriodDailyBudgetById(
                 id: id,
               );
 
@@ -168,7 +168,7 @@ void main() {
                   id: id,
                 ),
               ).called(1);
-              expect(entity, equals(expectedModel));
+              expect(model, equals(expectedModel));
 
               // cleanup
             },

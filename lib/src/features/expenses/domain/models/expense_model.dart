@@ -13,8 +13,8 @@ class ExpenseModel extends Equatable {
   final int id;
   final DateTime date;
   final int amount;
-  final String? note;
   final CategoryModel category;
+  final String? note;
 
   @override
   List<Object?> get props => [id, date, amount, note, category];
