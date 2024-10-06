@@ -1,12 +1,13 @@
-1. continue with categores data source
-- test get category and create category
-2. add repository and test it
+1. ok, lets now create use case to get home data
+- current month daily budget
+- expenses for current month
+- lets see if we already have how state is supposed to look like
+    - should be 
 
-2. introduce expesses feature
-- expense feature
-- expsese entity - needs reference to category always
-
-1. now we will need logic and saved data
-   1. database
-   2. layers 
-   3. logic
+2. then we create home screen controller
+    1. it will get this use case 
+    2. but it should also have use case to check if current month exists
+        1. it would just set different data state
+    3. lets use block for this too
+        1. because it will by design emit specific state
+        2. look at recommended architecture from their official guide
