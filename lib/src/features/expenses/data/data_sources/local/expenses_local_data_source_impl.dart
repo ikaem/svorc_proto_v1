@@ -103,9 +103,13 @@ class ExpensesLocalDataSourceImpl implements ExpensesLocalDataSource {
   }
 
   @override
-  Future<List<ExpenseLocalEntityValue>> getExpenses() async {
+  Future<List<ExpenseLocalEntityValue>> getExpenses({
+    required GetExpensesFilterValue filter,
+  }) async {
     final select = _databaseWrapper.expenseRepo.select();
-    final joinedSelect = select.join([
+    // TODO original
+    // final joinedSelect = select.join([
+    JoinedSelectStatement<HasResultSet, dynamic> joinedSelect = select.join([
       leftOuterJoin(
         _databaseWrapper.categoryRepo,
         _databaseWrapper.categoryRepo.id.equalsExp(
@@ -115,6 +119,38 @@ class ExpensesLocalDataSourceImpl implements ExpensesLocalDataSource {
     ]);
 
     // final result = await joinedSelect.get();
+
+    final minDate = filter.minDate;
+    final maxDate = filter.maxDate;
+
+    if (minDate != null) {
+      // TODO this is what copilot suggested -------------
+      // final fromDateExpression = _databaseWrapper.expenseRepo.date.isSmallerOrEqualValue(fromDate);
+      // joinedSelect.where(fromDateExpression);
+      // -----------
+
+      // need to create an expression
+// its here - https://drift.simonbinder.eu/docs/dart-api/select/#joins
+      final fromDateExpression =
+          _databaseWrapper.expenseRepo.date.isBiggerOrEqualValue(minDate);
+
+      // to where on joined select, we have to pass expression directly
+      // joinedSelect = joinedSelect..where(fromDateExpression);
+      joinedSelect.where(fromDateExpression);
+      // joinedSelect = joinedSelect..where(() {
+      //   // return tbl.date.isBiggerOrEqualValue(fromDate);
+
+      //   tbl.
+
+      // });
+    }
+
+    if (maxDate != null) {
+      final toDateExpression =
+          _databaseWrapper.expenseRepo.date.isSmallerOrEqualValue(maxDate);
+
+      joinedSelect.where(toDateExpression);
+    }
 
     final entityValues = await joinedSelect.map((row) {
       final expenseData = row.readTable(_databaseWrapper.expenseRepo);
@@ -175,74 +211,30 @@ class ExpensesLocalDataSourceImpl implements ExpensesLocalDataSource {
 
 /* 
 
+    if (matchTitle != null) {
+      // TODO I hope this will handle sanitization
+      final matchTitleVariable = Variable.withString(matchTitle);
+      // TODO this is a bit silly - currently, "asd" for match title will return one match, even if there are only matches with these titles in db
+      /* 
+ivanović
+ivan
+ivka
+ivo
+ivor
+ovan
+      
+       */
+      final isSimilarTitleExpression = CustomExpression<bool>(
+        // TODO maybe levenhstein is not that good for this - maybe there is better
+        "LEVENSHTEIN(title, '${matchTitleVariable.value}') <= 3",
+        precedence: Precedence.primary,
+      );
 
-
-    final select = _databaseWrapper.matchesRepo.select();
-    final joinedSelect = select.join([
-      leftOuterJoin(
-        _databaseWrapper.playerMatchParticipationsRepo,
-        _databaseWrapper.playerMatchParticipationsRepo.matchId.equalsExp(
-          _databaseWrapper.matchesRepo.id,
-        ),
-      ),
-      leftOuterJoin(
-        _databaseWrapper.playersRepo,
-        _databaseWrapper.playersRepo.id.equalsExp(
-          _databaseWrapper.playerMatchParticipationsRepo.playerId,
-        ),
-      ),
-    ]);
-
-    final findMatchSelect = joinedSelect
-      ..where(_databaseWrapper.matchesRepo.id.equals(matchId));
-
-    // final match = await findMatchSelect.getSingleOrNull();
-
-    final result = await findMatchSelect.get();
-
-    if (result.isEmpty) {
-      return null;
+      findMatches = findMatches
+        ..where((tbl) {
+          return isSimilarTitleExpression;
+        });
     }
-
-    final matchData = result.first.readTable(_databaseWrapper.matchesRepo);
-
-    final participationsData = result.map(
-      (row) {
-        // TODO we cal assem entity value here, and insert nickname here
-        final participationData =
-            // row.readTable(_databaseWrapper.playerMatchParticipationsRepo);
-            row.readTableOrNull(_databaseWrapper.playerMatchParticipationsRepo);
-
-        if (participationData == null) {
-          return null;
-        }
-
-        // final playerData = row.readTable(_databaseWrapper.playersRepo);
-        final playerData = row.readTableOrNull(_databaseWrapper.playersRepo);
-
-        // TODO not sure if in theory we could have particpation without player?
-        // TODO lets return null, and then we will see
-        if (playerData == null) {
-          return null;
-        }
-
-        final participationEntityValue = PlayerMatchParticipationEntityValue(
-          id: participationData.id,
-          createdAt: participationData.createdAt,
-          updatedAt: participationData.updatedAt,
-          status: participationData.status,
-          playerId: participationData.playerId,
-          matchId: participationData.matchId,
-          playerNickname: playerData.nickname,
-        );
-
-        return participationEntityValue;
-      },
-    ).toList();
-
-
-
-
 
 
 

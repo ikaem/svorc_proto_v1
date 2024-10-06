@@ -280,7 +280,9 @@ void main() {
                   .insertAll(companions);
 
               // when
-              final entityValues = await expensesLocalDataSource.getExpenses();
+              final entityValues = await expensesLocalDataSource.getExpenses(
+                filter: const GetExpensesFilterValue(),
+              );
 
               // then
               final expectedEntityValues = companions.map(
@@ -297,6 +299,177 @@ void main() {
               );
 
               expect(entityValues, equals(expectedEntityValues));
+
+              // cleanup
+            },
+          );
+
+          test(
+            "given matching [ExpenseLocalEntity]s exists in database"
+            "when [.getExpenses] is called with [maxDate] filter"
+            "then should return expected [List<ExpenseLocalEntityValue>]",
+            () async {
+              // setup
+              final dateNow = DateTime.now();
+              final companion = ExpenseLocalEntityCompanion.insert(
+                id: const Value(1),
+                date: dateNow,
+                amount: 100,
+                categoryId: 1,
+                note: const Value("note"),
+              );
+
+              // given
+              await testDatabaseWrapper.databaseWrapper.expenseRepo
+                  .insertOne(companion);
+
+              // when
+              final filterMaxDate = dateNow.add(const Duration(days: 1));
+              final filter = GetExpensesFilterValue(
+                maxDate: filterMaxDate,
+              );
+
+              final entityValues = await expensesLocalDataSource.getExpenses(
+                filter: filter,
+              );
+
+              // then
+              final expectedEntityValues = [
+                ExpenseLocalEntityValue(
+                  id: companion.id.value,
+                  amount: companion.amount.value,
+                  date: companion.date.value.normalizedToSeconds,
+                  category: const CategoryLocalEntityValue(
+                    id: 1,
+                    name: "general",
+                  ),
+                  note: companion.note.value,
+                ),
+              ];
+
+              expect(entityValues, equals(expectedEntityValues));
+
+              // cleanup
+            },
+          );
+
+          test(
+            "given no matching [ExpenseLocalEntity]s exists in database"
+            "when [.getExpenses] is called with [maxDate] filter"
+            "then should return empty list",
+            () async {
+              // setup
+              final dateNow = DateTime.now();
+              final companion = ExpenseLocalEntityCompanion.insert(
+                id: const Value(1),
+                date: dateNow,
+                amount: 100,
+                categoryId: 1,
+                note: const Value("note"),
+              );
+
+              // given
+              await testDatabaseWrapper.databaseWrapper.expenseRepo
+                  .insertOne(companion);
+
+              // when
+              final filterMaxDate = dateNow.subtract(const Duration(days: 1));
+              final filter = GetExpensesFilterValue(
+                maxDate: filterMaxDate,
+              );
+
+              final entityValues = await expensesLocalDataSource.getExpenses(
+                filter: filter,
+              );
+
+              // then
+              expect(entityValues, isEmpty);
+
+              // cleanup
+            },
+          );
+
+          test(
+            "given matching [ExpenseLocalEntity]s exists in database"
+            "when [.getExpenses] is called with [minDate] filter"
+            "then should return expected [List<ExpenseLocalEntityValue>]",
+            () async {
+              // setup
+              final dateNow = DateTime.now();
+              final companion = ExpenseLocalEntityCompanion.insert(
+                id: const Value(1),
+                date: dateNow,
+                amount: 100,
+                categoryId: 1,
+                note: const Value("note"),
+              );
+
+              // given
+              await testDatabaseWrapper.databaseWrapper.expenseRepo
+                  .insertOne(companion);
+
+              // when
+              final filterMinDate = dateNow.subtract(const Duration(days: 1));
+              final filter = GetExpensesFilterValue(
+                minDate: filterMinDate,
+              );
+
+              final entityValues = await expensesLocalDataSource.getExpenses(
+                filter: filter,
+              );
+
+              // then
+              final expectedEntityValues = [
+                ExpenseLocalEntityValue(
+                  id: companion.id.value,
+                  amount: companion.amount.value,
+                  date: companion.date.value.normalizedToSeconds,
+                  category: const CategoryLocalEntityValue(
+                    id: 1,
+                    name: "general",
+                  ),
+                  note: companion.note.value,
+                ),
+              ];
+
+              expect(entityValues, equals(expectedEntityValues));
+
+              // cleanup
+            },
+          );
+
+          test(
+            "given no matching [ExpenseLocalEntity]s exists in database"
+            "when [.getExpenses] is called with [minDate] filter"
+            "then should return empty list",
+            () async {
+              // setup
+              final dateNow = DateTime.now();
+              final companion = ExpenseLocalEntityCompanion.insert(
+                id: const Value(1),
+                date: dateNow,
+                amount: 100,
+                categoryId: 1,
+                note: const Value("note"),
+              );
+
+              // given
+              await testDatabaseWrapper.databaseWrapper.expenseRepo
+                  .insertOne(companion);
+
+              // when
+              final filterMinDate = dateNow.add(const Duration(days: 1));
+              final filter = GetExpensesFilterValue(
+                minDate: filterMinDate,
+              );
+
+              final entityValues = await expensesLocalDataSource.getExpenses(
+                filter: filter,
+              );
+
+              // then
+
+              expect(entityValues, isEmpty);
 
               // cleanup
             },

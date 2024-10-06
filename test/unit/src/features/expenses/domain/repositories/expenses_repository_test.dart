@@ -20,6 +20,7 @@ void main() {
   setUpAll(
     () {
       registerFallbackValue(_FakeNewExpenseLocalValue());
+      registerFallbackValue(const GetExpensesFilterValue());
     },
   );
 
@@ -154,7 +155,9 @@ void main() {
               );
 
               when(
-                () => expensesLocalDataSource.getExpenses(),
+                () => expensesLocalDataSource.getExpenses(
+                  filter: any(named: "filter"),
+                ),
               ).thenAnswer(
                 (_) async => expenseEntityValues,
               );
@@ -162,7 +165,9 @@ void main() {
               // given
 
               // when
-              final expenses = await repository.getExpenses();
+              final expenses = await repository.getExpenses(
+                filter: const GetExpensesFilterValue(),
+              );
 
               // then
               final expectedExpenseModels = expenseEntityValues
@@ -181,7 +186,9 @@ void main() {
                   .toList();
 
               verify(
-                () => expensesLocalDataSource.getExpenses(),
+                () => expensesLocalDataSource.getExpenses(
+                  filter: const GetExpensesFilterValue(),
+                ),
               ).called(1);
               expect(expenses, equals(expectedExpenseModels));
 

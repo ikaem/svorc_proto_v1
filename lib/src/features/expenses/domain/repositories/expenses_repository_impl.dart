@@ -44,8 +44,12 @@ class ExpensesRepositoryImpl implements ExpensesRepository {
   }
 
   @override
-  Future<List<ExpenseModel>> getExpenses() async {
-    final expenseEntityValues = await expensesLocalDataSource.getExpenses();
+  Future<List<ExpenseModel>> getExpenses({
+    required GetExpensesFilterValue filter,
+  }) async {
+    final expenseEntityValues = await expensesLocalDataSource.getExpenses(
+      filter: filter,
+    );
     final expenseModels = expenseEntityValues
         .map((e) => ExpensesConverters.toModelFromEntityValue(entityValue: e))
         .toList();
