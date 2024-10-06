@@ -122,6 +122,7 @@ class ExpensesLocalDataSourceImpl implements ExpensesLocalDataSource {
 
     final minDate = filter.minDate;
     final maxDate = filter.maxDate;
+    final limit = filter.limit;
 
     if (minDate != null) {
       // TODO this is what copilot suggested -------------
@@ -150,6 +151,9 @@ class ExpensesLocalDataSourceImpl implements ExpensesLocalDataSource {
           _databaseWrapper.expenseRepo.date.isSmallerOrEqualValue(maxDate);
 
       joinedSelect.where(toDateExpression);
+    }
+    if (limit != null) {
+      joinedSelect.limit(limit);
     }
 
     final entityValues = await joinedSelect.map((row) {

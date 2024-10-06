@@ -305,6 +305,57 @@ void main() {
           );
 
           test(
+            "given multiple [ExpenseLocalEntity]s exists in database"
+            "when [.getExpenses] is called with [limit] filter"
+            "then should return expected [List<ExpenseLocalEntityValue>]",
+            () async {
+              // setup
+              final companions = List.generate(7, (index) {
+                return ExpenseLocalEntityCompanion.insert(
+                  id: Value(index + 1),
+                  date: DateTime.now(),
+                  amount: (index + 1) * 100,
+                  categoryId: 1,
+                  note: Value("note ${index + 1}"),
+                );
+              });
+
+              // given
+              await testDatabaseWrapper.databaseWrapper.expenseRepo
+                  .insertAll(companions);
+
+              // when
+              const filterLimit = 5;
+              const filter = GetExpensesFilterValue(
+                limit: filterLimit,
+              );
+
+              final entityValues = await expensesLocalDataSource.getExpenses(
+                filter: filter,
+              );
+
+              // then
+              final expectedEntityValues =
+                  companions.sublist(0, filterLimit).map(
+                        (e) => ExpenseLocalEntityValue(
+                          id: e.id.value,
+                          amount: e.amount.value,
+                          date: e.date.value.normalizedToSeconds,
+                          category: const CategoryLocalEntityValue(
+                            id: 1,
+                            name: "general",
+                          ),
+                          note: e.note.value,
+                        ),
+                      );
+
+              expect(entityValues, equals(expectedEntityValues));
+
+              // cleanup
+            },
+          );
+
+          test(
             "given matching [ExpenseLocalEntity]s exists in database"
             "when [.getExpenses] is called with [maxDate] filter"
             "then should return expected [List<ExpenseLocalEntityValue>]",
