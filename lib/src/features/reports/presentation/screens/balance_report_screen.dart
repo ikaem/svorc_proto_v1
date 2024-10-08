@@ -835,44 +835,44 @@ class SpentReportDaily {
   // }
 }
 
-class RemainderReportDaily {
-  const RemainderReportDaily({
-    required this.date,
-    required this.dailyBudget,
-    required this.spentValue,
-  });
+// class RemainderReportDaily {
+//   const RemainderReportDaily({
+//     required this.date,
+//     required this.dailyBudget,
+//     required this.spentValue,
+//   });
 
-  final String date;
-  // final int remainder;
-  final int dailyBudget;
-  final int spentValue;
+//   final String date;
+//   // final int remainder;
+//   final int dailyBudget;
+//   final int spentValue;
 
-  int getRemainder() {
-    return dailyBudget - spentValue;
-  }
-}
+//   int getRemainder() {
+//     return dailyBudget - spentValue;
+//   }
+// }
 
-class AccumulatedRemainderReportDaily {
-  const AccumulatedRemainderReportDaily({
-    required this.date,
-    required this.dailyBudget,
-    required this.spentValue,
-    required this.previousDateAccumulatedRemainder,
-  });
+// class AccumulatedRemainderReportDaily {
+//   const AccumulatedRemainderReportDaily({
+//     required this.date,
+//     required this.dailyBudget,
+//     required this.spentValue,
+//     required this.previousDateAccumulatedRemainder,
+//   });
 
-  final String date;
-  final int dailyBudget;
-  final int spentValue;
-  final int previousDateAccumulatedRemainder;
+//   final String date;
+//   final int dailyBudget;
+//   final int spentValue;
+//   final int previousDateAccumulatedRemainder;
 
-  int getAccumulatedRemainder() {
-    final todayRemainder = dailyBudget - spentValue;
-    final todayAccumulatedRemainder =
-        todayRemainder + previousDateAccumulatedRemainder;
+//   int getAccumulatedRemainder() {
+//     final todayRemainder = dailyBudget - spentValue;
+//     final todayAccumulatedRemainder =
+//         todayRemainder + previousDateAccumulatedRemainder;
 
-    return todayAccumulatedRemainder;
-  }
-}
+//     return todayAccumulatedRemainder;
+//   }
+// }
 
 class RemainderReportDaily2 {
   const RemainderReportDaily2({
@@ -911,3 +911,23 @@ extension StringExtensions on String {
     return major.toStringAsFixed(2);
   }
 }
+
+// void main(List<String> args) {
+//   final randomDatesList = [
+//     DateTime.now(),
+//     DateTime.now().add(const Duration(days: 1)),
+//     DateTime.now().subtract(const Duration(minutes: 1)),
+//     DateTime.now().add(const Duration(days: 2)),
+//     DateTime.now().subtract(const Duration(seconds: 3)),
+//     DateTime.now().add(const Duration(days: 4)),
+//     DateTime.now().subtract(const Duration(minutes: 5)),
+//     DateTime.now().add(const Duration(days: 6)),
+//     DateTime.now().subtract(const Duration(seconds: 7)),
+//   ];
+
+//   print(randomDatesList);
+
+//   randomDatesList.sort((a, b) => a.compareTo(b));
+
+//   print(randomDatesList);
+// }
