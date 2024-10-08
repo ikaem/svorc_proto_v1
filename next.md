@@ -1,6 +1,6 @@
-1. get accumulation for today - will need accumulation for every day of month
-2. get accumulation for week - will need accumulation for every day of month - and just present current day 
-3. get accumulation for month - will need accumulation for every day of month - and just present current day or something
+1. use new calculator in home screen bloc
+2. create maybe some use cases 
+- how to now pass use cases to blocs? can we use repositories provider to actually provide use cases?
 
 
 1. ok, lets now create use case to get home data
