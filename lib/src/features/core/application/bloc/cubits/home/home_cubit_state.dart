@@ -18,7 +18,7 @@ class HomeCubitStateSuccess extends HomeCubitState {
     required this.state,
   });
 
-  final HomeScreenExpensesStateValue state;
+  final HomeScreenBalancesValue state;
 }
 
 class HomeCubitStateCurrentMonthDailyBudgetNotFound extends HomeCubitState {}

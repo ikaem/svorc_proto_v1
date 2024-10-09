@@ -4,7 +4,7 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:svorc_proto_v1/src/features/categories/domain/models/category_model.dart';
-import 'package:svorc_proto_v1/src/features/core/domain/values/home_screen_expenses_state_value.dart';
+import 'package:svorc_proto_v1/src/features/reports/domain/values/home_screen_balances_value.dart';
 import 'package:svorc_proto_v1/src/features/expenses/domain/models/expense_model.dart';
 import 'package:svorc_proto_v1/src/features/period_daily_budgets/data/entities/local/period_daily_budget/period_daily_budget_local_entity.dart';
 import 'package:svorc_proto_v1/src/features/period_daily_budgets/domain/models/period_daily_budget_model.dart';
@@ -74,40 +74,40 @@ Future<List<ExpenseModel>> _fakeGetCurrentMonthExpensesUseCase() async {
   return expenses;
 }
 
-HomeScreenPeriodAmounts _getTodayPeriodAmounts({
-  required List<ExpenseModel> expenses,
-  required PeriodDailyBudgetModel dailyBudget,
-}) {
-  final today = DateTime.now();
+// HomeScreenPeriodAmounts _getTodayPeriodAmounts({
+//   required List<ExpenseModel> expenses,
+//   required PeriodDailyBudgetModel dailyBudget,
+// }) {
+//   final today = DateTime.now();
 
-  final todayExtremesMoments =
-      PeriodExtremesMomentsCalculator.calculateDayMoments(
-    dayIndex: today.day,
-    monthIndex: today.month,
-    year: today.year,
-  );
+//   final todayExtremesMoments =
+//       PeriodExtremesMomentsCalculator.calculateDayMoments(
+//     dayIndex: today.day,
+//     monthIndex: today.month,
+//     year: today.year,
+//   );
 
-  final todayExpenses = expenses.where((expense) {
-    final isWithinTodayStart = expense.date.millisecondsSinceEpoch >=
-        todayExtremesMoments.periodStart.millisecondsSinceEpoch;
-    final isWithinTodayEnd = expense.date.millisecondsSinceEpoch <=
-        todayExtremesMoments.periodEnd.millisecondsSinceEpoch;
+//   final todayExpenses = expenses.where((expense) {
+//     final isWithinTodayStart = expense.date.millisecondsSinceEpoch >=
+//         todayExtremesMoments.periodStart.millisecondsSinceEpoch;
+//     final isWithinTodayEnd = expense.date.millisecondsSinceEpoch <=
+//         todayExtremesMoments.periodEnd.millisecondsSinceEpoch;
 
-    return isWithinTodayStart && isWithinTodayEnd;
-  }).toList();
+//     return isWithinTodayStart && isWithinTodayEnd;
+//   }).toList();
 
-  final spent = todayExpenses.fold<int>(
-    0,
-    (previousValue, element) => previousValue + element.amount,
-  );
+//   final spent = todayExpenses.fold<int>(
+//     0,
+//     (previousValue, element) => previousValue + element.amount,
+//   );
 
-  final remainder = dailyBudget.amount - spent;
+//   final remainder = dailyBudget.amount - spent;
 
-// TODO this will not work - this needs data from yesterday too
-  final accumulation = dailyBudget.amount - remainder;
+// // TODO this will not work - this needs data from yesterday too
+//   final accumulation = dailyBudget.amount - remainder;
 
-  throw UnimplementedError();
-}
+//   throw UnimplementedError();
+// }
 
 /* 
 

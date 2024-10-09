@@ -15,7 +15,8 @@ abstract interface class PeriodDailyBudgetsRepository {
 
   Future<PeriodDailyBudgetModel?> getPeriodDailyBudgetByDateAndPeriod({
     required DateTime date,
-    required Period period,
+    required Period
+        period, // this should me Period.month - because we are always having daily budget for a month
   });
 
   Future<PeriodDailyBudgetModel?> getPeriodDailyBudgetById({
