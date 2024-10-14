@@ -95,7 +95,7 @@ void main() {
               ).thenAnswer(
                 (_) async => null,
               );
-              await cubit.onLoadData();
+              await cubit.onLoadBalances();
 
               // delay needed to add the event to the stream
               await Future.delayed(Duration.zero);
@@ -142,7 +142,7 @@ void main() {
               ).thenAnswer(
                 (_) async => throw Exception("Some exception"),
               );
-              await cubit.onLoadData();
+              await cubit.onLoadBalances();
 
               // delay needed to add the event to the stream
               await Future.delayed(Duration.zero);
@@ -203,7 +203,7 @@ void main() {
               ).thenAnswer(
                 (_) async => throw Exception("Some exception"),
               );
-              await cubit.onLoadData();
+              await cubit.onLoadBalances();
 
               // delay needed to add the event to the stream
               await Future.delayed(Duration.zero);
@@ -285,7 +285,7 @@ void main() {
               ).thenAnswer(
                 (_) async => balances,
               );
-              await cubit.onLoadData();
+              await cubit.onLoadBalances();
 
               // delay needed to add the event to the stream
               await Future.delayed(Duration.zero);
@@ -314,7 +314,7 @@ void main() {
               ).thenAnswer(
                 (_) async => null,
               );
-              await cubit.onLoadData();
+              await cubit.onLoadBalances();
             },
             expect: () => [
               HomeScreenBalancesReportCubitStateLoading(),
