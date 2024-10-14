@@ -1,18 +1,14 @@
-1. use new calculator in home screen bloc
-2. create maybe some use cases 
-- how to now pass use cases to blocs? can we use repositories provider to actually provide use cases?
+1. now need presentation business logic to add new montly budget for this month
+- lets create a use case to add new budget
+- we need new value
+- who should create the value?
+- maybe use case can create the value
+- and bloc would pass it extreme monents and amount?
+    - becasue in get home balances, cubit also passes extreme moments, so lets keep it consistent
+- and use case would provide period for month
 
 
-1. ok, lets now create use case to get home data
-- current month daily budget
-- expenses for current month
-- lets see if we already have how state is supposed to look like
-    - should be 
-
-2. then we create home screen controller
-    1. it will get this use case 
-    2. but it should also have use case to check if current month exists
-        1. it would just set different data state
-    3. lets use block for this too
-        1. because it will by design emit specific state
-        2. look at recommended architecture from their official guide
+- so we would call this use case?
+- createMonthDailyBudget
+- accept extremen monents 
+- accept amount
