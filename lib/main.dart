@@ -1,22 +1,47 @@
 import 'package:flutter/material.dart';
+import 'package:svorc_proto_v1/src/features/core/domain/values/app_repositories_value.dart';
+import 'package:svorc_proto_v1/src/features/core/utilities/helpers/app_dependencies_resolver_helper.dart';
+import 'package:svorc_proto_v1/src/wrappers/drift/drift_database_wrapper.dart';
 
 import 'src/app.dart';
 import 'src/settings/settings_controller.dart';
 import 'src/settings/settings_service.dart';
 
 void main() async {
-  // Set up the SettingsController, which will glue user settings to multiple
-  // Flutter Widgets.
   final settingsController = SettingsController(SettingsService());
 
-  // Load the user's preferred theme while the splash screen is displayed.
-  // This prevents a sudden theme change when the app is first displayed.
+// TODO remove this when time - or maybe not, we will see.
+// TODO then leave as long as really no good reason to remove. probably can use some of it
   await settingsController.loadSettings();
 
-  await Future.delayed(const Duration(seconds: 21));
+  final DriftDatabaseWrapper driftDatabaseWrapper =
+      _getInitializedDatabaseWrapper();
+  final AppRepositoriesValue appRepositories =
+      _getAppRepositories(driftDatabaseWrapper);
 
-  // Run the app and pass in the SettingsController. The app listens to the
-  // SettingsController for changes, then passes it further down to the
-  // SettingsView.
-  runApp(MyApp(settingsController: settingsController));
+  runApp(MyApp(
+    settingsController: settingsController,
+    appRepositories: appRepositories,
+  ));
+}
+
+DriftDatabaseWrapper _getInitializedDatabaseWrapper() {
+  final DriftDatabaseWrapper driftDatabaseWrapper = DriftDatabaseWrapper.app();
+  driftDatabaseWrapper.initialize();
+
+  return driftDatabaseWrapper;
+}
+
+AppRepositoriesValue _getAppRepositories(
+  DriftDatabaseWrapper databaseWrapper,
+) {
+  final AppDependenciesResolverHelper appDependenciesResolverHelper =
+      AppDependenciesResolverHelper(
+    databaseWrapper,
+  );
+
+  final AppRepositoriesValue appRepositories =
+      appDependenciesResolverHelper.resolveRepositories();
+
+  return appRepositories;
 }

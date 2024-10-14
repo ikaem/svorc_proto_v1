@@ -6,8 +6,8 @@ import 'package:svorc_proto_v1/src/features/categories/utils/converters/category
 
 class CategoriesRepositoryImpl implements CategoriesRepository {
   const CategoriesRepositoryImpl({
-    required CategoriesLocalDataSource categoryLocalDataSource,
-  }) : _categoryLocalDataSource = categoryLocalDataSource;
+    required CategoriesLocalDataSource categoriesLocalDataSource,
+  }) : _categoryLocalDataSource = categoriesLocalDataSource;
 
   final CategoriesLocalDataSource _categoryLocalDataSource;
 

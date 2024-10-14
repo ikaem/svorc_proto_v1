@@ -12,7 +12,7 @@ void main() {
 
   // tested class
   final repository = CategoriesRepositoryImpl(
-    categoryLocalDataSource: categoryLocalDataSource,
+    categoriesLocalDataSource: categoryLocalDataSource,
   );
 
   setUpAll(
