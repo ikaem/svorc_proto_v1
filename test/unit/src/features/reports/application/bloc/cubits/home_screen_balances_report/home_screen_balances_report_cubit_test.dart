@@ -1,5 +1,4 @@
 import 'package:bloc_test/bloc_test.dart';
-import 'package:drift/drift.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:svorc_proto_v1/src/features/period_daily_budgets/data/entities/local/period_daily_budget/period_daily_budget_local_entity.dart';
@@ -10,7 +9,6 @@ import 'package:svorc_proto_v1/src/features/reports/application/bloc/cubits/home
 import 'package:svorc_proto_v1/src/features/reports/domain/use_cases/get_home_screen_balances_use_case.dart';
 import 'package:svorc_proto_v1/src/features/reports/domain/values/home_screen_balances_value.dart';
 import 'package:svorc_proto_v1/src/features/reports/utils/helpers/month_balance_calculation_helper.dart';
-// import 'package:test/test.dart';
 
 void main() {
   final GetHomeScreenBalancesUseCase getHomeScreenBalancesUseCase =
@@ -36,9 +34,9 @@ void main() {
         "initial state",
         () {
           test(
-            "given <pre-condition to the test>"
-            "when <behavior we are specifying>"
-            "then should <state we expect to happen>",
+            "given instance of [HomeScreenBalancesReportCubit]"
+            "when state is retrieved"
+            "then should be [HomeScreenBalancesReportCubitStateInitial]",
             () async {
               // setup
 
@@ -56,17 +54,20 @@ void main() {
               );
 
               // cleanup
+              addTearDown(() async {
+                await cubit.close();
+              });
             },
           );
         },
       );
 
       group(
-        ".onLoadData",
+        ".onLoadBalances",
         () {
           test(
             "given [HomeScreenBalancesReportCubitStateInitial] state"
-            "when [onLoadData] is called and [getMonthDailyBudgetUseCase] returns null"
+            "when [onLoadBalances] is called and [GetMonthDailyBudgetUseCase] returns null"
             "then should emit expected states",
             () async {
               // setup
@@ -111,7 +112,7 @@ void main() {
 
           test(
             "given [HomeScreenBalancesReportCubitStateInitial] state"
-            "when [onLoadData] is called and [getMonthDailyBudgetUseCase] throws"
+            "when [onLoadBalances] is called and [GetMonthDailyBudgetUseCase] throws"
             "then should emit expected states",
             () async {
               // setup
@@ -156,7 +157,7 @@ void main() {
 
           test(
             "given [HomeScreenBalancesReportCubitStateInitial] state"
-            "when [onLoadData] is called and [GetHomeScreenBalancesUseCase] throws"
+            "when [onLoadBalances] is called and [GetHomeScreenBalancesUseCase] throws"
             "then should emit expected states",
             () async {
               // setup
@@ -217,7 +218,7 @@ void main() {
 
           test(
             "given [HomeScreenBalancesReportCubitStateInitial] state"
-            "when [onLoadData] is called and [GetHomeScreenBalancesUseCase] and [getMonthDailyBudgetUseCase] return successfully"
+            "when [onLoadBalances] is called and [GetHomeScreenBalancesUseCase] and [GetMonthDailyBudgetUseCase] return successfully"
             "then should emit expected states",
             () async {
               // setup
