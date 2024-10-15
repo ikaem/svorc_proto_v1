@@ -69,7 +69,12 @@ class DriftAppDatabaseMigrator {
 
     await _database.categoryLocalEntity.insertOne(
       generalCategoryCompanion,
-      onConflict: DoNothing(),
+      // onConflict: DoNothing(),
+      // TODO figure if there is a better way for this. for now, we ignore hoping issue is the unique constraint one where we already have category 1 in db
+      mode: InsertMode.insertOrIgnore,
+      // mode: InsertMode.insertOrAbort,
     );
+
+    print("Done");
   }
 }
