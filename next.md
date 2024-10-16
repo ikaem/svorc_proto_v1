@@ -1,4 +1,10 @@
-1. CONTENT WIDGET FOR home scren
-- to be called by view body
-2. dialog for adding montly budget when there is none
-- i guess this not found error should return data for which month there is no budget (perido extremes) - so we can print it in the dialog, and also use it to create data in database
+1. contentview contianer loaded
+- needs values from stsate
+	- thinking if cubit on home should only fetch daily bugdget 
+	- if so, we can pass daily bidget to content loaded
+	- then, loaded contianer (will need rename, but maybe - HomeScreenReporsContainer) will accept this daily budget, and would use another cubit to fetch reports data
+	- and then we would have another widget which is current months report contianer
+		- which will get current month reports 
+	- and then we would have another widget that would be recent expenses report
+		- which will use some other cubit to get recent expenses
+- so we would have scoped cubits for each of these

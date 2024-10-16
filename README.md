@@ -382,3 +382,12 @@ class TestDatabaseWrapper {
       onConflict: DoNothing(),
     );
   }
+
+
+
+  adding cubit to add entry to database
+  1. create cubit
+  2. create dialog
+  3. we have form
+  4. on success, we can close
+  5. maybe better to use some kind of lisnerer of state of bloc, and then call on close callback , or on success, whatever

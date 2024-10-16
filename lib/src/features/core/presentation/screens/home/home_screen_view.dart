@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:svorc_proto_v1/src/features/core/presentation/widgets/home/add_monthly_budget.dart';
+import 'package:svorc_proto_v1/src/features/core/presentation/widgets/home/add_monthly_budget_dialog.dart';
 import 'package:svorc_proto_v1/src/features/reports/application/bloc/cubits/home_screen_balances_report/home_screen_balances_report_cubit.dart';
 
 class HomeScreenView extends StatelessWidget {
@@ -27,7 +27,11 @@ class HomeScreenView extends StatelessWidget {
             barrierDismissible: false,
             builder: (context) {
               // TODO future work, prevent closing this in any way by user
-              return const AddMonthlyBudget();
+              return AddMonthlyBudgetDialog(
+                onClose: () {
+                  Navigator.of(context).pop();
+                },
+              );
             },
           );
         }

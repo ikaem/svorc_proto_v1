@@ -31,7 +31,6 @@ class HomeScreen extends StatelessWidget {
           getHomeScreenBalancesUseCase: balancesUseCase,
           getMonthDailyBudgetUseCase: monthDailyBudgetUseCase,
         )..onLoadBalances();
-
         return balancesReportCubit;
       },
       child: const HomeScreenView(),
