@@ -3,8 +3,7 @@ import 'package:flutter/material.dart';
 class HomeScreenViewContentLoadedContainer extends StatelessWidget {
   const HomeScreenViewContentLoadedContainer({super.key});
 
-
-  final Period
+  // final Period
 
   @override
   Widget build(BuildContext context) {

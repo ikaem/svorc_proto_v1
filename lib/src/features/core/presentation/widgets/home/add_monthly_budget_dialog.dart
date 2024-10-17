@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:svorc_proto_v1/src/features/period_daily_budgets/application/bloc/cubits/create_month_daily_budget_cubit.dart';
+import 'package:svorc_proto_v1/src/features/period_daily_budgets/application/bloc/cubits/create_month_daily_budget/create_month_daily_budget_cubit.dart';
 import 'package:svorc_proto_v1/src/features/period_daily_budgets/domain/repositories/period_daily_budgets_repository.dart';
 import 'package:svorc_proto_v1/src/features/period_daily_budgets/domain/use_cases/create_month_daily_budget_use_case.dart';
 
