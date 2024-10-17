@@ -10,6 +10,7 @@ import 'package:svorc_proto_v1/src/features/period_daily_budgets/utils/helpers/p
 
 part "home_screen_balances_report_cubit_state.dart";
 
+// TODO: rename and remove logic to get month daily budget
 class HomeScreenBalancesReportCubit
     extends Cubit<HomeScreenBalancesReportCubitState> {
   HomeScreenBalancesReportCubit({
@@ -60,7 +61,7 @@ class HomeScreenBalancesReportCubit
           errorMessage: "There was an issue loading data",
         ),
       );
-      return;
+      // return;
     }
   }
 }
