@@ -3,30 +3,30 @@ import 'dart:developer';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:svorc_proto_v1/src/features/period_daily_budgets/domain/use_cases/get_month_daily_budget_use_case.dart';
-import 'package:svorc_proto_v1/src/features/reports/domain/use_cases/get_home_screen_balances_use_case.dart';
-import 'package:svorc_proto_v1/src/features/reports/domain/values/home_screen_balances_value.dart';
+import 'package:svorc_proto_v1/src/features/reports/domain/use_cases/get_month_balances_use_case.dart';
+import 'package:svorc_proto_v1/src/features/reports/domain/values/month_balances_value.dart';
 import 'package:svorc_proto_v1/src/features/period_daily_budgets/domain/models/period_daily_budget_model.dart';
 import 'package:svorc_proto_v1/src/features/period_daily_budgets/utils/helpers/period_extremes_moments_calculator.dart';
 
-part "home_screen_balances_report_cubit_state.dart";
+part "get_current_month_balances_cubit_state.dart";
 
 // TODO: rename and remove logic to get month daily budget
-class HomeScreenBalancesReportCubit
-    extends Cubit<HomeScreenBalancesReportCubitState> {
-  HomeScreenBalancesReportCubit({
-    required GetHomeScreenBalancesUseCase getHomeScreenBalancesUseCase,
+class GetCurrentMonthBalancesCubit
+    extends Cubit<GetCurrentMonthBalancesCubitState> {
+  GetCurrentMonthBalancesCubit({
+    required GetMonthBalancesUseCase getHomeScreenBalancesUseCase,
     // required GetMonthDailyBudgetUseCase getMonthDailyBudgetUseCase,
   })  : _getHomeScreenBalancesUseCase = getHomeScreenBalancesUseCase,
         // _getMonthDailyBudgetUseCase = getMonthDailyBudgetUseCase,
-        super(HomeScreenBalancesReportCubitStateInitial());
+        super(GetCurrentMonthBalancesCubitStateInitial());
 
-  final GetHomeScreenBalancesUseCase _getHomeScreenBalancesUseCase;
+  final GetMonthBalancesUseCase _getHomeScreenBalancesUseCase;
   // final GetMonthDailyBudgetUseCase _getMonthDailyBudgetUseCase;
 
   Future<void> onLoadBalances({
     required PeriodDailyBudgetModel currentMonthDailyBudget,
   }) async {
-    emit(HomeScreenBalancesReportCubitStateLoading());
+    emit(GetCurrentMonthBalancesCubitStateLoading());
 
     final DateTime nowDate = DateTime.now();
 
@@ -48,18 +48,17 @@ class HomeScreenBalancesReportCubit
         year: nowDate.year,
       );
 
-      final HomeScreenBalancesValue balances =
-          await _getHomeScreenBalancesUseCase(
-        currentMonthExtremes: currentMonthExtremes,
-        currentMonthDailyBudget: currentMonthDailyBudget,
+      final MonthBalancesValue balances = await _getHomeScreenBalancesUseCase(
+        monthExtremes: currentMonthExtremes,
+        monthDailyBudget: currentMonthDailyBudget,
       );
-      emit(HomeScreenBalancesReportCubitStateSuccess(
+      emit(GetCurrentMonthBalancesCubitStateSuccess(
         balances: balances,
       ));
     } catch (e) {
       log(e.toString());
       emit(
-        HomeScreenBalancesReportCubitStateFailure(
+        GetCurrentMonthBalancesCubitStateFailure(
           errorMessage: "There was an issue loading data",
         ),
       );

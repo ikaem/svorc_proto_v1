@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:svorc_proto_v1/src/features/core/presentation/widgets/home/add_monthly_budget_dialog.dart';
-import 'package:svorc_proto_v1/src/features/reports/application/bloc/cubits/home_screen_balances_report/home_screen_balances_report_cubit.dart';
+import 'package:svorc_proto_v1/src/features/reports/application/bloc/cubits/get_current_month_balances/get_current_month_balances_cubit.dart';
 
 class HomeScreenView extends StatelessWidget {
   const HomeScreenView({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<HomeScreenBalancesReportCubit,
-        HomeScreenBalancesReportCubitState>(
+    return BlocConsumer<GetCurrentMonthBalancesCubit,
+        GetCurrentMonthBalancesCubitState>(
       builder: (context, state) {
         return Scaffold(
           body: SafeArea(
@@ -47,17 +47,17 @@ class _HomeScreenViewBody extends StatelessWidget {
     required this.state,
   });
 
-  final HomeScreenBalancesReportCubitState state;
+  final GetCurrentMonthBalancesCubitState state;
 
   @override
   Widget build(BuildContext context) {
     return switch (state) {
-      HomeScreenBalancesReportCubitStateInitial() =>
+      GetCurrentMonthBalancesCubitStateInitial() =>
         const Center(child: Text("Initial stuff")),
-      (HomeScreenBalancesReportCubitStateLoading _) => const Center(
+      (GetCurrentMonthBalancesCubitStateLoading _) => const Center(
           child: CircularProgressIndicator(),
         ),
-      (HomeScreenBalancesReportCubitStateSuccess _) => const Center(
+      (GetCurrentMonthBalancesCubitStateSuccess _) => const Center(
           child: Text("Success"),
         ),
       // TODO: Handle this case.
@@ -65,7 +65,7 @@ class _HomeScreenViewBody extends StatelessWidget {
       //   const Center(
       //     child: Text("Not Found"),
       //   ),
-      (HomeScreenBalancesReportCubitStateFailure _) => const Center(
+      (GetCurrentMonthBalancesCubitStateFailure _) => const Center(
           child: Text("Failure"),
         ),
     };

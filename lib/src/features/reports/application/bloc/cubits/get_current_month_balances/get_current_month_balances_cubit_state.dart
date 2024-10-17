@@ -4,27 +4,27 @@
 // import 'package:svorc_proto_v1/src/features/period_daily_budgets/data/entities/local/period_daily_budget/period_daily_budget_local_entity.dart';
 // import 'package:svorc_proto_v1/src/features/period_daily_budgets/domain/models/period_daily_budget_model.dart';
 
-part of "home_screen_balances_report_cubit.dart";
+part of "get_current_month_balances_cubit.dart";
 
-sealed class HomeScreenBalancesReportCubitState extends Equatable {
+sealed class GetCurrentMonthBalancesCubitState extends Equatable {
   @override
   List<Object?> get props => [];
 }
 
-class HomeScreenBalancesReportCubitStateInitial
-    extends HomeScreenBalancesReportCubitState {}
+class GetCurrentMonthBalancesCubitStateInitial
+    extends GetCurrentMonthBalancesCubitState {}
 
 // class HomeScreenBalancesReportCubitStateCurrentDailyBudgetLoading extends HomeScreenBalancesReportCubitState {}
-class HomeScreenBalancesReportCubitStateLoading
-    extends HomeScreenBalancesReportCubitState {}
+class GetCurrentMonthBalancesCubitStateLoading
+    extends GetCurrentMonthBalancesCubitState {}
 
-class HomeScreenBalancesReportCubitStateSuccess
-    extends HomeScreenBalancesReportCubitState {
-  HomeScreenBalancesReportCubitStateSuccess({
+class GetCurrentMonthBalancesCubitStateSuccess
+    extends GetCurrentMonthBalancesCubitState {
+  GetCurrentMonthBalancesCubitStateSuccess({
     required this.balances,
   });
 
-  final HomeScreenBalancesValue balances;
+  final MonthBalancesValue balances;
 
   @override
   List<Object?> get props => [balances];
@@ -33,9 +33,9 @@ class HomeScreenBalancesReportCubitStateSuccess
 // class HomeScreenBalancesReportCubitStateCurrentMonthDailyBudgetNotFound
 //     extends HomeScreenBalancesReportCubitState {}
 
-class HomeScreenBalancesReportCubitStateFailure
-    extends HomeScreenBalancesReportCubitState {
-  HomeScreenBalancesReportCubitStateFailure({
+class GetCurrentMonthBalancesCubitStateFailure
+    extends GetCurrentMonthBalancesCubitState {
+  GetCurrentMonthBalancesCubitStateFailure({
     required this.errorMessage,
   });
 

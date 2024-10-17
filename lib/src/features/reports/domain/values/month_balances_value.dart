@@ -1,28 +1,27 @@
 import 'package:equatable/equatable.dart';
-import 'package:svorc_proto_v1/src/features/period_daily_budgets/data/entities/local/period_daily_budget/period_daily_budget_local_entity.dart';
 import 'package:svorc_proto_v1/src/features/period_daily_budgets/domain/models/period_daily_budget_model.dart';
 import 'package:svorc_proto_v1/src/features/reports/utils/helpers/month_balance_calculation_helper.dart';
 
-class HomeScreenBalancesValue extends Equatable {
-  const HomeScreenBalancesValue({
-    required this.thisMonthDailyBudget,
-    required this.thisWeekBalance,
-    required this.thisMonthBalance,
-    required this.todayBalance,
+class MonthBalancesValue extends Equatable {
+  const MonthBalancesValue({
+    required this.currentMonthDailyBudget,
+    required this.currentWeekBalance,
+    required this.currentMonthBalance,
+    required this.currentDayBalance,
   });
 
-  final PeriodDailyBudgetModel thisMonthDailyBudget;
+  final PeriodDailyBudgetModel currentMonthDailyBudget;
 
-  final WeekBalanceValue thisWeekBalance;
-  final MonthBalanceValue thisMonthBalance;
-  final DateBalanceValue todayBalance;
+  final WeekBalanceValue currentWeekBalance;
+  final MonthBalanceValue currentMonthBalance;
+  final DateBalanceValue currentDayBalance;
 
   @override
   List<Object> get props => [
-        thisMonthDailyBudget,
-        thisWeekBalance,
-        thisMonthBalance,
-        todayBalance,
+        currentMonthDailyBudget,
+        currentWeekBalance,
+        currentMonthBalance,
+        currentDayBalance,
       ];
 }
 

@@ -4,13 +4,13 @@ import 'package:svorc_proto_v1/src/features/period_daily_budgets/data/entities/l
 import 'package:svorc_proto_v1/src/features/period_daily_budgets/domain/models/period_daily_budget_model.dart';
 
 import 'package:svorc_proto_v1/src/features/period_daily_budgets/utils/helpers/period_extremes_moments_calculator.dart';
-import 'package:svorc_proto_v1/src/features/reports/application/bloc/cubits/home_screen_balances_report/home_screen_balances_report_cubit.dart';
-import 'package:svorc_proto_v1/src/features/reports/domain/use_cases/get_home_screen_balances_use_case.dart';
-import 'package:svorc_proto_v1/src/features/reports/domain/values/home_screen_balances_value.dart';
+import 'package:svorc_proto_v1/src/features/reports/application/bloc/cubits/get_current_month_balances/get_current_month_balances_cubit.dart';
+import 'package:svorc_proto_v1/src/features/reports/domain/use_cases/get_month_balances_use_case.dart';
+import 'package:svorc_proto_v1/src/features/reports/domain/values/month_balances_value.dart';
 import 'package:svorc_proto_v1/src/features/reports/utils/helpers/month_balance_calculation_helper.dart';
 
 void main() {
-  final GetHomeScreenBalancesUseCase getHomeScreenBalancesUseCase =
+  final GetMonthBalancesUseCase getHomeScreenBalancesUseCase =
       _MockGetHomeScreenBalancesUseCase();
 
   setUpAll(() {
@@ -23,7 +23,7 @@ void main() {
   });
 
   group(
-    HomeScreenBalancesReportCubit,
+    GetCurrentMonthBalancesCubit,
     () {
       group(
         "initial state",
@@ -36,15 +36,15 @@ void main() {
               // setup
 
               // given
-              final HomeScreenBalancesReportCubit cubit =
-                  HomeScreenBalancesReportCubit(
+              final GetCurrentMonthBalancesCubit cubit =
+                  GetCurrentMonthBalancesCubit(
                 getHomeScreenBalancesUseCase: getHomeScreenBalancesUseCase,
               );
 
               // when / then
               expect(
                 cubit.state,
-                equals(HomeScreenBalancesReportCubitStateInitial()),
+                equals(GetCurrentMonthBalancesCubitStateInitial()),
               );
 
               // cleanup
@@ -74,8 +74,8 @@ void main() {
               );
 
               // given
-              final HomeScreenBalancesReportCubit cubit =
-                  HomeScreenBalancesReportCubit(
+              final GetCurrentMonthBalancesCubit cubit =
+                  GetCurrentMonthBalancesCubit(
                 getHomeScreenBalancesUseCase: getHomeScreenBalancesUseCase,
               );
 
@@ -84,8 +84,8 @@ void main() {
                 cubit.stream,
                 emitsInOrder(
                   [
-                    HomeScreenBalancesReportCubitStateLoading(),
-                    HomeScreenBalancesReportCubitStateFailure(
+                    GetCurrentMonthBalancesCubitStateLoading(),
+                    GetCurrentMonthBalancesCubitStateFailure(
                       errorMessage: "There was an issue loading data",
                     )
                   ],
@@ -95,9 +95,8 @@ void main() {
               // when
               when(
                 () => getHomeScreenBalancesUseCase(
-                  currentMonthDailyBudget:
-                      any(named: "currentMonthDailyBudget"),
-                  currentMonthExtremes: any(named: "currentMonthExtremes"),
+                  monthDailyBudget: any(named: "currentMonthDailyBudget"),
+                  monthExtremes: any(named: "currentMonthExtremes"),
                 ),
               ).thenAnswer(
                 (_) async => throw Exception("Some exception"),
@@ -127,21 +126,21 @@ void main() {
                 amount: 100,
                 period: Period.month,
               );
-              final HomeScreenBalancesValue balances = HomeScreenBalancesValue(
-                thisMonthDailyBudget: budget,
-                thisWeekBalance: WeekBalanceValue(
+              final MonthBalancesValue balances = MonthBalancesValue(
+                currentMonthDailyBudget: budget,
+                currentWeekBalance: WeekBalanceValue(
                   accumulationValue: 50,
                   date: DateTime.now(),
                   remainderValue: 50,
                   spentValue: 50,
                 ),
-                thisMonthBalance: MonthBalanceValue(
+                currentMonthBalance: MonthBalanceValue(
                   accumulationValue: 50,
                   remainderValue: 50,
                   spentValue: 50,
                   date: DateTime.now(),
                 ),
-                todayBalance: DateBalanceValue(
+                currentDayBalance: DateBalanceValue(
                   accumulationValue: 50,
                   remainderValue: 50,
                   spentValue: 50,
@@ -150,8 +149,8 @@ void main() {
               );
 
               // given
-              final HomeScreenBalancesReportCubit cubit =
-                  HomeScreenBalancesReportCubit(
+              final GetCurrentMonthBalancesCubit cubit =
+                  GetCurrentMonthBalancesCubit(
                 getHomeScreenBalancesUseCase: getHomeScreenBalancesUseCase,
               );
 
@@ -160,8 +159,8 @@ void main() {
                 cubit.stream,
                 emitsInOrder(
                   [
-                    HomeScreenBalancesReportCubitStateLoading(),
-                    HomeScreenBalancesReportCubitStateSuccess(
+                    GetCurrentMonthBalancesCubitStateLoading(),
+                    GetCurrentMonthBalancesCubitStateSuccess(
                       balances: balances,
                     )
                   ],
@@ -170,9 +169,8 @@ void main() {
 
               when(
                 () => getHomeScreenBalancesUseCase(
-                  currentMonthDailyBudget:
-                      any(named: "currentMonthDailyBudget"),
-                  currentMonthExtremes: any(named: "currentMonthExtremes"),
+                  monthDailyBudget: any(named: "currentMonthDailyBudget"),
+                  monthExtremes: any(named: "currentMonthExtremes"),
                 ),
               ).thenAnswer(
                 (_) async => balances,
@@ -222,7 +220,7 @@ void main() {
 }
 
 class _MockGetHomeScreenBalancesUseCase extends Mock
-    implements GetHomeScreenBalancesUseCase {}
+    implements GetMonthBalancesUseCase {}
 
 class _FakePeriodDailyBudgetModel extends Fake
     implements PeriodDailyBudgetModel {}

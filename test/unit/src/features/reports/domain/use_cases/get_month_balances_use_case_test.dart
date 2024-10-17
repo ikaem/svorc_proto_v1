@@ -9,16 +9,16 @@ import 'package:svorc_proto_v1/src/features/period_daily_budgets/domain/models/p
 import 'package:svorc_proto_v1/src/features/period_daily_budgets/domain/repositories/period_daily_budgets_repository.dart';
 import 'package:svorc_proto_v1/src/features/period_daily_budgets/domain/use_cases/get_month_daily_budget_use_case.dart';
 import 'package:svorc_proto_v1/src/features/period_daily_budgets/utils/helpers/period_extremes_moments_calculator.dart';
-import 'package:svorc_proto_v1/src/features/reports/domain/use_cases/get_home_screen_balances_use_case.dart';
-import 'package:svorc_proto_v1/src/features/reports/domain/values/home_screen_balances_value.dart';
+import 'package:svorc_proto_v1/src/features/reports/domain/use_cases/get_month_balances_use_case.dart';
+import 'package:svorc_proto_v1/src/features/reports/domain/values/month_balances_value.dart';
 import 'package:svorc_proto_v1/src/features/reports/utils/helpers/month_balance_calculation_helper.dart';
 
 void main() {
   final ExpensesRepository expensesRepository = _MockExpensesRepository();
 
   // tested class
-  final GetHomeScreenBalancesUseCase useCase =
-      GetHomeScreenBalancesUseCase(expensesRepository);
+  final GetMonthBalancesUseCase useCase =
+      GetMonthBalancesUseCase(expensesRepository);
 
   setUpAll(() {
     registerFallbackValue(_FakeGetExpensesFilterValue());
@@ -29,7 +29,7 @@ void main() {
   });
 
   group(
-    GetHomeScreenBalancesUseCase,
+    GetMonthBalancesUseCase,
     () {
       group(
         ".call",
@@ -81,28 +81,28 @@ void main() {
               );
 
               // when
-              final HomeScreenBalancesValue result = await useCase(
-                currentMonthExtremes: currentMonthExtremes,
-                currentMonthDailyBudget: currentMonthDailyBudget,
+              final MonthBalancesValue result = await useCase(
+                monthExtremes: currentMonthExtremes,
+                monthDailyBudget: currentMonthDailyBudget,
               );
 
               // then
               // TODO not using this still
-              final expectedResult = HomeScreenBalancesValue(
-                thisMonthDailyBudget: currentMonthDailyBudget,
-                thisWeekBalance: WeekBalanceValue(
+              final expectedResult = MonthBalancesValue(
+                currentMonthDailyBudget: currentMonthDailyBudget,
+                currentWeekBalance: WeekBalanceValue(
                   spentValue: 0,
                   remainderValue: 0,
                   accumulationValue: 0,
                   date: DateTime.now(),
                 ),
-                thisMonthBalance: MonthBalanceValue(
+                currentMonthBalance: MonthBalanceValue(
                   spentValue: 0,
                   remainderValue: 0,
                   accumulationValue: 0,
                   date: DateTime.now(),
                 ),
-                todayBalance: DateBalanceValue(
+                currentDayBalance: DateBalanceValue(
                   date: DateTime.now(),
                   spentValue: 0,
                   remainderValue: 0,
