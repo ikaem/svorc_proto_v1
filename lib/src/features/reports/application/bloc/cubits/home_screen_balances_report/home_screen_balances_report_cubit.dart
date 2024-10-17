@@ -15,30 +15,32 @@ class HomeScreenBalancesReportCubit
     extends Cubit<HomeScreenBalancesReportCubitState> {
   HomeScreenBalancesReportCubit({
     required GetHomeScreenBalancesUseCase getHomeScreenBalancesUseCase,
-    required GetMonthDailyBudgetUseCase getMonthDailyBudgetUseCase,
+    // required GetMonthDailyBudgetUseCase getMonthDailyBudgetUseCase,
   })  : _getHomeScreenBalancesUseCase = getHomeScreenBalancesUseCase,
-        _getMonthDailyBudgetUseCase = getMonthDailyBudgetUseCase,
+        // _getMonthDailyBudgetUseCase = getMonthDailyBudgetUseCase,
         super(HomeScreenBalancesReportCubitStateInitial());
 
   final GetHomeScreenBalancesUseCase _getHomeScreenBalancesUseCase;
-  final GetMonthDailyBudgetUseCase _getMonthDailyBudgetUseCase;
+  // final GetMonthDailyBudgetUseCase _getMonthDailyBudgetUseCase;
 
-  Future<void> onLoadBalances() async {
+  Future<void> onLoadBalances({
+    required PeriodDailyBudgetModel currentMonthDailyBudget,
+  }) async {
     emit(HomeScreenBalancesReportCubitStateLoading());
 
     final DateTime nowDate = DateTime.now();
 
     try {
-      final PeriodDailyBudgetModel? currentMonthDailyBudget =
-          await _getMonthDailyBudgetUseCase(
-        date: nowDate,
-      );
+      // final PeriodDailyBudgetModel? currentMonthDailyBudget =
+      //     await _getMonthDailyBudgetUseCase(
+      //   date: nowDate,
+      // );
 
-      if (currentMonthDailyBudget == null) {
-        emit(
-            HomeScreenBalancesReportCubitStateCurrentMonthDailyBudgetNotFound());
-        return;
-      }
+      // if (currentMonthDailyBudget == null) {
+      //   emit(
+      //       HomeScreenBalancesReportCubitStateCurrentMonthDailyBudgetNotFound());
+      //   return;
+      // }
 
       final PeriodExtremesMoments currentMonthExtremes =
           PeriodExtremesMomentsCalculator.calculateMonthMoments(

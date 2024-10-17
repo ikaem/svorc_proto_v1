@@ -19,23 +19,25 @@ class HomeScreenView extends StatelessWidget {
           ),
         );
       },
-      listener: (context, state) {
-        if (state
-            is HomeScreenBalancesReportCubitStateCurrentMonthDailyBudgetNotFound) {
-          showDialog(
-            context: context,
-            barrierDismissible: false,
-            builder: (context) {
-              // TODO future work, prevent closing this in any way by user
-              return AddMonthlyBudgetDialog(
-                onClose: () {
-                  Navigator.of(context).pop();
-                },
-              );
-            },
-          );
-        }
-      },
+      // TODO not needed
+      listener: (context, state) {},
+      // listener: (context, state) {
+      //   if (state
+      //       is HomeScreenBalancesReportCubitStateCurrentMonthDailyBudgetNotFound) {
+      //     showDialog(
+      //       context: context,
+      //       barrierDismissible: false,
+      //       builder: (context) {
+      //         // TODO future work, prevent closing this in any way by user
+      //         return AddMonthlyBudgetDialog(
+      //           onClose: () {
+      //             Navigator.of(context).pop();
+      //           },
+      //         );
+      //       },
+      //     );
+      //   }
+      // },
     );
   }
 }
@@ -59,10 +61,10 @@ class _HomeScreenViewBody extends StatelessWidget {
           child: Text("Success"),
         ),
       // TODO: Handle this case.
-      (HomeScreenBalancesReportCubitStateCurrentMonthDailyBudgetNotFound _) =>
-        const Center(
-          child: Text("Not Found"),
-        ),
+      // (HomeScreenBalancesReportCubitStateCurrentMonthDailyBudgetNotFound _) =>
+      //   const Center(
+      //     child: Text("Not Found"),
+      //   ),
       (HomeScreenBalancesReportCubitStateFailure _) => const Center(
           child: Text("Failure"),
         ),

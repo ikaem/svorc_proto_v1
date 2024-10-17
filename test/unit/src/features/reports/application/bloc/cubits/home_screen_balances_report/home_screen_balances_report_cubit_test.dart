@@ -1,9 +1,8 @@
-import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:svorc_proto_v1/src/features/period_daily_budgets/data/entities/local/period_daily_budget/period_daily_budget_local_entity.dart';
 import 'package:svorc_proto_v1/src/features/period_daily_budgets/domain/models/period_daily_budget_model.dart';
-import 'package:svorc_proto_v1/src/features/period_daily_budgets/domain/use_cases/get_month_daily_budget_use_case.dart';
+
 import 'package:svorc_proto_v1/src/features/period_daily_budgets/utils/helpers/period_extremes_moments_calculator.dart';
 import 'package:svorc_proto_v1/src/features/reports/application/bloc/cubits/home_screen_balances_report/home_screen_balances_report_cubit.dart';
 import 'package:svorc_proto_v1/src/features/reports/domain/use_cases/get_home_screen_balances_use_case.dart';
@@ -13,18 +12,14 @@ import 'package:svorc_proto_v1/src/features/reports/utils/helpers/month_balance_
 void main() {
   final GetHomeScreenBalancesUseCase getHomeScreenBalancesUseCase =
       _MockGetHomeScreenBalancesUseCase();
-  final GetMonthDailyBudgetUseCase getMonthDailyBudgetUseCase =
-      _MockGetMonthDailyBudgetUseCase();
 
   setUpAll(() {
-    registerFallbackValue(Period.month);
     registerFallbackValue(_FakePeriodDailyBudgetModel());
     registerFallbackValue(_FakePeriodExtremesMoments());
   });
 
   tearDown(() {
     reset(getHomeScreenBalancesUseCase);
-    reset(getMonthDailyBudgetUseCase);
   });
 
   group(
@@ -44,7 +39,6 @@ void main() {
               final HomeScreenBalancesReportCubit cubit =
                   HomeScreenBalancesReportCubit(
                 getHomeScreenBalancesUseCase: getHomeScreenBalancesUseCase,
-                getMonthDailyBudgetUseCase: getMonthDailyBudgetUseCase,
               );
 
               // when / then
@@ -67,96 +61,6 @@ void main() {
         () {
           test(
             "given [HomeScreenBalancesReportCubitStateInitial] state"
-            "when [onLoadBalances] is called and [GetMonthDailyBudgetUseCase] returns null"
-            "then should emit expected states",
-            () async {
-              // setup
-
-              // given
-              final HomeScreenBalancesReportCubit cubit =
-                  HomeScreenBalancesReportCubit(
-                getHomeScreenBalancesUseCase: getHomeScreenBalancesUseCase,
-                getMonthDailyBudgetUseCase: getMonthDailyBudgetUseCase,
-              );
-
-              // then
-              expect(
-                cubit.stream,
-                emitsInOrder(
-                  [
-                    HomeScreenBalancesReportCubitStateLoading(),
-                    HomeScreenBalancesReportCubitStateCurrentMonthDailyBudgetNotFound()
-                  ],
-                ),
-              );
-
-              // when
-              when(
-                () => getMonthDailyBudgetUseCase(date: any(named: "date")),
-              ).thenAnswer(
-                (_) async => null,
-              );
-              await cubit.onLoadBalances();
-
-              // delay needed to add the event to the stream
-              await Future.delayed(Duration.zero);
-
-              // TODO maaaybe we should test that use case was called
-
-              // cleanup
-              addTearDown(() async {
-                await cubit.close();
-              });
-            },
-          );
-
-          test(
-            "given [HomeScreenBalancesReportCubitStateInitial] state"
-            "when [onLoadBalances] is called and [GetMonthDailyBudgetUseCase] throws"
-            "then should emit expected states",
-            () async {
-              // setup
-
-              // given
-              final HomeScreenBalancesReportCubit cubit =
-                  HomeScreenBalancesReportCubit(
-                getHomeScreenBalancesUseCase: getHomeScreenBalancesUseCase,
-                getMonthDailyBudgetUseCase: getMonthDailyBudgetUseCase,
-              );
-
-              // then
-              expect(
-                cubit.stream,
-                emitsInOrder(
-                  [
-                    HomeScreenBalancesReportCubitStateLoading(),
-                    HomeScreenBalancesReportCubitStateFailure(
-                      errorMessage: "There was an issue loading data",
-                    )
-                  ],
-                ),
-              );
-
-              // when
-              when(
-                () => getMonthDailyBudgetUseCase(date: any(named: "date")),
-              ).thenAnswer(
-                (_) async => throw Exception("Some exception"),
-              );
-              await cubit.onLoadBalances();
-
-              // delay needed to add the event to the stream
-              await Future.delayed(Duration.zero);
-
-              // cleanup
-              addTearDown(() async {
-                await cubit.close();
-              });
-            },
-          );
-
-          test(
-            "given [HomeScreenBalancesReportCubitStateInitial] state"
             "when [onLoadBalances] is called and [GetHomeScreenBalancesUseCase] throws"
             "then should emit expected states",
             () async {
@@ -168,17 +72,11 @@ void main() {
                 amount: 100,
                 period: Period.month,
               );
-              when(
-                () => getMonthDailyBudgetUseCase(date: any(named: "date")),
-              ).thenAnswer(
-                (_) async => budget,
-              );
 
               // given
               final HomeScreenBalancesReportCubit cubit =
                   HomeScreenBalancesReportCubit(
                 getHomeScreenBalancesUseCase: getHomeScreenBalancesUseCase,
-                getMonthDailyBudgetUseCase: getMonthDailyBudgetUseCase,
               );
 
               // then
@@ -204,7 +102,7 @@ void main() {
               ).thenAnswer(
                 (_) async => throw Exception("Some exception"),
               );
-              await cubit.onLoadBalances();
+              await cubit.onLoadBalances(currentMonthDailyBudget: budget);
 
               // delay needed to add the event to the stream
               await Future.delayed(Duration.zero);
@@ -255,7 +153,6 @@ void main() {
               final HomeScreenBalancesReportCubit cubit =
                   HomeScreenBalancesReportCubit(
                 getHomeScreenBalancesUseCase: getHomeScreenBalancesUseCase,
-                getMonthDailyBudgetUseCase: getMonthDailyBudgetUseCase,
               );
 
               // then
@@ -271,12 +168,6 @@ void main() {
                 ),
               );
 
-              // when
-              when(
-                () => getMonthDailyBudgetUseCase(date: any(named: "date")),
-              ).thenAnswer(
-                (_) async => budget,
-              );
               when(
                 () => getHomeScreenBalancesUseCase(
                   currentMonthDailyBudget:
@@ -286,7 +177,9 @@ void main() {
               ).thenAnswer(
                 (_) async => balances,
               );
-              await cubit.onLoadBalances();
+              await cubit.onLoadBalances(
+                currentMonthDailyBudget: budget,
+              );
 
               // delay needed to add the event to the stream
               await Future.delayed(Duration.zero);
@@ -299,29 +192,29 @@ void main() {
           );
 
           // TODO keep as reference, but prefer regular test
-          blocTest(
-            // NOTE for some reason, three lines dont work
-            // "given <pre-condition to the test>"
-            "when <behavior we are specifying>"
-            "then should <state we expect to happen>",
-            // build: () => WeatherCubit(mockWeatherRepository),
-            build: () => HomeScreenBalancesReportCubit(
-              getHomeScreenBalancesUseCase: getHomeScreenBalancesUseCase,
-              getMonthDailyBudgetUseCase: getMonthDailyBudgetUseCase,
-            ),
-            act: (HomeScreenBalancesReportCubit cubit) async {
-              when(
-                () => getMonthDailyBudgetUseCase(date: any(named: "date")),
-              ).thenAnswer(
-                (_) async => null,
-              );
-              await cubit.onLoadBalances();
-            },
-            expect: () => [
-              HomeScreenBalancesReportCubitStateLoading(),
-              HomeScreenBalancesReportCubitStateCurrentMonthDailyBudgetNotFound()
-            ],
-          );
+          // blocTest(
+          //   // NOTE for some reason, three lines dont work
+          //   // "given <pre-condition to the test>"
+          //   "when <behavior we are specifying>"
+          //   "then should <state we expect to happen>",
+          //   // build: () => WeatherCubit(mockWeatherRepository),
+          //   build: () => HomeScreenBalancesReportCubit(
+          //     getHomeScreenBalancesUseCase: getHomeScreenBalancesUseCase,
+          //     // getMonthDailyBudgetUseCase: getMonthDailyBudgetUseCase,
+          //   ),
+          //   act: (HomeScreenBalancesReportCubit cubit) async {
+          //     when(
+          //       () => getMonthDailyBudgetUseCase(date: any(named: "date")),
+          //     ).thenAnswer(
+          //       (_) async => null,
+          //     );
+          //     await cubit.onLoadBalances();
+          //   },
+          //   expect: () => [
+          //     HomeScreenBalancesReportCubitStateLoading(),
+          //     HomeScreenBalancesReportCubitStateCurrentMonthDailyBudgetNotFound()
+          //   ],
+          // );
         },
       );
     },
@@ -330,9 +223,6 @@ void main() {
 
 class _MockGetHomeScreenBalancesUseCase extends Mock
     implements GetHomeScreenBalancesUseCase {}
-
-class _MockGetMonthDailyBudgetUseCase extends Mock
-    implements GetMonthDailyBudgetUseCase {}
 
 class _FakePeriodDailyBudgetModel extends Fake
     implements PeriodDailyBudgetModel {}

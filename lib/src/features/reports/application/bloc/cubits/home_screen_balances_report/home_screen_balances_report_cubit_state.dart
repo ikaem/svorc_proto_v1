@@ -30,8 +30,8 @@ class HomeScreenBalancesReportCubitStateSuccess
   List<Object?> get props => [balances];
 }
 
-class HomeScreenBalancesReportCubitStateCurrentMonthDailyBudgetNotFound
-    extends HomeScreenBalancesReportCubitState {}
+// class HomeScreenBalancesReportCubitStateCurrentMonthDailyBudgetNotFound
+//     extends HomeScreenBalancesReportCubitState {}
 
 class HomeScreenBalancesReportCubitStateFailure
     extends HomeScreenBalancesReportCubitState {
