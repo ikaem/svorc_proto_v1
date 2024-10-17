@@ -18,7 +18,7 @@ void main() {
 
   // tested class
   final GetMonthBalancesUseCase useCase =
-      GetMonthBalancesUseCase(expensesRepository);
+      GetMonthBalancesUseCase(expensesRepository: expensesRepository);
 
   setUpAll(() {
     registerFallbackValue(_FakeGetExpensesFilterValue());

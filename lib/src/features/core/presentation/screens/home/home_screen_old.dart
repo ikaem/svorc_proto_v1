@@ -134,8 +134,8 @@ class _HomeScreenOldState extends State<HomeScreenOld> {
   }
 }
 
-class _HomeScreenRecentExpenses extends StatelessWidget {
-  const _HomeScreenRecentExpenses({
+class HomeScreenRecentExpenses extends StatelessWidget {
+  const HomeScreenRecentExpenses({
     super.key,
   });
 
@@ -279,8 +279,8 @@ class ExpenseBriefItem extends StatelessWidget {
   }
 }
 
-class _HomeScreenPeriodBalances extends StatelessWidget {
-  const _HomeScreenPeriodBalances({
+class HomeScreenPeriodBalances extends StatelessWidget {
+  const HomeScreenPeriodBalances({
     super.key,
     required this.color,
     required this.iconData,
@@ -418,33 +418,26 @@ class _HomeScreenPeriodBalances extends StatelessWidget {
   }
 }
 
-class _HomeScreenTodayBalances extends StatelessWidget {
-  const _HomeScreenTodayBalances({
+class HomeScreenTodayBalances extends StatelessWidget {
+  const HomeScreenTodayBalances({
     super.key,
+    required this.accumulation,
+    required this.spent,
+    required this.remainder,
   });
+
+  final int accumulation;
+  final int spent;
+  final int remainder;
 
   @override
   Widget build(BuildContext context) {
-    return const Column(
+    return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        // Text(
-        //   "TODAY",
-        //   style: TextStyle(
-        //     fontSize: 20,
-        //     fontWeight: FontWeight.bold,
-        //   ),
-        // ),
-        Row(
+        const Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            // Text(
-            //   "THIS WEEK",
-            //   style: TextStyle(
-            //     fontSize: 16,
-            //     fontWeight: FontWeight.bold,
-            //   ),
-            // ),
             Text(
               "TODAY",
               style: TextStyle(
@@ -461,21 +454,19 @@ class _HomeScreenTodayBalances extends StatelessWidget {
                 child: Icon(
                   Icons.calendar_view_day,
                   size: 36,
-                  // iconData,
-                  // color: Colors.white,
                 ),
               ),
             ),
           ],
         ),
-        SizedBox(
+        const SizedBox(
           height: 5,
         ),
         // Accumulated remainder
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Row(
+            const Row(
               children: [
                 Text(
                   "Accumulated Remainder",
@@ -492,20 +483,23 @@ class _HomeScreenTodayBalances extends StatelessWidget {
                 ),
               ],
             ),
-            SizedBox(
+            const SizedBox(
               height: 2,
             ),
             Text(
-              "-11 EUR",
-              style: TextStyle(
+              // "-11 EUR",
+              // TODO maybe this needs to be formated
+              "$accumulation EUR",
+              style: const TextStyle(
                 fontSize: 40,
                 fontWeight: FontWeight.bold,
+                // TODO color needs to be adjusted too
                 color: Colors.red,
               ),
             ),
           ],
         ),
-        SizedBox(
+        const SizedBox(
           height: 5,
         ),
         // Other balances
@@ -514,7 +508,7 @@ class _HomeScreenTodayBalances extends StatelessWidget {
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Row(
+                const Row(
                   children: [
                     Text(
                       "Spent",
@@ -531,12 +525,14 @@ class _HomeScreenTodayBalances extends StatelessWidget {
                     ),
                   ],
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 2,
                 ),
                 Text(
-                  "7 EUR",
-                  style: TextStyle(
+                  // "7 EUR",
+                  // TODO maybe this needs to be formated
+                  "$spent EUR",
+                  style: const TextStyle(
                     fontSize: 14,
                     fontWeight: FontWeight.bold,
                     // color: Colors.red,
@@ -544,13 +540,13 @@ class _HomeScreenTodayBalances extends StatelessWidget {
                 ),
               ],
             ),
-            SizedBox(
+            const SizedBox(
               width: 40,
             ),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Row(
+                const Row(
                   children: [
                     Text(
                       "Remainder",
@@ -567,12 +563,14 @@ class _HomeScreenTodayBalances extends StatelessWidget {
                     ),
                   ],
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 2,
                 ),
                 Text(
-                  "1 EUR",
-                  style: TextStyle(
+                  // "1 EUR",
+                  // TODO maybe this needs to be formated
+                  "$remainder EUR",
+                  style: const TextStyle(
                     fontSize: 14,
                     fontWeight: FontWeight.bold,
                     color: Colors.green,
@@ -587,8 +585,9 @@ class _HomeScreenTodayBalances extends StatelessWidget {
   }
 }
 
-class _HomeScreenTopButtons extends StatelessWidget {
-  const _HomeScreenTopButtons({
+// TODO move to its own widget call it, and rename it - HomeScreenTopButtons
+class HomeScreenTopButtons extends StatelessWidget {
+  const HomeScreenTopButtons({
     super.key,
   });
 

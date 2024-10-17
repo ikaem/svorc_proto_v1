@@ -8,7 +8,9 @@ import 'package:svorc_proto_v1/src/features/reports/utils/helpers/month_balance_
 
 // TODO this needs to be tested
 class GetMonthBalancesUseCase {
-  const GetMonthBalancesUseCase(this._expensesRepository);
+  const GetMonthBalancesUseCase({
+    required ExpensesRepository expensesRepository,
+  }) : _expensesRepository = expensesRepository;
 
   final ExpensesRepository _expensesRepository;
 
