@@ -10,8 +10,8 @@ import 'package:svorc_proto_v1/src/features/period_daily_budgets/domain/use_case
 // TODO or maybe this should be widget only, and parent should use the dialog wrapper
 // TODO also should be called CreateMonthDailyBudgetDialog, becasue this is how the cubit is called
 // TODO this should probably use some kind of DialogWrapper that we will have
-class AddMonthlyBudgetDialog extends StatefulWidget {
-  const AddMonthlyBudgetDialog({
+class AddMonthDailyBudgetDialog extends StatefulWidget {
+  const AddMonthDailyBudgetDialog({
     super.key,
     required this.onClose,
   });
@@ -19,10 +19,11 @@ class AddMonthlyBudgetDialog extends StatefulWidget {
   final VoidCallback onClose;
 
   @override
-  State<AddMonthlyBudgetDialog> createState() => _AddMonthlyBudgetDialogState();
+  State<AddMonthDailyBudgetDialog> createState() =>
+      _AddMonthDailyBudgetDialogState();
 }
 
-class _AddMonthlyBudgetDialogState extends State<AddMonthlyBudgetDialog> {
+class _AddMonthDailyBudgetDialogState extends State<AddMonthDailyBudgetDialog> {
 // TODO for now text controller, but later maybe some kind of input validator that will keep validated input state
   final TextEditingController amountController = TextEditingController();
 

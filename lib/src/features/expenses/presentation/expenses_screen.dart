@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:svorc_proto_v1/src/features/categories/domain/models/category_model.dart';
 import 'package:svorc_proto_v1/src/features/core/presentation/screens/home/home_screen_old.dart';
+import 'package:svorc_proto_v1/src/features/expenses/presentation/widgets/expense_brief_item.dart';
 
 class ExpensesScreen extends StatelessWidget {
   const ExpensesScreen({super.key});
