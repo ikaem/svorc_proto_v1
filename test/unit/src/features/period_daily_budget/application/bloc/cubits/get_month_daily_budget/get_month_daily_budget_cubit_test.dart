@@ -74,7 +74,9 @@ void main() {
 
               // when
               when(() => getMonthDailyBudgetUseCase(date: any(named: "date")))
-                  .thenAnswer((_) async => null);
+                  .thenAnswer(
+                (_) async => null,
+              );
               await cubit.onLoadBudget(date: DateTime.now());
 
               await Future.delayed(Duration.zero);

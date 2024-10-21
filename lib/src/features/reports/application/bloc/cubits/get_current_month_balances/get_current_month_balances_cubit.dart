@@ -2,7 +2,6 @@ import 'dart:developer';
 
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:svorc_proto_v1/src/features/period_daily_budgets/domain/use_cases/get_month_daily_budget_use_case.dart';
 import 'package:svorc_proto_v1/src/features/reports/domain/use_cases/get_month_balances_use_case.dart';
 import 'package:svorc_proto_v1/src/features/reports/domain/values/month_balances_value.dart';
 import 'package:svorc_proto_v1/src/features/period_daily_budgets/domain/models/period_daily_budget_model.dart';
@@ -15,13 +14,10 @@ class GetCurrentMonthBalancesCubit
     extends Cubit<GetCurrentMonthBalancesCubitState> {
   GetCurrentMonthBalancesCubit({
     required GetMonthBalancesUseCase getHomeScreenBalancesUseCase,
-    // required GetMonthDailyBudgetUseCase getMonthDailyBudgetUseCase,
   })  : _getHomeScreenBalancesUseCase = getHomeScreenBalancesUseCase,
-        // _getMonthDailyBudgetUseCase = getMonthDailyBudgetUseCase,
         super(GetCurrentMonthBalancesCubitStateInitial());
 
   final GetMonthBalancesUseCase _getHomeScreenBalancesUseCase;
-  // final GetMonthDailyBudgetUseCase _getMonthDailyBudgetUseCase;
 
   Future<void> onLoadBalances({
     required PeriodDailyBudgetModel currentMonthDailyBudget,
@@ -31,17 +27,6 @@ class GetCurrentMonthBalancesCubit
     final DateTime nowDate = DateTime.now();
 
     try {
-      // final PeriodDailyBudgetModel? currentMonthDailyBudget =
-      //     await _getMonthDailyBudgetUseCase(
-      //   date: nowDate,
-      // );
-
-      // if (currentMonthDailyBudget == null) {
-      //   emit(
-      //       HomeScreenBalancesReportCubitStateCurrentMonthDailyBudgetNotFound());
-      //   return;
-      // }
-
       final PeriodExtremesMoments currentMonthExtremes =
           PeriodExtremesMomentsCalculator.calculateMonthMoments(
         monthIndex: nowDate.month,
