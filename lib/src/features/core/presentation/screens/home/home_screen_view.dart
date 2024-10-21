@@ -210,10 +210,20 @@ class HomeScreenBalances extends StatelessWidget {
             HomeScreenPeriodBalances(
               color: Colors.grey.shade300,
               iconData: Icons.calendar_view_week,
+              accumulation:
+                  successState.balances.currentWeekBalance.accumulationValue,
+              spent: successState.balances.currentWeekBalance.spentValue,
+              remainder:
+                  successState.balances.currentWeekBalance.remainderValue,
             ),
             HomeScreenPeriodBalances(
               color: Colors.grey.shade400,
               iconData: Icons.calendar_view_month,
+              accumulation:
+                  successState.balances.currentMonthBalance.accumulationValue,
+              spent: successState.balances.currentMonthBalance.spentValue,
+              remainder:
+                  successState.balances.currentMonthBalance.remainderValue,
             )
           ],
         );

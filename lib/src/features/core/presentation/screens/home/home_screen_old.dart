@@ -284,10 +284,17 @@ class HomeScreenPeriodBalances extends StatelessWidget {
     super.key,
     required this.color,
     required this.iconData,
+    required this.accumulation,
+    required this.spent,
+    required this.remainder,
   });
 
   final Color color;
   final IconData iconData;
+
+  final int accumulation;
+  final int spent;
+  final int remainder;
 
   @override
   Widget build(BuildContext context) {
@@ -326,7 +333,7 @@ class HomeScreenPeriodBalances extends StatelessWidget {
             const SizedBox(
               height: 4,
             ),
-            const Row(
+            Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.start,
               // crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -337,18 +344,18 @@ class HomeScreenPeriodBalances extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text(
+                      const Text(
                         "Accumulated Remainder",
                         style: TextStyle(
                           fontSize: 14,
                         ),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 2,
                       ),
                       Text(
-                        "-4 EUR",
-                        style: TextStyle(
+                        "$accumulation EUR",
+                        style: const TextStyle(
                           fontSize: 24,
                           fontWeight: FontWeight.bold,
                           // color: Colors.red,
@@ -362,19 +369,19 @@ class HomeScreenPeriodBalances extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text(
+                      const Text(
                         "Spent",
                         style: TextStyle(
                           fontSize: 12,
                         ),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 2,
                       ),
                       // Spacer(),
                       Text(
-                        "-4 EUR",
-                        style: TextStyle(
+                        "$spent EUR",
+                        style: const TextStyle(
                           fontSize: 14,
                           fontWeight: FontWeight.bold,
                           // color: Colors.red,
@@ -388,19 +395,19 @@ class HomeScreenPeriodBalances extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text(
+                      const Text(
                         "Remainder",
                         style: TextStyle(
                           fontSize: 12,
                         ),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 2,
                       ),
                       // Spacer(),
                       Text(
-                        "-4 EUR",
-                        style: TextStyle(
+                        "$remainder EUR",
+                        style: const TextStyle(
                           fontSize: 14,
                           fontWeight: FontWeight.bold,
                           // color: Colors.red,
