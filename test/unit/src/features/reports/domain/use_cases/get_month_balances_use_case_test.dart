@@ -6,8 +6,6 @@ import 'package:svorc_proto_v1/src/features/expenses/domain/models/expense_model
 import 'package:svorc_proto_v1/src/features/expenses/domain/repositories/expenses_repository.dart';
 import 'package:svorc_proto_v1/src/features/period_daily_budgets/data/entities/local/period_daily_budget/period_daily_budget_local_entity.dart';
 import 'package:svorc_proto_v1/src/features/period_daily_budgets/domain/models/period_daily_budget_model.dart';
-import 'package:svorc_proto_v1/src/features/period_daily_budgets/domain/repositories/period_daily_budgets_repository.dart';
-import 'package:svorc_proto_v1/src/features/period_daily_budgets/domain/use_cases/get_month_daily_budget_use_case.dart';
 import 'package:svorc_proto_v1/src/features/period_daily_budgets/utils/helpers/period_extremes_moments_calculator.dart';
 import 'package:svorc_proto_v1/src/features/reports/domain/use_cases/get_month_balances_use_case.dart';
 import 'package:svorc_proto_v1/src/features/reports/domain/values/month_balances_value.dart';

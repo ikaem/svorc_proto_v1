@@ -146,6 +146,16 @@ class ExpensesLocalDataSourceImpl implements ExpensesLocalDataSource {
       // });
     }
 
+    joinedSelect.orderBy(
+      [
+        OrderingTerm(
+          expression: _databaseWrapper.expenseRepo.date,
+          // TODO if needed, it is easy to add orderBy to filter
+          mode: OrderingMode.desc,
+        ),
+      ],
+    );
+
     if (maxDate != null) {
       final toDateExpression =
           _databaseWrapper.expenseRepo.date.isSmallerOrEqualValue(maxDate);

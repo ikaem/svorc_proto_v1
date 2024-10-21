@@ -268,7 +268,7 @@ void main() {
               final companions = List.generate(3, (index) {
                 return ExpenseLocalEntityCompanion.insert(
                   id: Value(index + 1),
-                  date: DateTime.now(),
+                  date: DateTime.now().add(Duration(seconds: index)),
                   amount: (index + 1) * 100,
                   categoryId: 1,
                   note: Value("note ${index + 1}"),
@@ -285,18 +285,23 @@ void main() {
               );
 
               // then
-              final expectedEntityValues = companions.map(
-                (e) => ExpenseLocalEntityValue(
-                  id: e.id.value,
-                  amount: e.amount.value,
-                  date: e.date.value.normalizedToSeconds,
-                  category: const CategoryLocalEntityValue(
-                    id: 1,
-                    name: "general",
-                  ),
-                  note: e.note.value,
-                ),
-              );
+              final expectedEntityValues = companions
+                  .map(
+                    (e) => ExpenseLocalEntityValue(
+                      id: e.id.value,
+                      amount: e.amount.value,
+                      date: e.date.value.normalizedToSeconds,
+                      category: const CategoryLocalEntityValue(
+                        id: 1,
+                        name: "general",
+                      ),
+                      note: e.note.value,
+                    ),
+                  )
+                  .toList()
+                  // TODO because we order by desc date
+                  .reversed
+                  .toList();
 
               expect(entityValues, equals(expectedEntityValues));
 
