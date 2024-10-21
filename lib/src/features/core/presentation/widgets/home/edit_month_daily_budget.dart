@@ -1,6 +1,5 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
-import 'package:svorc_proto_v1/src/features/core/presentation/screens/home/home_screen_old.dart';
 import 'package:svorc_proto_v1/src/features/core/presentation/widgets/home/month_selector.dart';
 
 // TODO handle this better

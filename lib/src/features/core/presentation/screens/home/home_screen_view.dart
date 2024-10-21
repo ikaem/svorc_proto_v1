@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:svorc_proto_v1/src/features/core/presentation/screens/home/home_screen_old.dart';
 import 'package:svorc_proto_v1/src/features/core/presentation/widgets/home/home_screen_balances.dart';
 import 'package:svorc_proto_v1/src/features/core/presentation/widgets/home/home_screen_recent_expenses.dart';
 import 'package:svorc_proto_v1/src/features/core/presentation/widgets/home/home_screen_top_buttons.dart';

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:svorc_proto_v1/src/features/core/presentation/screens/home/home_screen_old.dart';
 import 'package:svorc_proto_v1/src/features/expenses/application/bloc/cubits/get_recent_expenses/get_recent_expenses_cubit.dart';
 import 'package:svorc_proto_v1/src/features/expenses/presentation/expenses_screen.dart';
+import 'package:svorc_proto_v1/src/features/expenses/presentation/widgets/expense_brief_item.dart';
 
 class HomeScreenRecentExpenses extends StatelessWidget {
   const HomeScreenRecentExpenses({

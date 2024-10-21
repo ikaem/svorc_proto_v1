@@ -5,7 +5,6 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:svorc_proto_v1/src/features/categories/domain/repositories/categories_repository.dart';
 import 'package:svorc_proto_v1/src/features/core/domain/values/app_repositories_value.dart';
 import 'package:svorc_proto_v1/src/features/core/presentation/screens/home/home_screen.dart';
-import 'package:svorc_proto_v1/src/features/core/presentation/screens/home/home_screen_old.dart';
 import 'package:svorc_proto_v1/src/features/expenses/domain/repositories/expenses_repository.dart';
 import 'package:svorc_proto_v1/src/features/period_daily_budgets/domain/repositories/period_daily_budgets_repository.dart';
 

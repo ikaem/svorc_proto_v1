@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:svorc_proto_v1/src/features/core/presentation/screens/home/home_screen_old.dart';
 import 'package:svorc_proto_v1/src/features/core/presentation/widgets/home/home_screen_period_balances.dart';
 import 'package:svorc_proto_v1/src/features/core/presentation/widgets/home/home_screen_today_balances.dart';
 import 'package:svorc_proto_v1/src/features/reports/application/bloc/cubits/get_current_month_balances/get_current_month_balances_cubit.dart';

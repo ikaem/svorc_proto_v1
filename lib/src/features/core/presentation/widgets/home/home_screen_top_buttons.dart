@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:svorc_proto_v1/src/features/core/presentation/screens/home/home_screen_old.dart';
 import 'package:svorc_proto_v1/src/features/core/presentation/widgets/home/add_expense.dart';
 import 'package:svorc_proto_v1/src/features/core/presentation/widgets/home/edit_month_daily_budget.dart';
 import 'package:svorc_proto_v1/src/features/reports/presentation/screens/balance_report_screen.dart';
