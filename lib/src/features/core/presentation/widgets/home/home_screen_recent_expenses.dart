@@ -79,27 +79,48 @@ class HomeScreenRecentExpenses extends StatelessWidget {
                 const SizedBox(
                   height: 10,
                 ),
-                Expanded(
-                  child: ListView.separated(
-                    itemCount: expenses.length,
-                    separatorBuilder: (context, index) => const Divider(),
-                    itemBuilder: (context, index) {
-                      final ExpenseModel expense = expenses[index];
-                      return ExpenseBriefItem(
-                        amount: expense.amount,
-                        date: expense.date,
-                        category: expense.category,
-                        note: expense.note,
-                        id: expense.id,
-                      );
-                    },
-                  ),
-                ),
+                _RecentExpensesPresenter(expenses: expenses),
               ],
             ),
           ),
         );
       },
+    );
+  }
+}
+
+class _RecentExpensesPresenter extends StatelessWidget {
+  const _RecentExpensesPresenter({
+    required this.expenses,
+  });
+
+  final List<ExpenseModel> expenses;
+
+  @override
+  Widget build(BuildContext context) {
+    if (expenses.isEmpty) {
+      return const Expanded(
+        child: Center(
+          child: Text("No recent expenses"),
+        ),
+      );
+    }
+
+    return Expanded(
+      child: ListView.separated(
+        itemCount: expenses.length,
+        separatorBuilder: (context, index) => const Divider(),
+        itemBuilder: (context, index) {
+          final ExpenseModel expense = expenses[index];
+          return ExpenseBriefItem(
+            amount: expense.amount,
+            date: expense.date,
+            category: expense.category,
+            note: expense.note,
+            id: expense.id,
+          );
+        },
+      ),
     );
   }
 }
