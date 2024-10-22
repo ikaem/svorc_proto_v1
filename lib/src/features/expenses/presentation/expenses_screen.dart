@@ -47,7 +47,17 @@ class _ExpensesScreenItems extends StatelessWidget {
           separatorBuilder: (context, index) => const Divider(),
           itemCount: 10,
           itemBuilder: (context, index) {
-            return const ExpenseBriefItem();
+            // TODO temp - until get data
+
+            return ExpenseBriefItem(
+              id: 1,
+              date: DateTime.now(),
+              amount: 100,
+              category: const CategoryModel(
+                id: 1,
+                name: "Food",
+              ),
+            );
           },
         ),
       ),

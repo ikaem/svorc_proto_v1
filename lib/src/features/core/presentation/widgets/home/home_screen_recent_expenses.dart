@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:svorc_proto_v1/src/features/expenses/application/bloc/cubits/get_recent_expenses/get_recent_expenses_cubit.dart';
+import 'package:svorc_proto_v1/src/features/expenses/domain/models/expense_model.dart';
 import 'package:svorc_proto_v1/src/features/expenses/presentation/expenses_screen.dart';
 import 'package:svorc_proto_v1/src/features/expenses/presentation/widgets/expense_brief_item.dart';
 
@@ -27,6 +28,8 @@ class HomeScreenRecentExpenses extends StatelessWidget {
 
         final GetRecentExpensesCubitStateSuccess successState =
             state as GetRecentExpensesCubitStateSuccess;
+
+        final List<ExpenseModel> expenses = successState.expenses;
 
         return Container(
           color: Colors.grey.shade500,
@@ -78,10 +81,17 @@ class HomeScreenRecentExpenses extends StatelessWidget {
                 ),
                 Expanded(
                   child: ListView.separated(
-                    itemCount: 5,
+                    itemCount: expenses.length,
                     separatorBuilder: (context, index) => const Divider(),
                     itemBuilder: (context, index) {
-                      return const ExpenseBriefItem();
+                      final ExpenseModel expense = expenses[index];
+                      return ExpenseBriefItem(
+                        amount: expense.amount,
+                        date: expense.date,
+                        category: expense.category,
+                        note: expense.note,
+                        id: expense.id,
+                      );
                     },
                   ),
                 ),
