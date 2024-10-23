@@ -1,4 +1,9 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:svorc_proto_v1/src/features/core/utilities/helpers/date_picker_helper.dart';
+import 'package:svorc_proto_v1/src/features/core/utilities/helpers/time_picker_helper.dart';
 
 class AddExpense extends StatefulWidget {
   const AddExpense({
@@ -10,12 +15,33 @@ class AddExpense extends StatefulWidget {
 }
 
 class _AddExpenseState extends State<AddExpense> {
+  // TODO this will need to be retrieved from another cubit - and it could hold some state maybe for the future
   String _selectedCategory = categories.first;
+
+  final TextEditingController _dateController = TextEditingController.fromValue(
+      TextEditingValue(text: DateFormat("dd/MM/yyyy").format(DateTime.now())));
+
+  // TODO create initial value from current time, so can be reused later for pickers as initial time and date
+  final TextEditingController _timeController = TextEditingController.fromValue(
+      TextEditingValue(text: DateFormat("HH:mm").format(DateTime.now())));
 
   // TODO temp
 
   @override
+  void dispose() {
+    _dateController.dispose();
+    _timeController.dispose();
+
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final TimeOfDay time = TimeOfDay.now();
+    final formatedTimeOf = time.format(context);
+
+    log("Time: $formatedTimeOf");
+
     return Column(
       mainAxisSize: MainAxisSize.min,
       // crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -52,27 +78,58 @@ class _AddExpenseState extends State<AddExpense> {
             const SizedBox(
               height: 10,
             ),
-            const Row(
+            Row(
               children: [
                 Expanded(
                   child: TextField(
-                    decoration: InputDecoration(
+                    controller: _dateController,
+                    readOnly: true,
+                    decoration: const InputDecoration(
                       labelText: "Date",
                       hintText: "Enter date",
                       suffixIcon: Icon(Icons.calendar_month),
                     ),
+                    onTap: () async {
+                      final DateTime? date = await DatePickerHelper(
+                        context: context,
+                        // TODO this should use exact date as initial one
+                        initialDate: DateTime.now(),
+                        fromDate: DateTime(2021),
+                        toDate: DateTime(2025),
+                      ).getDate();
+
+                      if (date == null) return;
+
+                      _dateController.text =
+                          DateFormat("dd/MM/yyyy").format(date);
+                      setState(() {});
+                    },
                   ),
                 ),
-                SizedBox(
+                const SizedBox(
                   width: 10,
                 ),
                 Expanded(
                   child: TextField(
-                    decoration: InputDecoration(
+                    readOnly: true,
+                    controller: _timeController,
+                    decoration: const InputDecoration(
                       labelText: "Time",
                       hintText: "Enter time",
                       suffixIcon: Icon(Icons.access_time),
                     ),
+                    onTap: () async {
+                      final TimeOfDay? time = await TimePickerHelper(
+                        context: context,
+                        // TODO should use exact same initial time as initial one
+                        initialTime: TimeOfDay.now(),
+                      ).getTime();
+
+                      if (!context.mounted) return;
+
+                      if (time == null) return;
+                      _timeController.text = time.format(context);
+                    },
                   ),
                 ),
               ],
