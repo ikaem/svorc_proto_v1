@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:svorc_proto_v1/src/features/core/presentation/widgets/home/add_month_daily_budget_dialog.dart';
 import 'package:svorc_proto_v1/src/features/core/presentation/widgets/home/home_screen_balances.dart';
 import 'package:svorc_proto_v1/src/features/core/presentation/widgets/home/home_screen_recent_expenses.dart';
 import 'package:svorc_proto_v1/src/features/core/presentation/widgets/home/home_screen_top_buttons.dart';
@@ -20,61 +21,61 @@ class HomeScreenView extends StatelessWidget {
         GetMonthDailyBudgetCubitState>(
       builder: (context, state) {
         switch (state) {
-          case GetMonthDailyBudgetCubitStateInitial state:
+          case GetMonthDailyBudgetCubitStateInitial _:
             return const Center(child: Text("Initial stuff"));
-          case GetMonthDailyBudgetCubitStateLoading state:
+          case GetMonthDailyBudgetCubitStateLoading _:
             return const Center(child: CircularProgressIndicator());
           case GetMonthDailyBudgetCubitStateSuccess state:
             // return const Center(child: Text("Success"));
-            return HomeScreenContentsContainer(
+            return _HomeScreenContentsContainer(
               currentMonthDailyBudget: state.dailyBudget,
             );
-          case GetMonthDailyBudgetCubitStateFailure state:
+          case GetMonthDailyBudgetCubitStateFailure _:
             return const Center(child: Text("Failure"));
-          case GetMonthDailyBudgetCubitStateMonthDailyBudgetNotFound state:
-            return const Center(child: Text("Not Found"));
+          case GetMonthDailyBudgetCubitStateNotFound _:
+            // return const Center(child: Text("Not Found"));
+            return const _HomeScreenMonthDailyBudgetNotFound();
         }
       },
-      listener: (context, state) {},
-    );
+      listener: (context, state) {
+        if (state is! GetMonthDailyBudgetCubitStateNotFound) {
+          return;
+        }
 
-    // TODO old
-    // return BlocConsumer<GetCurrentMonthBalancesCubit,
-    //     GetCurrentMonthBalancesCubitState>(
-    //   builder: (context, state) {
-    //     return Scaffold(
-    //       body: SafeArea(
-    //         child: _HomeScreenViewBody(
-    //           state: state,
-    //         ),
-    //       ),
-    //     );
-    //   },
-    //   // TODO not needed
-    //   listener: (context, state) {},
-    //   // listener: (context, state) {
-    //   //   if (state
-    //   //       is HomeScreenBalancesReportCubitStateCurrentMonthDailyBudgetNotFound) {
-    //   //     showDialog(
-    //   //       context: context,
-    //   //       barrierDismissible: false,
-    //   //       builder: (context) {
-    //   //         // TODO future work, prevent closing this in any way by user
-    //   //         return AddMonthlyBudgetDialog(
-    //   //           onClose: () {
-    //   //             Navigator.of(context).pop();
-    //   //           },
-    //   //         );
-    //   //       },
-    //   //     );
-    //   //   }
-    //   // },
-    // );
+        showDialog(
+          context: context,
+          barrierDismissible: false,
+          builder: (context) {
+            return AddMonthDailyBudgetDialog(
+              onClose: () {
+                // TODO this is not really used
+                Navigator.of(context).pop();
+              },
+            );
+          },
+        );
+      },
+    );
   }
 }
 
-class HomeScreenContentsContainer extends StatelessWidget {
-  const HomeScreenContentsContainer({
+class _HomeScreenMonthDailyBudgetNotFound extends StatelessWidget {
+  const _HomeScreenMonthDailyBudgetNotFound();
+
+  @override
+  Widget build(BuildContext context) {
+    return const Scaffold(
+      body: SafeArea(
+        child: Center(
+          child: Text("Current month daily budget not found"),
+        ),
+      ),
+    );
+  }
+}
+
+class _HomeScreenContentsContainer extends StatelessWidget {
+  const _HomeScreenContentsContainer({
     super.key,
     required this.currentMonthDailyBudget,
   });
@@ -83,6 +84,7 @@ class HomeScreenContentsContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // TODO if keyboard is activated here, there is an overflow. fix it
     return Scaffold(
       body: SafeArea(
           child: Column(

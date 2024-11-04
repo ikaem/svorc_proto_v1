@@ -29,7 +29,7 @@ class GetMonthDailyBudgetCubit extends Cubit<GetMonthDailyBudgetCubitState> {
       if (monthDailyBudget == null) {
         // TODO maybe should throw some more meaningfull exception  custom one
         // throw Exception("Month daily budget not found");
-        emit(GetMonthDailyBudgetCubitStateMonthDailyBudgetNotFound());
+        emit(GetMonthDailyBudgetCubitStateNotFound());
         return;
       }
 

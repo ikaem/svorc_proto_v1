@@ -1,3 +1,10 @@
+1. ok, lets add ui to add new expense
+- first, need dialog
+
+
+
+----------------------
+
 1. create text editing controllers for other inputs
 - use category 1 for now
 	- i guess categor state will need to be handled by something else - or it can be awaited and once retrieved, first one can be set as state? but it would be infinite loop?

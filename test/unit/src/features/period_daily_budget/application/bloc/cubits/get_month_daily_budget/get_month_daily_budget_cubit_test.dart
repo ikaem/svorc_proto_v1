@@ -67,7 +67,7 @@ void main() {
                 emitsInOrder(
                   [
                     GetMonthDailyBudgetCubitStateLoading(),
-                    GetMonthDailyBudgetCubitStateMonthDailyBudgetNotFound(),
+                    GetMonthDailyBudgetCubitStateNotFound(),
                   ],
                 ),
               );

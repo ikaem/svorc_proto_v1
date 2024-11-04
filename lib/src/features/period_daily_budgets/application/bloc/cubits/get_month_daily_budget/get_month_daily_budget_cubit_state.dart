@@ -23,7 +23,7 @@ class GetMonthDailyBudgetCubitStateSuccess
   List<Object?> get props => [dailyBudget];
 }
 
-class GetMonthDailyBudgetCubitStateMonthDailyBudgetNotFound
+class GetMonthDailyBudgetCubitStateNotFound
     extends GetMonthDailyBudgetCubitState {}
 
 class GetMonthDailyBudgetCubitStateFailure
