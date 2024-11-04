@@ -189,7 +189,9 @@ class HomeScreenTopButtons extends StatelessWidget {
                         left: 15,
                         right: 15,
                       ),
-                      child: const AddExpense(),
+                      child: AddExpense(
+                        onClose: () => Navigator.of(context).pop(),
+                      ),
                     );
                   },
                 );

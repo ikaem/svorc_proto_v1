@@ -1,5 +1,12 @@
-1. ok, lets add ui to add new expense
-- first, need dialog
+1. ok, now we need to add expense.
+- need cubit
+- need ui for it
+- while loading, do nothing.
+- when success, call on close passed from parent
+
+
+1. lets figure out how to use blocs only with context - because consumers and such seem to be a mess
+- lets check listener first - want to trigger listening with context only
 
 
 
