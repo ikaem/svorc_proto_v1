@@ -1,3 +1,20 @@
+1. next is create riverpod provider fro cotnrolelr to create expense
+- and test it 
+- and use it
+- and delete cubit
+
+
+
+
+
+
+
+
+
+
+
+
+-------------
 1. ok, now we need to add expense.
 - need cubit
 - need ui for it
