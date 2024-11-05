@@ -17,45 +17,48 @@ class HomeScreenView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<GetMonthDailyBudgetCubit,
-        GetMonthDailyBudgetCubitState>(
-      builder: (context, state) {
-        switch (state) {
-          case GetMonthDailyBudgetCubitStateInitial _:
-            return const Center(child: Text("Initial stuff"));
-          case GetMonthDailyBudgetCubitStateLoading _:
-            return const Center(child: CircularProgressIndicator());
-          case GetMonthDailyBudgetCubitStateSuccess state:
-            // return const Center(child: Text("Success"));
-            return _HomeScreenContentsContainer(
-              currentMonthDailyBudget: state.dailyBudget,
-            );
-          case GetMonthDailyBudgetCubitStateFailure _:
-            return const Center(child: Text("Failure"));
-          case GetMonthDailyBudgetCubitStateNotFound _:
-            // return const Center(child: Text("Not Found"));
-            return const _HomeScreenMonthDailyBudgetNotFound();
-        }
-      },
-      listener: (context, state) {
-        if (state is! GetMonthDailyBudgetCubitStateNotFound) {
-          return;
-        }
-
-        showDialog(
-          context: context,
-          barrierDismissible: false,
-          builder: (context) {
-            return AddMonthDailyBudgetDialog(
-              onClose: () {
-                // TODO this is not really used
-                Navigator.of(context).pop();
-              },
-            );
-          },
-        );
-      },
+    return const Center(
+      child: Text("Hello"),
     );
+    // return BlocConsumer<GetMonthDailyBudgetCubit,
+    //     GetMonthDailyBudgetCubitState>(
+    //   builder: (context, state) {
+    //     switch (state) {
+    //       case GetMonthDailyBudgetCubitStateInitial _:
+    //         return const Center(child: Text("Initial stuff"));
+    //       case GetMonthDailyBudgetCubitStateLoading _:
+    //         return const Center(child: CircularProgressIndicator());
+    //       case GetMonthDailyBudgetCubitStateSuccess state:
+    //         // return const Center(child: Text("Success"));
+    //         return _HomeScreenContentsContainer(
+    //           currentMonthDailyBudget: state.dailyBudget,
+    //         );
+    //       case GetMonthDailyBudgetCubitStateFailure _:
+    //         return const Center(child: Text("Failure"));
+    //       case GetMonthDailyBudgetCubitStateNotFound _:
+    //         // return const Center(child: Text("Not Found"));
+    //         return const _HomeScreenMonthDailyBudgetNotFound();
+    //     }
+    //   },
+    //   listener: (context, state) {
+    //     if (state is! GetMonthDailyBudgetCubitStateNotFound) {
+    //       return;
+    //     }
+
+    //     showDialog(
+    //       context: context,
+    //       barrierDismissible: false,
+    //       builder: (context) {
+    //         return AddMonthDailyBudgetDialog(
+    //           onClose: () {
+    //             // TODO this is not really used
+    //             Navigator.of(context).pop();
+    //           },
+    //         );
+    //       },
+    //     );
+    //   },
+    // );
   }
 }
 
@@ -85,55 +88,19 @@ class _HomeScreenContentsContainer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // TODO if keyboard is activated here, there is an overflow. fix it
-    return Scaffold(
+    return const Scaffold(
       body: SafeArea(
           child: Column(
         children: [
-          const Padding(
+          Padding(
             padding: EdgeInsets.all(15),
             child: HomeScreenTopButtons(),
           ),
-          BlocProvider<GetCurrentMonthBalancesCubit>(
-            create: (context) {
-              final ExpensesRepository expensesRepository =
-                  context.read<ExpensesRepository>();
-              final GetMonthBalancesUseCase getMonthBalancesUseCase =
-                  GetMonthBalancesUseCase(
-                expensesRepository: expensesRepository,
-              );
-
-              final getCurrentMonthBalancesCubit = GetCurrentMonthBalancesCubit(
-                getHomeScreenBalancesUseCase: getMonthBalancesUseCase,
-              );
-
-              return getCurrentMonthBalancesCubit
-                ..onLoadBalances(
-                    currentMonthDailyBudget: currentMonthDailyBudget);
-            },
-            child: const HomeScreenBalances(),
-          ),
-          const SizedBox(
+          HomeScreenBalances(),
+          SizedBox(
             height: 15,
           ),
-          BlocProvider(
-            create: (context) {
-              final ExpensesRepository expensesRepository =
-                  context.read<ExpensesRepository>();
-
-              final GetRecentExpensesUseCase getRecentExpensesUseCase =
-                  GetRecentExpensesUseCase(
-                expensesRepository: expensesRepository,
-              );
-
-              final GetRecentExpensesCubit getRecentExpensesCubit =
-                  GetRecentExpensesCubit(
-                getRecentExpensesUseCase: getRecentExpensesUseCase,
-              );
-
-              return getRecentExpensesCubit..onLoadRecentExpenses();
-            },
-            child: const Expanded(child: HomeScreenRecentExpenses()),
-          ),
+          Expanded(child: HomeScreenRecentExpenses()),
         ],
       )),
     );

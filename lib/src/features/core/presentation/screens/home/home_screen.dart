@@ -12,22 +12,7 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider<GetMonthDailyBudgetCubit>(
-      create: (context) {
-        final PeriodDailyBudgetsRepository budgetsRepository =
-            context.read<PeriodDailyBudgetsRepository>();
-        final GetMonthDailyBudgetUseCase monthDailyBudgetUseCase =
-            GetMonthDailyBudgetUseCase(budgetsRepository);
-
-        final GetMonthDailyBudgetCubit monthDailyBudgetCubit =
-            GetMonthDailyBudgetCubit(
-          getMonthDailyBudgetUseCase: monthDailyBudgetUseCase,
-        );
-
-        return monthDailyBudgetCubit..onLoadBudget(date: DateTime.now());
-      },
-      child: const HomeScreenView(),
-    );
+    return const HomeScreenView();
 
     // TODO old
     // return BlocProvider<GetCurrentMonthBalancesCubit>(

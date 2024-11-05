@@ -83,246 +83,230 @@ class _AddExpenseState extends State<AddExpense> {
     // log("Time: $formatedTimeOf");
 
 // TODO lets try provide and consume blocs in the same widget
-    return BlocProvider<CreateExpenseCubit>(
-      create: (context) {
-        final expensesRepository = context.read<ExpensesRepository>();
-        final CreateExpenseUseCase createExpenseUseCase = CreateExpenseUseCase(
-          expensesRepository: expensesRepository,
-        );
-
-        final CreateExpenseCubit createExpenseCubit = CreateExpenseCubit(
-          createExpenseUseCase: createExpenseUseCase,
-        );
-
-        return createExpenseCubit;
-      },
-      child: Builder(builder: (context) {
-        final state = context.watch<CreateExpenseCubit>().state;
-
-        return Column(
-          mainAxisSize: MainAxisSize.min,
-          // crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            // TODO this should be extracted as it is exverywhere, and reused
-            const Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  "ADD EXPENSE",
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                  ),
+    return Builder(builder: (context) {
+      return Column(
+        mainAxisSize: MainAxisSize.min,
+        // crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          // TODO this should be extracted as it is exverywhere, and reused
+          const Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                "ADD EXPENSE",
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
                 ),
-                SizedBox(
-                  width: 10,
+              ),
+              SizedBox(
+                width: 10,
+              ),
+            ],
+          ),
+          const SizedBox(
+            height: 30,
+          ),
+          Column(
+            children: [
+              TextField(
+                keyboardType: TextInputType.number,
+                controller: _amountController,
+                decoration: const InputDecoration(
+                  labelText: "Amount",
+                  hintText: "Enter amount",
+                  suffixIcon: Icon(Icons.credit_card),
                 ),
-              ],
-            ),
-            const SizedBox(
-              height: 30,
-            ),
-            Column(
-              children: [
-                TextField(
-                  keyboardType: TextInputType.number,
-                  controller: _amountController,
-                  decoration: const InputDecoration(
-                    labelText: "Amount",
-                    hintText: "Enter amount",
-                    suffixIcon: Icon(Icons.credit_card),
-                  ),
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
-                Row(
-                  children: [
-                    Expanded(
-                      child: TextField(
-                        controller: _dateController,
-                        readOnly: true,
-                        decoration: const InputDecoration(
-                          labelText: "Date",
-                          hintText: "Enter date",
-                          suffixIcon: Icon(Icons.calendar_month),
-                        ),
-                        onTap: () async {
-                          final DateTime? date = await DatePickerHelper(
-                            context: context,
-                            // TODO this should use exact date as initial one
-                            initialDate: DateTime.now(),
-                            fromDate: DateTime(2021),
-                            toDate: DateTime(2025),
-                          ).getDate();
-
-                          if (date == null) return;
-
-                          _dateController.text =
-                              DateFormat("dd/MM/yyyy").format(date);
-                          _selectedDate = date;
-                          setState(() {});
-                        },
-                      ),
-                    ),
-                    const SizedBox(
-                      width: 10,
-                    ),
-                    Expanded(
-                      child: TextField(
-                        readOnly: true,
-                        controller: _timeController,
-                        decoration: const InputDecoration(
-                          labelText: "Time",
-                          hintText: "Enter time",
-                          suffixIcon: Icon(Icons.access_time),
-                        ),
-                        onTap: () async {
-                          final TimeOfDay? time = await TimePickerHelper(
-                            context: context,
-                            // TODO should use exact same initial time as initial one
-                            initialTime: TimeOfDay.now(),
-                          ).getTime();
-
-                          if (!context.mounted) return;
-
-                          if (time == null) return;
-                          _timeController.text = time.format(context);
-                          _selectedTime = time;
-                        },
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
-                DropdownButtonFormField<String>(
-                  icon: const Padding(
-                    padding: EdgeInsets.only(right: 12, top: 0),
-                    // child: Icon(Icons.folder),
-                    child: Icon(Icons.arrow_drop_down),
-                  ),
-                  // padding: const EdgeInsets.all(10),
-                  decoration: const InputDecoration(
-                    labelText: "Category",
-                    hintText: "Enter category",
-                    // suffixIcon: Icon(Icons.folder),
-                  ),
-                  value: _selectedCategory.id.toString(),
-                  onChanged: (String? value) {
-                    if (value == null) return;
-
-                    final id = int.tryParse(value);
-                    if (id == null) return;
-
-                    final CategoryModel category = _tempCategories.firstWhere(
-                      (element) => element.id == id,
-                    );
-
-                    setState(() {
-                      // _selectedCategory = value!;
-                      _selectedCategory = category;
-                    });
-                  },
-                  items: _tempCategories
-                      .map(
-                        (e) => DropdownMenuItem(
-                          value: e.id.toString(),
-                          child: Text(e.name),
-                        ),
-                      )
-                      .toList(),
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
-                const TextField(
-                  decoration: InputDecoration(
-                    labelText: "Note",
-                    hintText: "Enter note",
-                    // suffixIcon: Icon(Icons.note),
-                    suffixIcon: Icon(Icons.note),
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(
-              height: 40,
-            ),
-            Center(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              Row(
                 children: [
-                  GestureDetector(
-                    onTap: () {
-                      // TODO this could be called maybe in listener of state
-                      // TODO this should be all validate and such
-                      final value = int.tryParse(_amountController.text);
-                      final date = _selectedDate;
-                      final time = _selectedTime;
+                  Expanded(
+                    child: TextField(
+                      controller: _dateController,
+                      readOnly: true,
+                      decoration: const InputDecoration(
+                        labelText: "Date",
+                        hintText: "Enter date",
+                        suffixIcon: Icon(Icons.calendar_month),
+                      ),
+                      onTap: () async {
+                        final DateTime? date = await DatePickerHelper(
+                          context: context,
+                          // TODO this should use exact date as initial one
+                          initialDate: DateTime.now(),
+                          fromDate: DateTime(2021),
+                          toDate: DateTime(2025),
+                        ).getDate();
 
-                      final categoryId = _selectedCategory.id;
-                      final note = _noteController.text;
+                        if (date == null) return;
 
-                      final normalizedDateTime = DateTime(
-                        date.year,
-                        date.month,
-                        date.day,
-                        time.hour,
-                        time.minute,
-                      );
-
-                      if (value == null) return;
-
-                      context.read<CreateExpenseCubit>().onCreateExpense(
-                            amount: value,
-                            categoryId: categoryId,
-                            date: normalizedDateTime,
-                            note: note,
-                          );
-
-                      // widget.onClose();
-                      print(
-                          "Amount: $value, Date: $date, Time: $time, Category: $categoryId, Note: $note");
-                    },
-                    child: const Column(
-                      children: [
-                        Icon(
-                          Icons.check_box,
-                          size: 40,
-                        ),
-                        Text("Save"),
-                      ],
+                        _dateController.text =
+                            DateFormat("dd/MM/yyyy").format(date);
+                        _selectedDate = date;
+                        setState(() {});
+                      },
                     ),
                   ),
                   const SizedBox(
-                    width: 40,
+                    width: 10,
                   ),
-                  GestureDetector(
-                    onTap: () {
-                      Navigator.pop(context);
-                    },
-                    child: const Column(
-                      children: [
-                        Icon(
-                          Icons.close,
-                          size: 40,
-                        ),
-                        Text("Cancel"),
-                      ],
+                  Expanded(
+                    child: TextField(
+                      readOnly: true,
+                      controller: _timeController,
+                      decoration: const InputDecoration(
+                        labelText: "Time",
+                        hintText: "Enter time",
+                        suffixIcon: Icon(Icons.access_time),
+                      ),
+                      onTap: () async {
+                        final TimeOfDay? time = await TimePickerHelper(
+                          context: context,
+                          // TODO should use exact same initial time as initial one
+                          initialTime: TimeOfDay.now(),
+                        ).getTime();
+
+                        if (!context.mounted) return;
+
+                        if (time == null) return;
+                        _timeController.text = time.format(context);
+                        _selectedTime = time;
+                      },
                     ),
                   ),
                 ],
               ),
+              const SizedBox(
+                height: 10,
+              ),
+              DropdownButtonFormField<String>(
+                icon: const Padding(
+                  padding: EdgeInsets.only(right: 12, top: 0),
+                  // child: Icon(Icons.folder),
+                  child: Icon(Icons.arrow_drop_down),
+                ),
+                // padding: const EdgeInsets.all(10),
+                decoration: const InputDecoration(
+                  labelText: "Category",
+                  hintText: "Enter category",
+                  // suffixIcon: Icon(Icons.folder),
+                ),
+                value: _selectedCategory.id.toString(),
+                onChanged: (String? value) {
+                  if (value == null) return;
+
+                  final id = int.tryParse(value);
+                  if (id == null) return;
+
+                  final CategoryModel category = _tempCategories.firstWhere(
+                    (element) => element.id == id,
+                  );
+
+                  setState(() {
+                    // _selectedCategory = value!;
+                    _selectedCategory = category;
+                  });
+                },
+                items: _tempCategories
+                    .map(
+                      (e) => DropdownMenuItem(
+                        value: e.id.toString(),
+                        child: Text(e.name),
+                      ),
+                    )
+                    .toList(),
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              const TextField(
+                decoration: InputDecoration(
+                  labelText: "Note",
+                  hintText: "Enter note",
+                  // suffixIcon: Icon(Icons.note),
+                  suffixIcon: Icon(Icons.note),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(
+            height: 40,
+          ),
+          Center(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                GestureDetector(
+                  onTap: () {
+                    // TODO this could be called maybe in listener of state
+                    // TODO this should be all validate and such
+                    final value = int.tryParse(_amountController.text);
+                    final date = _selectedDate;
+                    final time = _selectedTime;
+
+                    final categoryId = _selectedCategory.id;
+                    final note = _noteController.text;
+
+                    final normalizedDateTime = DateTime(
+                      date.year,
+                      date.month,
+                      date.day,
+                      time.hour,
+                      time.minute,
+                    );
+
+                    if (value == null) return;
+
+                    // context.read<CreateExpenseCubit>().onCreateExpense(
+                    //       amount: value,
+                    //       categoryId: categoryId,
+                    //       date: normalizedDateTime,
+                    //       note: note,
+                    //     );
+
+                    // widget.onClose();
+                    print(
+                        "Amount: $value, Date: $date, Time: $time, Category: $categoryId, Note: $note");
+                  },
+                  child: const Column(
+                    children: [
+                      Icon(
+                        Icons.check_box,
+                        size: 40,
+                      ),
+                      Text("Save"),
+                    ],
+                  ),
+                ),
+                const SizedBox(
+                  width: 40,
+                ),
+                GestureDetector(
+                  onTap: () {
+                    Navigator.pop(context);
+                  },
+                  child: const Column(
+                    children: [
+                      Icon(
+                        Icons.close,
+                        size: 40,
+                      ),
+                      Text("Cancel"),
+                    ],
+                  ),
+                ),
+              ],
             ),
-            const SizedBox(
-              height: 40,
-            ),
-          ],
-        );
-      }),
-    );
+          ),
+          const SizedBox(
+            height: 40,
+          ),
+        ],
+      );
+    });
   }
 }
 

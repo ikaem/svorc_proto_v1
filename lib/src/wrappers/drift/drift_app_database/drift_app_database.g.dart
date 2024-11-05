@@ -1077,85 +1077,99 @@ typedef $$PeriodDailyBudgetLocalEntityTableUpdateCompanionBuilder
   Value<DateTime> updatedAt,
 });
 
-class $$PeriodDailyBudgetLocalEntityTableFilterComposer extends FilterComposer<
-    _$DriftAppDatabase, $PeriodDailyBudgetLocalEntityTable> {
-  $$PeriodDailyBudgetLocalEntityTableFilterComposer(super.$state);
-  ColumnFilters<int> get id => $state.composableBuilder(
-      column: $state.table.id,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
+class $$PeriodDailyBudgetLocalEntityTableFilterComposer
+    extends Composer<_$DriftAppDatabase, $PeriodDailyBudgetLocalEntityTable> {
+  $$PeriodDailyBudgetLocalEntityTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<int> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnFilters(column));
 
-  ColumnFilters<DateTime> get periodStart => $state.composableBuilder(
-      column: $state.table.periodStart,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
+  ColumnFilters<DateTime> get periodStart => $composableBuilder(
+      column: $table.periodStart, builder: (column) => ColumnFilters(column));
 
-  ColumnFilters<DateTime> get periodEnd => $state.composableBuilder(
-      column: $state.table.periodEnd,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
+  ColumnFilters<DateTime> get periodEnd => $composableBuilder(
+      column: $table.periodEnd, builder: (column) => ColumnFilters(column));
 
-  ColumnFilters<int> get amount => $state.composableBuilder(
-      column: $state.table.amount,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
+  ColumnFilters<int> get amount => $composableBuilder(
+      column: $table.amount, builder: (column) => ColumnFilters(column));
 
   ColumnWithTypeConverterFilters<Period, Period, int> get period =>
-      $state.composableBuilder(
-          column: $state.table.period,
-          builder: (column, joinBuilders) => ColumnWithTypeConverterFilters(
-              column,
-              joinBuilders: joinBuilders));
+      $composableBuilder(
+          column: $table.period,
+          builder: (column) => ColumnWithTypeConverterFilters(column));
 
-  ColumnFilters<DateTime> get createdAt => $state.composableBuilder(
-      column: $state.table.createdAt,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
+  ColumnFilters<DateTime> get createdAt => $composableBuilder(
+      column: $table.createdAt, builder: (column) => ColumnFilters(column));
 
-  ColumnFilters<DateTime> get updatedAt => $state.composableBuilder(
-      column: $state.table.updatedAt,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
+  ColumnFilters<DateTime> get updatedAt => $composableBuilder(
+      column: $table.updatedAt, builder: (column) => ColumnFilters(column));
 }
 
 class $$PeriodDailyBudgetLocalEntityTableOrderingComposer
-    extends OrderingComposer<_$DriftAppDatabase,
-        $PeriodDailyBudgetLocalEntityTable> {
-  $$PeriodDailyBudgetLocalEntityTableOrderingComposer(super.$state);
-  ColumnOrderings<int> get id => $state.composableBuilder(
-      column: $state.table.id,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
+    extends Composer<_$DriftAppDatabase, $PeriodDailyBudgetLocalEntityTable> {
+  $$PeriodDailyBudgetLocalEntityTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<int> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<DateTime> get periodStart => $state.composableBuilder(
-      column: $state.table.periodStart,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
+  ColumnOrderings<DateTime> get periodStart => $composableBuilder(
+      column: $table.periodStart, builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<DateTime> get periodEnd => $state.composableBuilder(
-      column: $state.table.periodEnd,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
+  ColumnOrderings<DateTime> get periodEnd => $composableBuilder(
+      column: $table.periodEnd, builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<int> get amount => $state.composableBuilder(
-      column: $state.table.amount,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
+  ColumnOrderings<int> get amount => $composableBuilder(
+      column: $table.amount, builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<int> get period => $state.composableBuilder(
-      column: $state.table.period,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
+  ColumnOrderings<int> get period => $composableBuilder(
+      column: $table.period, builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<DateTime> get createdAt => $state.composableBuilder(
-      column: $state.table.createdAt,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
+  ColumnOrderings<DateTime> get createdAt => $composableBuilder(
+      column: $table.createdAt, builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<DateTime> get updatedAt => $state.composableBuilder(
-      column: $state.table.updatedAt,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
+  ColumnOrderings<DateTime> get updatedAt => $composableBuilder(
+      column: $table.updatedAt, builder: (column) => ColumnOrderings(column));
+}
+
+class $$PeriodDailyBudgetLocalEntityTableAnnotationComposer
+    extends Composer<_$DriftAppDatabase, $PeriodDailyBudgetLocalEntityTable> {
+  $$PeriodDailyBudgetLocalEntityTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<int> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get periodStart => $composableBuilder(
+      column: $table.periodStart, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get periodEnd =>
+      $composableBuilder(column: $table.periodEnd, builder: (column) => column);
+
+  GeneratedColumn<int> get amount =>
+      $composableBuilder(column: $table.amount, builder: (column) => column);
+
+  GeneratedColumnWithTypeConverter<Period, int> get period =>
+      $composableBuilder(column: $table.period, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get createdAt =>
+      $composableBuilder(column: $table.createdAt, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get updatedAt =>
+      $composableBuilder(column: $table.updatedAt, builder: (column) => column);
 }
 
 class $$PeriodDailyBudgetLocalEntityTableTableManager extends RootTableManager<
@@ -1164,6 +1178,7 @@ class $$PeriodDailyBudgetLocalEntityTableTableManager extends RootTableManager<
     PeriodDailyBudgetLocalEntityData,
     $$PeriodDailyBudgetLocalEntityTableFilterComposer,
     $$PeriodDailyBudgetLocalEntityTableOrderingComposer,
+    $$PeriodDailyBudgetLocalEntityTableAnnotationComposer,
     $$PeriodDailyBudgetLocalEntityTableCreateCompanionBuilder,
     $$PeriodDailyBudgetLocalEntityTableUpdateCompanionBuilder,
     (
@@ -1178,10 +1193,15 @@ class $$PeriodDailyBudgetLocalEntityTableTableManager extends RootTableManager<
       : super(TableManagerState(
           db: db,
           table: table,
-          filteringComposer: $$PeriodDailyBudgetLocalEntityTableFilterComposer(
-              ComposerState(db, table)),
-          orderingComposer: $$PeriodDailyBudgetLocalEntityTableOrderingComposer(
-              ComposerState(db, table)),
+          createFilteringComposer: () =>
+              $$PeriodDailyBudgetLocalEntityTableFilterComposer(
+                  $db: db, $table: table),
+          createOrderingComposer: () =>
+              $$PeriodDailyBudgetLocalEntityTableOrderingComposer(
+                  $db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$PeriodDailyBudgetLocalEntityTableAnnotationComposer(
+                  $db: db, $table: table),
           updateCompanionCallback: ({
             Value<int> id = const Value.absent(),
             Value<DateTime> periodStart = const Value.absent(),
@@ -1232,6 +1252,7 @@ typedef $$PeriodDailyBudgetLocalEntityTableProcessedTableManager
         PeriodDailyBudgetLocalEntityData,
         $$PeriodDailyBudgetLocalEntityTableFilterComposer,
         $$PeriodDailyBudgetLocalEntityTableOrderingComposer,
+        $$PeriodDailyBudgetLocalEntityTableAnnotationComposer,
         $$PeriodDailyBudgetLocalEntityTableCreateCompanionBuilder,
         $$PeriodDailyBudgetLocalEntityTableUpdateCompanionBuilder,
         (
@@ -1281,68 +1302,112 @@ final class $$CategoryLocalEntityTableReferences extends BaseReferences<
 }
 
 class $$CategoryLocalEntityTableFilterComposer
-    extends FilterComposer<_$DriftAppDatabase, $CategoryLocalEntityTable> {
-  $$CategoryLocalEntityTableFilterComposer(super.$state);
-  ColumnFilters<int> get id => $state.composableBuilder(
-      column: $state.table.id,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
+    extends Composer<_$DriftAppDatabase, $CategoryLocalEntityTable> {
+  $$CategoryLocalEntityTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<int> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnFilters(column));
 
-  ColumnFilters<String> get name => $state.composableBuilder(
-      column: $state.table.name,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
+  ColumnFilters<String> get name => $composableBuilder(
+      column: $table.name, builder: (column) => ColumnFilters(column));
 
-  ColumnFilters<DateTime> get createdAt => $state.composableBuilder(
-      column: $state.table.createdAt,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
+  ColumnFilters<DateTime> get createdAt => $composableBuilder(
+      column: $table.createdAt, builder: (column) => ColumnFilters(column));
 
-  ColumnFilters<DateTime> get updatedAt => $state.composableBuilder(
-      column: $state.table.updatedAt,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
+  ColumnFilters<DateTime> get updatedAt => $composableBuilder(
+      column: $table.updatedAt, builder: (column) => ColumnFilters(column));
 
-  ComposableFilter expenseLocalEntityRefs(
-      ComposableFilter Function($$ExpenseLocalEntityTableFilterComposer f) f) {
-    final $$ExpenseLocalEntityTableFilterComposer composer = $state
-        .composerBuilder(
-            composer: this,
-            getCurrentColumn: (t) => t.id,
-            referencedTable: $state.db.expenseLocalEntity,
-            getReferencedColumn: (t) => t.categoryId,
-            builder: (joinBuilder, parentComposers) =>
-                $$ExpenseLocalEntityTableFilterComposer(ComposerState(
-                    $state.db,
-                    $state.db.expenseLocalEntity,
-                    joinBuilder,
-                    parentComposers)));
+  Expression<bool> expenseLocalEntityRefs(
+      Expression<bool> Function($$ExpenseLocalEntityTableFilterComposer f) f) {
+    final $$ExpenseLocalEntityTableFilterComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.id,
+        referencedTable: $db.expenseLocalEntity,
+        getReferencedColumn: (t) => t.categoryId,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$ExpenseLocalEntityTableFilterComposer(
+              $db: $db,
+              $table: $db.expenseLocalEntity,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
     return f(composer);
   }
 }
 
 class $$CategoryLocalEntityTableOrderingComposer
-    extends OrderingComposer<_$DriftAppDatabase, $CategoryLocalEntityTable> {
-  $$CategoryLocalEntityTableOrderingComposer(super.$state);
-  ColumnOrderings<int> get id => $state.composableBuilder(
-      column: $state.table.id,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
+    extends Composer<_$DriftAppDatabase, $CategoryLocalEntityTable> {
+  $$CategoryLocalEntityTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<int> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<String> get name => $state.composableBuilder(
-      column: $state.table.name,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
+  ColumnOrderings<String> get name => $composableBuilder(
+      column: $table.name, builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<DateTime> get createdAt => $state.composableBuilder(
-      column: $state.table.createdAt,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
+  ColumnOrderings<DateTime> get createdAt => $composableBuilder(
+      column: $table.createdAt, builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<DateTime> get updatedAt => $state.composableBuilder(
-      column: $state.table.updatedAt,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
+  ColumnOrderings<DateTime> get updatedAt => $composableBuilder(
+      column: $table.updatedAt, builder: (column) => ColumnOrderings(column));
+}
+
+class $$CategoryLocalEntityTableAnnotationComposer
+    extends Composer<_$DriftAppDatabase, $CategoryLocalEntityTable> {
+  $$CategoryLocalEntityTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<int> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<String> get name =>
+      $composableBuilder(column: $table.name, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get createdAt =>
+      $composableBuilder(column: $table.createdAt, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get updatedAt =>
+      $composableBuilder(column: $table.updatedAt, builder: (column) => column);
+
+  Expression<T> expenseLocalEntityRefs<T extends Object>(
+      Expression<T> Function($$ExpenseLocalEntityTableAnnotationComposer a) f) {
+    final $$ExpenseLocalEntityTableAnnotationComposer composer =
+        $composerBuilder(
+            composer: this,
+            getCurrentColumn: (t) => t.id,
+            referencedTable: $db.expenseLocalEntity,
+            getReferencedColumn: (t) => t.categoryId,
+            builder: (joinBuilder,
+                    {$addJoinBuilderToRootComposer,
+                    $removeJoinBuilderFromRootComposer}) =>
+                $$ExpenseLocalEntityTableAnnotationComposer(
+                  $db: $db,
+                  $table: $db.expenseLocalEntity,
+                  $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+                  joinBuilder: joinBuilder,
+                  $removeJoinBuilderFromRootComposer:
+                      $removeJoinBuilderFromRootComposer,
+                ));
+    return f(composer);
+  }
 }
 
 class $$CategoryLocalEntityTableTableManager extends RootTableManager<
@@ -1351,6 +1416,7 @@ class $$CategoryLocalEntityTableTableManager extends RootTableManager<
     CategoryLocalEntityData,
     $$CategoryLocalEntityTableFilterComposer,
     $$CategoryLocalEntityTableOrderingComposer,
+    $$CategoryLocalEntityTableAnnotationComposer,
     $$CategoryLocalEntityTableCreateCompanionBuilder,
     $$CategoryLocalEntityTableUpdateCompanionBuilder,
     (CategoryLocalEntityData, $$CategoryLocalEntityTableReferences),
@@ -1361,10 +1427,14 @@ class $$CategoryLocalEntityTableTableManager extends RootTableManager<
       : super(TableManagerState(
           db: db,
           table: table,
-          filteringComposer: $$CategoryLocalEntityTableFilterComposer(
-              ComposerState(db, table)),
-          orderingComposer: $$CategoryLocalEntityTableOrderingComposer(
-              ComposerState(db, table)),
+          createFilteringComposer: () =>
+              $$CategoryLocalEntityTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$CategoryLocalEntityTableOrderingComposer(
+                  $db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$CategoryLocalEntityTableAnnotationComposer(
+                  $db: db, $table: table),
           updateCompanionCallback: ({
             Value<int> id = const Value.absent(),
             Value<String> name = const Value.absent(),
@@ -1429,6 +1499,7 @@ typedef $$CategoryLocalEntityTableProcessedTableManager = ProcessedTableManager<
     CategoryLocalEntityData,
     $$CategoryLocalEntityTableFilterComposer,
     $$CategoryLocalEntityTableOrderingComposer,
+    $$CategoryLocalEntityTableAnnotationComposer,
     $$CategoryLocalEntityTableCreateCompanionBuilder,
     $$CategoryLocalEntityTableUpdateCompanionBuilder,
     (CategoryLocalEntityData, $$CategoryLocalEntityTableReferences),
@@ -1477,101 +1548,147 @@ final class $$ExpenseLocalEntityTableReferences extends BaseReferences<
 }
 
 class $$ExpenseLocalEntityTableFilterComposer
-    extends FilterComposer<_$DriftAppDatabase, $ExpenseLocalEntityTable> {
-  $$ExpenseLocalEntityTableFilterComposer(super.$state);
-  ColumnFilters<int> get id => $state.composableBuilder(
-      column: $state.table.id,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
+    extends Composer<_$DriftAppDatabase, $ExpenseLocalEntityTable> {
+  $$ExpenseLocalEntityTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<int> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnFilters(column));
 
-  ColumnFilters<DateTime> get date => $state.composableBuilder(
-      column: $state.table.date,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
+  ColumnFilters<DateTime> get date => $composableBuilder(
+      column: $table.date, builder: (column) => ColumnFilters(column));
 
-  ColumnFilters<int> get amount => $state.composableBuilder(
-      column: $state.table.amount,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
+  ColumnFilters<int> get amount => $composableBuilder(
+      column: $table.amount, builder: (column) => ColumnFilters(column));
 
-  ColumnFilters<String> get note => $state.composableBuilder(
-      column: $state.table.note,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
+  ColumnFilters<String> get note => $composableBuilder(
+      column: $table.note, builder: (column) => ColumnFilters(column));
 
-  ColumnFilters<DateTime> get createdAt => $state.composableBuilder(
-      column: $state.table.createdAt,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
+  ColumnFilters<DateTime> get createdAt => $composableBuilder(
+      column: $table.createdAt, builder: (column) => ColumnFilters(column));
 
-  ColumnFilters<DateTime> get updatedAt => $state.composableBuilder(
-      column: $state.table.updatedAt,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
+  ColumnFilters<DateTime> get updatedAt => $composableBuilder(
+      column: $table.updatedAt, builder: (column) => ColumnFilters(column));
 
   $$CategoryLocalEntityTableFilterComposer get categoryId {
-    final $$CategoryLocalEntityTableFilterComposer composer =
-        $state.composerBuilder(
-            composer: this,
-            getCurrentColumn: (t) => t.categoryId,
-            referencedTable: $state.db.categoryLocalEntity,
-            getReferencedColumn: (t) => t.id,
-            builder: (joinBuilder, parentComposers) =>
-                $$CategoryLocalEntityTableFilterComposer(ComposerState(
-                    $state.db,
-                    $state.db.categoryLocalEntity,
-                    joinBuilder,
-                    parentComposers)));
+    final $$CategoryLocalEntityTableFilterComposer composer = $composerBuilder(
+        composer: this,
+        getCurrentColumn: (t) => t.categoryId,
+        referencedTable: $db.categoryLocalEntity,
+        getReferencedColumn: (t) => t.id,
+        builder: (joinBuilder,
+                {$addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer}) =>
+            $$CategoryLocalEntityTableFilterComposer(
+              $db: $db,
+              $table: $db.categoryLocalEntity,
+              $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+              joinBuilder: joinBuilder,
+              $removeJoinBuilderFromRootComposer:
+                  $removeJoinBuilderFromRootComposer,
+            ));
     return composer;
   }
 }
 
 class $$ExpenseLocalEntityTableOrderingComposer
-    extends OrderingComposer<_$DriftAppDatabase, $ExpenseLocalEntityTable> {
-  $$ExpenseLocalEntityTableOrderingComposer(super.$state);
-  ColumnOrderings<int> get id => $state.composableBuilder(
-      column: $state.table.id,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
+    extends Composer<_$DriftAppDatabase, $ExpenseLocalEntityTable> {
+  $$ExpenseLocalEntityTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<int> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<DateTime> get date => $state.composableBuilder(
-      column: $state.table.date,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
+  ColumnOrderings<DateTime> get date => $composableBuilder(
+      column: $table.date, builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<int> get amount => $state.composableBuilder(
-      column: $state.table.amount,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
+  ColumnOrderings<int> get amount => $composableBuilder(
+      column: $table.amount, builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<String> get note => $state.composableBuilder(
-      column: $state.table.note,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
+  ColumnOrderings<String> get note => $composableBuilder(
+      column: $table.note, builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<DateTime> get createdAt => $state.composableBuilder(
-      column: $state.table.createdAt,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
+  ColumnOrderings<DateTime> get createdAt => $composableBuilder(
+      column: $table.createdAt, builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<DateTime> get updatedAt => $state.composableBuilder(
-      column: $state.table.updatedAt,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
+  ColumnOrderings<DateTime> get updatedAt => $composableBuilder(
+      column: $table.updatedAt, builder: (column) => ColumnOrderings(column));
 
   $$CategoryLocalEntityTableOrderingComposer get categoryId {
     final $$CategoryLocalEntityTableOrderingComposer composer =
-        $state.composerBuilder(
+        $composerBuilder(
             composer: this,
             getCurrentColumn: (t) => t.categoryId,
-            referencedTable: $state.db.categoryLocalEntity,
+            referencedTable: $db.categoryLocalEntity,
             getReferencedColumn: (t) => t.id,
-            builder: (joinBuilder, parentComposers) =>
-                $$CategoryLocalEntityTableOrderingComposer(ComposerState(
-                    $state.db,
-                    $state.db.categoryLocalEntity,
-                    joinBuilder,
-                    parentComposers)));
+            builder: (joinBuilder,
+                    {$addJoinBuilderToRootComposer,
+                    $removeJoinBuilderFromRootComposer}) =>
+                $$CategoryLocalEntityTableOrderingComposer(
+                  $db: $db,
+                  $table: $db.categoryLocalEntity,
+                  $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+                  joinBuilder: joinBuilder,
+                  $removeJoinBuilderFromRootComposer:
+                      $removeJoinBuilderFromRootComposer,
+                ));
+    return composer;
+  }
+}
+
+class $$ExpenseLocalEntityTableAnnotationComposer
+    extends Composer<_$DriftAppDatabase, $ExpenseLocalEntityTable> {
+  $$ExpenseLocalEntityTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<int> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get date =>
+      $composableBuilder(column: $table.date, builder: (column) => column);
+
+  GeneratedColumn<int> get amount =>
+      $composableBuilder(column: $table.amount, builder: (column) => column);
+
+  GeneratedColumn<String> get note =>
+      $composableBuilder(column: $table.note, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get createdAt =>
+      $composableBuilder(column: $table.createdAt, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get updatedAt =>
+      $composableBuilder(column: $table.updatedAt, builder: (column) => column);
+
+  $$CategoryLocalEntityTableAnnotationComposer get categoryId {
+    final $$CategoryLocalEntityTableAnnotationComposer composer =
+        $composerBuilder(
+            composer: this,
+            getCurrentColumn: (t) => t.categoryId,
+            referencedTable: $db.categoryLocalEntity,
+            getReferencedColumn: (t) => t.id,
+            builder: (joinBuilder,
+                    {$addJoinBuilderToRootComposer,
+                    $removeJoinBuilderFromRootComposer}) =>
+                $$CategoryLocalEntityTableAnnotationComposer(
+                  $db: $db,
+                  $table: $db.categoryLocalEntity,
+                  $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+                  joinBuilder: joinBuilder,
+                  $removeJoinBuilderFromRootComposer:
+                      $removeJoinBuilderFromRootComposer,
+                ));
     return composer;
   }
 }
@@ -1582,6 +1699,7 @@ class $$ExpenseLocalEntityTableTableManager extends RootTableManager<
     ExpenseLocalEntityData,
     $$ExpenseLocalEntityTableFilterComposer,
     $$ExpenseLocalEntityTableOrderingComposer,
+    $$ExpenseLocalEntityTableAnnotationComposer,
     $$ExpenseLocalEntityTableCreateCompanionBuilder,
     $$ExpenseLocalEntityTableUpdateCompanionBuilder,
     (ExpenseLocalEntityData, $$ExpenseLocalEntityTableReferences),
@@ -1592,10 +1710,13 @@ class $$ExpenseLocalEntityTableTableManager extends RootTableManager<
       : super(TableManagerState(
           db: db,
           table: table,
-          filteringComposer:
-              $$ExpenseLocalEntityTableFilterComposer(ComposerState(db, table)),
-          orderingComposer: $$ExpenseLocalEntityTableOrderingComposer(
-              ComposerState(db, table)),
+          createFilteringComposer: () =>
+              $$ExpenseLocalEntityTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$ExpenseLocalEntityTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$ExpenseLocalEntityTableAnnotationComposer(
+                  $db: db, $table: table),
           updateCompanionCallback: ({
             Value<int> id = const Value.absent(),
             Value<DateTime> date = const Value.absent(),
@@ -1653,6 +1774,7 @@ class $$ExpenseLocalEntityTableTableManager extends RootTableManager<
                       dynamic,
                       dynamic,
                       dynamic,
+                      dynamic,
                       dynamic>>(state) {
                 if (categoryId) {
                   state = state.withJoin(
@@ -1682,6 +1804,7 @@ typedef $$ExpenseLocalEntityTableProcessedTableManager = ProcessedTableManager<
     ExpenseLocalEntityData,
     $$ExpenseLocalEntityTableFilterComposer,
     $$ExpenseLocalEntityTableOrderingComposer,
+    $$ExpenseLocalEntityTableAnnotationComposer,
     $$ExpenseLocalEntityTableCreateCompanionBuilder,
     $$ExpenseLocalEntityTableUpdateCompanionBuilder,
     (ExpenseLocalEntityData, $$ExpenseLocalEntityTableReferences),

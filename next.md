@@ -4,6 +4,16 @@
 - and delete cubit
 
 
+--
+1. how to use repositories?
+- lets expose them with get it? lets not expose them via riverpod?
+- and then in controller, we can get them, and create use case? and then maybe dispose of stuff in use case if ever needed?   
+
+
+1. actually, first lets create get month daily budget controller
+- and lets remove all bloc provider 
+
+
 
 
 
