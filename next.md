@@ -1,1 +1,1 @@
-1. cobntroller to get initial this mobnths daily budget
+1. ctest get budget controller all states and public methods
