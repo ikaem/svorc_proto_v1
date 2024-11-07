@@ -60,7 +60,10 @@ class GetMonthDailyBudgetController extends _$GetMonthDailyBudgetController {
     } catch (e) {
       log("Error loading month daily budget: $e");
       state = AsyncValue<GetMonthDailyBudgetControllerState>.error(
-          e, StackTrace.empty);
+        e,
+        // making .current to match .build() rethrow state signature
+        StackTrace.current,
+      );
     }
   }
 
