@@ -11,10 +11,12 @@ void main() {
   final _MockPeriodDailyBudgetsRepository periodDailyBudgetsRepository =
       _MockPeriodDailyBudgetsRepository();
 
-  final _MockListener listener =
-      _MockListener<GetMonthDailyBudgetControllerState>();
+  final _MockListener<AsyncValue<GetMonthDailyBudgetControllerState>> listener =
+      _MockListener<AsyncValue<GetMonthDailyBudgetControllerState>>();
 
   setUpAll(() {
+    registerFallbackValue(
+        AsyncValue.data(_FakeGetMonthDailyBudgetControllerState()));
     registerFallbackValue(_FakeGetMonthDailyBudgetControllerState());
     registerFallbackValue(Period.month);
   });
@@ -79,13 +81,6 @@ void main() {
               // call .onLoadBudget()
               await container.read(provider.notifier).onLoadBudget();
 
-              // TODO test
-              // final captured = verifyInOrder([
-              //   () => listener(captureAny(), captureAny()),
-              //   () => listener(captureAny(), captureAny()),
-              //   () => listener(captureAny(), captureAny()),
-              // ]).captured;
-
               verifyInOrder([
                 () => listener(
                       null,
@@ -96,17 +91,15 @@ void main() {
                       ),
                     ),
                 () => listener(
-                      const AsyncValue<GetMonthDailyBudgetControllerState>.data(
-                        GetMonthDailyBudgetControllerState(
-                          null,
-                        ),
+                    const AsyncValue<GetMonthDailyBudgetControllerState>.data(
+                      GetMonthDailyBudgetControllerState(
+                        null,
                       ),
-                      const AsyncValue<
-                          GetMonthDailyBudgetControllerState>.loading(),
                     ),
+                    // cannot use const because loading does have value of null in this case
+                    any(that: isA<AsyncLoading>())),
                 () => listener(
-                      const AsyncValue<
-                          GetMonthDailyBudgetControllerState>.loading(),
+                      any(that: isA<AsyncLoading>()),
                       any(
                           that: isA<
                                   AsyncError<
@@ -127,91 +120,173 @@ void main() {
                     ),
               ]);
 
-              print("captured");
+              verifyNoMoreInteractions(listener);
 
-              // verifyInOrder(
-              //   [
-              //     () => listener(
-              //           null,
-              //           const AsyncValue<
-              //               GetMonthDailyBudgetControllerState>.data(
-              //             GetMonthDailyBudgetControllerState(
-              //               null,
-              //             ),
-              //           ),
-              //         ),
-              //     () => listener(
-              //           const AsyncValue<
-              //               GetMonthDailyBudgetControllerState>.data(
-              //             GetMonthDailyBudgetControllerState(
-              //               null,
-              //             ),
-              //           ),
-              //           const AsyncValue<
-              //               GetMonthDailyBudgetControllerState>.loading(),
-              //         ),
-              //     () => listener(
-              //           const AsyncValue<
-              //               GetMonthDailyBudgetControllerState>.loading(),
-              //           any(
-              //               that: isA<
-              //                       AsyncError<
-              //                           GetMonthDailyBudgetControllerState>>()
-              //                   .having(
-              //             (e) {
-              //               return e.error;
-              //             },
-              //             "error",
-              //             isA<Exception>(),
-              //           ).having(
-              //             (e) {
-              //               return e.stackTrace;
-              //             },
-              //             "stackTrace",
-              //             isA<StackTrace>(),
-              //           )),
-              //         ),
-              //   ],
-              // );
+              // cleanup
+              addTearDown(
+                () {
+                  container.dispose();
+                },
+              );
+            },
+          );
 
-              // verifyNoMoreInteractions(listener);
+          test(
+            "given [PeriodDailyBudgetsRepository].getPeriodDailyBudgetByDateAndPeriod returns null"
+            "when [.onLoadBudget()] is called"
+            "then should emit states in particular order",
+            () async {
+              // setup
+              final ProviderContainer container = ProviderContainer();
 
-              // print(captured);
+              when(() => periodDailyBudgetsRepository
+                      .getPeriodDailyBudgetByDateAndPeriod(
+                    date: any(named: "date"),
+                    period: any(named: "period"),
+                  )).thenAnswer((_) async => null);
 
-              // then
-              // verifyInOrder([
-              //   () => listener(
-              //         const AsyncValue<GetMonthDailyBudgetControllerState>.data(
-              //           GetMonthDailyBudgetControllerState(
-              //             null,
-              //           ),
-              //         ),
-              //         const AsyncValue<
-              //             GetMonthDailyBudgetControllerState>.loading(),
-              //       ),
-              //   () => listener(
-              //         const AsyncValue<
-              //             GetMonthDailyBudgetControllerState>.loading(),
-              //         any(
-              //             that: isA<
-              //                     AsyncError<
-              //                         GetMonthDailyBudgetControllerState>>()
-              //                 .having(
-              //           (e) {
-              //             return e.error;
-              //           },
-              //           "error",
-              //           isA<Exception>(),
-              //         ).having(
-              //           (e) {
-              //             return e.stackTrace;
-              //           },
-              //           "stackTrace",
-              //           isA<StackTrace>(),
-              //         )),
-              //       )
-              // ]);
-              // verifyNoMoreInteractions(listener);
+              // final provider = getMonthDailyBudgetControllerProvider()
+              final provider =
+                  getMonthDailyBudgetControllerProvider(DateTime.now());
+              await Future.delayed(Duration.zero);
+
+              // complete initial .build() call
+              await container.read(provider.future);
+
+              // given
+              when(() => periodDailyBudgetsRepository
+                      .getPeriodDailyBudgetByDateAndPeriod(
+                    date: any(named: "date"),
+                    period: any(named: "period"),
+                  )).thenAnswer((_) async => null);
+
+              // when
+              // listen to the provider
+              container.listen(
+                provider,
+                listener.call,
+                fireImmediately: true,
+              );
+              await Future.delayed(Duration.zero);
+
+              // call .onLoadBudget()
+              await container.read(provider.notifier).onLoadBudget();
+
+              verifyInOrder([
+                () => listener(
+                      null,
+                      const AsyncValue<GetMonthDailyBudgetControllerState>.data(
+                        GetMonthDailyBudgetControllerState(
+                          null,
+                        ),
+                      ),
+                    ),
+                () => listener(
+                    const AsyncValue<GetMonthDailyBudgetControllerState>.data(
+                      GetMonthDailyBudgetControllerState(
+                        null,
+                      ),
+                    ),
+                    // cannot use const because loading does have value of null in this case
+                    any(that: isA<AsyncLoading>())),
+                () => listener(
+                      any(that: isA<AsyncLoading>()),
+                      const AsyncValue<GetMonthDailyBudgetControllerState>.data(
+                        GetMonthDailyBudgetControllerState(
+                          null,
+                        ),
+                      ),
+                    ),
+              ]);
+
+              verifyNoMoreInteractions(listener);
+
+              // cleanup
+              addTearDown(
+                () {
+                  container.dispose();
+                },
+              );
+            },
+          );
+
+          test(
+            "given [PeriodDailyBudgetsRepository].getPeriodDailyBudgetByDateAndPeriod returns [PeriodDailyBudgetModel]"
+            "when [.onLoadBudget()] is called"
+            "then should emit states in particular order",
+            () async {
+              // setup
+              final ProviderContainer container = ProviderContainer();
+
+              when(() => periodDailyBudgetsRepository
+                      .getPeriodDailyBudgetByDateAndPeriod(
+                    date: any(named: "date"),
+                    period: any(named: "period"),
+                  )).thenAnswer((_) async => null);
+
+              // final provider = getMonthDailyBudgetControllerProvider()
+              final provider =
+                  getMonthDailyBudgetControllerProvider(DateTime.now());
+              await Future.delayed(Duration.zero);
+
+              // complete initial .build() call
+              await container.read(provider.future);
+
+              // given
+              final PeriodDailyBudgetModel periodDailyBudgetModel =
+                  PeriodDailyBudgetModel(
+                id: 1,
+                periodStart: DateTime.now(),
+                periodEnd: DateTime.now(),
+                amount: 100,
+                period: Period.month,
+              );
+              when(() => periodDailyBudgetsRepository
+                      .getPeriodDailyBudgetByDateAndPeriod(
+                    date: any(named: "date"),
+                    period: any(named: "period"),
+                  )).thenAnswer((_) async => periodDailyBudgetModel);
+
+              // when
+              // listen to the provider
+              container.listen(
+                provider,
+                listener.call,
+                fireImmediately: true,
+              );
+              await Future.delayed(Duration.zero);
+
+              // call .onLoadBudget()
+              await container.read(provider.notifier).onLoadBudget();
+
+              verifyInOrder([
+                () => listener(
+                      null,
+                      const AsyncValue<GetMonthDailyBudgetControllerState>.data(
+                        GetMonthDailyBudgetControllerState(
+                          null,
+                        ),
+                      ),
+                    ),
+                () => listener(
+                    const AsyncValue<GetMonthDailyBudgetControllerState>.data(
+                      GetMonthDailyBudgetControllerState(
+                        null,
+                      ),
+                    ),
+                    // cannot use const because loading does have value of null in this case
+                    any(that: isA<AsyncLoading>())),
+                () => listener(
+                      any(that: isA<AsyncLoading>()),
+                      AsyncValue<GetMonthDailyBudgetControllerState>.data(
+                        GetMonthDailyBudgetControllerState(
+                          periodDailyBudgetModel,
+                        ),
+                      ),
+                    ),
+              ]);
+
+              verifyNoMoreInteractions(listener);
 
               // cleanup
               addTearDown(
