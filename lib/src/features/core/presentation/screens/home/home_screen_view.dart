@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:svorc_proto_v1/src/features/core/presentation/widgets/home/add_month_daily_budget_dialog.dart';
 import 'package:svorc_proto_v1/src/features/core/presentation/widgets/home/home_screen_balances.dart';
 import 'package:svorc_proto_v1/src/features/core/presentation/widgets/home/home_screen_recent_expenses.dart';
@@ -8,15 +9,34 @@ import 'package:svorc_proto_v1/src/features/expenses/application/bloc/cubits/get
 import 'package:svorc_proto_v1/src/features/expenses/domain/repositories/expenses_repository.dart';
 import 'package:svorc_proto_v1/src/features/expenses/domain/use_cases/get_recent_expenses_use_case.dart';
 import 'package:svorc_proto_v1/src/features/period_daily_budgets/application/bloc/cubits/get_month_daily_budget/get_month_daily_budget_cubit.dart';
+import 'package:svorc_proto_v1/src/features/period_daily_budgets/application/controllers/get_month_daily_budget/get_month_daily_budget_controller.dart';
 import 'package:svorc_proto_v1/src/features/period_daily_budgets/domain/models/period_daily_budget_model.dart';
 import 'package:svorc_proto_v1/src/features/reports/application/bloc/cubits/get_current_month_balances/get_current_month_balances_cubit.dart';
 import 'package:svorc_proto_v1/src/features/reports/domain/use_cases/get_month_balances_use_case.dart';
 
-class HomeScreenView extends StatelessWidget {
-  const HomeScreenView({super.key});
+class HomeScreenView extends ConsumerWidget {
+  HomeScreenView({super.key});
+
+  late final GetMonthDailyBudgetControllerProvider
+      getCurrentMonthDailyBudgetControllerProvider =
+      getMonthDailyBudgetControllerProvider(DateTime.now());
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(
+    BuildContext context,
+    WidgetRef ref,
+  ) {
+    ref.listen(
+        getCurrentMonthDailyBudgetControllerProvider,
+        (os, ns) => _onListenDailyBudgetProvider(
+              os,
+              ns,
+              context: context,
+            ));
+
+    final AsyncValue<GetMonthDailyBudgetControllerState> state =
+        ref.watch(getCurrentMonthDailyBudgetControllerProvider);
+
     return const Center(
       child: Text("Hello"),
     );
@@ -103,6 +123,27 @@ class _HomeScreenContentsContainer extends StatelessWidget {
           Expanded(child: HomeScreenRecentExpenses()),
         ],
       )),
+    );
+  }
+}
+
+void _onListenDailyBudgetProvider(
+  AsyncValue<GetMonthDailyBudgetControllerState>? oldState,
+  AsyncValue<GetMonthDailyBudgetControllerState> newState, {
+  required BuildContext context,
+}) {
+  final state = newState;
+  if (state is! AsyncData<GetMonthDailyBudgetControllerState>) return;
+
+  final dailyBudget = state.value.dailyBudget;
+  if (dailyBudget == null) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return const Dialog(
+          child: Text("No daily budget found"),
+        );
+      },
     );
   }
 }

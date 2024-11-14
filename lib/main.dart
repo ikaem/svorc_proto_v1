@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:svorc_proto_v1/src/features/core/domain/values/app_repositories_value.dart';
 import 'package:svorc_proto_v1/src/features/core/utilities/helpers/app_dependencies_resolver_helper.dart';
 import 'package:svorc_proto_v1/src/wrappers/drift/drift_database_wrapper.dart';
@@ -21,9 +22,11 @@ void main() async {
       _getAppRepositories(driftDatabaseWrapper);
   GetItWrapper.registerRepositories(repositories: appRepositories);
 
-  runApp(MyApp(
-    settingsController: settingsController,
-    // appRepositories: appRepositories,
+  runApp(ProviderScope(
+    child: MyApp(
+      settingsController: settingsController,
+      // appRepositories: appRepositories,
+    ),
   ));
 }
 

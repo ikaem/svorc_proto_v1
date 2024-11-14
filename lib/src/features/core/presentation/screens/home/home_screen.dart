@@ -12,7 +12,7 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const HomeScreenView();
+    return HomeScreenView();
 
     // TODO old
     // return BlocProvider<GetCurrentMonthBalancesCubit>(

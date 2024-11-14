@@ -28,6 +28,7 @@ class GetMonthDailyBudgetController extends _$GetMonthDailyBudgetController {
 
     try {
       final controllerState = await _loadBudget();
+      // throw UnimplementedError();
       return controllerState;
     } catch (e) {
       log("Error loading month daily budget: $e");
