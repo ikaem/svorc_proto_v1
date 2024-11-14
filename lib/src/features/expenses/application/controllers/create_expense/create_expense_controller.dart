@@ -15,6 +15,7 @@ class CreateExpenseController extends _$CreateExpenseController {
   late final CreateExpenseUseCase createExpenseUseCase =
       CreateExpenseUseCase(expensesRepository: expensesRepository);
 
+  @override
   AsyncValue<CreateExpenseControllerState> build() {
     return const AsyncValue<CreateExpenseControllerState>.data(
       CreateExpenseControllerState(createdExpenseId: null),
