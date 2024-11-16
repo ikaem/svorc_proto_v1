@@ -85,6 +85,7 @@ void main() {
                 listener.call,
                 fireImmediately: true,
               );
+              // i guess await for initial state to emit
               await Future<void>.delayed(Duration.zero);
 
               await container
@@ -129,7 +130,7 @@ void main() {
           );
 
           test(
-            "given [ExpensesRepository].createExpense() throws an error"
+            "given [ExpensesRepository].createExpense() returns an id"
             "when [CreateExpenseController].onCreateExpense() returns an id"
             "then should emit states in particular order",
             () async {

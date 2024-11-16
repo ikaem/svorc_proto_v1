@@ -16,6 +16,8 @@ class AddMonthDailyBudgetDialog extends StatefulWidget {
     required this.onClose,
   });
 
+  // TODO all this widget no longer needed
+
   final VoidCallback onClose;
 
   @override

@@ -64,6 +64,12 @@ class PeriodDailyBudgetsLocalDataSourceImpl
     required Period period,
   }) async {
     // throw UnimplementedError();
+    // TODO test
+
+    final selectAll = _databaseWrapper.periodDailyBudgetRepo.select();
+    final all = await selectAll.get();
+
+    // test END
 
     final select = _databaseWrapper.periodDailyBudgetRepo.select();
     final budgetSelect = select

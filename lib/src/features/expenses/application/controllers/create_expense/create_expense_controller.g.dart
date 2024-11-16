@@ -7,7 +7,7 @@ part of 'create_expense_controller.dart';
 // **************************************************************************
 
 String _$createExpenseControllerHash() =>
-    r'5a3cf0313469a18bed0c3881ee361a154dfb4ab6';
+    r'0378abc7bdee012b195692061c7a81221cb4e65c';
 
 /// See also [CreateExpenseController].
 @ProviderFor(CreateExpenseController)

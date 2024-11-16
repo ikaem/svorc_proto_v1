@@ -9,11 +9,11 @@ part "create_expense_controller.g.dart";
 
 @riverpod
 class CreateExpenseController extends _$CreateExpenseController {
-  final ExpensesRepository expensesRepository =
+  final ExpensesRepository _expensesRepository =
       GetItWrapper.get<ExpensesRepository>();
 
-  late final CreateExpenseUseCase createExpenseUseCase =
-      CreateExpenseUseCase(expensesRepository: expensesRepository);
+  late final CreateExpenseUseCase _createExpenseUseCase =
+      CreateExpenseUseCase(expensesRepository: _expensesRepository);
 
   @override
   AsyncValue<CreateExpenseControllerState> build() {
@@ -31,7 +31,7 @@ class CreateExpenseController extends _$CreateExpenseController {
     state = const AsyncValue<CreateExpenseControllerState>.loading();
 
     try {
-      final int id = await createExpenseUseCase(
+      final int id = await _createExpenseUseCase(
         date: date,
         amount: amount,
         note: note,
@@ -44,7 +44,6 @@ class CreateExpenseController extends _$CreateExpenseController {
     } catch (e) {
       state = AsyncValue<CreateExpenseControllerState>.error(
         e,
-        // making .current to match .build() rethrow state signature
         StackTrace.current,
       );
     }
