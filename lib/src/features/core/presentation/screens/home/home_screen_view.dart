@@ -58,7 +58,7 @@ class HomeScreenView extends ConsumerWidget {
                 );
               },
               data: (GetMonthDailyBudgetControllerState data) {
-                final budget = data.dailyBudget;
+                final PeriodDailyBudgetModel? budget = data.dailyBudget;
 
                 if (budget == null) {
                   return const Center(
@@ -66,14 +66,16 @@ class HomeScreenView extends ConsumerWidget {
                   );
                 }
 
-                return const Column(
+                return Column(
                   children: [
                     // TODO revert this
-                    // Padding(
-                    //   padding: EdgeInsets.all(15),
-                    //   child: HomeScreenTopButtons(),
-                    // ),
-                    // HomeScreenBalances(),
+                    const Padding(
+                      padding: EdgeInsets.all(15),
+                      child: HomeScreenTopButtons(),
+                    ),
+                    HomeScreenBalances(
+                      currentMonthDailyBudget: budget,
+                    ),
                     // SizedBox(
                     //   height: 15,
                     // ),

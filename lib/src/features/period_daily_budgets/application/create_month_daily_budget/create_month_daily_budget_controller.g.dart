@@ -7,7 +7,7 @@ part of 'create_month_daily_budget_controller.dart';
 // **************************************************************************
 
 String _$createMonthDailyBudgetControllerHash() =>
-    r'd2d64ecfb3cc9775f478b66b08a0147e9c117b18';
+    r'18f33e54ad0266e7491b15452ae072faf1233b61';
 
 /// See also [CreateMonthDailyBudgetController].
 @ProviderFor(CreateMonthDailyBudgetController)

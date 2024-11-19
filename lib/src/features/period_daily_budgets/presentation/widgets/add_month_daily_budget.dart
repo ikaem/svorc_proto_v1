@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:svorc_proto_v1/src/features/expenses/application/controllers/create_expense/create_expense_controller.dart';
+import 'package:svorc_proto_v1/src/features/period_daily_budgets/application/create_month_daily_budget/create_month_daily_budget_controller.dart';
 
 class AddMonthDailyBudget extends ConsumerStatefulWidget {
   const AddMonthDailyBudget({
@@ -27,9 +28,14 @@ class _AddMonthDailyBudgetState extends ConsumerState<AddMonthDailyBudget> {
   @override
   Widget build(BuildContext context) {
     // TODO NEED to create budbget really, not expense
+    // ref.listen(
+    //   createExpenseControllerProvider,
+    //   _onListenCreateExpenseControllerProvider,
+    // );
+
     ref.listen(
-      createExpenseControllerProvider,
-      _onListenCreateExpenseControllerProvider,
+      createMonthDailyBudgetControllerProvider,
+      _onListenCreateMonthDailyBudgetControllerProvider,
     );
 
     return Column(
@@ -127,13 +133,20 @@ class _AddMonthDailyBudgetState extends ConsumerState<AddMonthDailyBudget> {
                 }
 
                 ref
-                    .read(createExpenseControllerProvider.notifier)
-                    .onCreateExpense(
+                    .read(createMonthDailyBudgetControllerProvider.notifier)
+                    .onCreateBudget(
                       date: DateTime.now(),
                       amount: amount,
-                      note: null,
-                      categoryId: 1,
                     );
+
+                // ref
+                //     .read(createExpenseControllerProvider.notifier)
+                //     .onCreateExpense(
+                //       date: DateTime.now(),
+                //       amount: amount,
+                //       note: null,
+                //       categoryId: 1,
+                //     );
 
                 // Navigator.pop(context);
                 // onClose();
@@ -175,28 +188,47 @@ class _AddMonthDailyBudgetState extends ConsumerState<AddMonthDailyBudget> {
     );
   }
 
-  void _onListenCreateExpenseControllerProvider(
-    AsyncValue<CreateExpenseControllerState>? os,
-    AsyncValue<CreateExpenseControllerState> ns,
+// TODO not needed
+  // void _onListenCreateExpenseControllerProvider(
+  //   AsyncValue<CreateExpenseControllerState>? os,
+  //   AsyncValue<CreateExpenseControllerState> ns,
+  // ) {
+  //   final state = ns;
+  //   if (state is! AsyncData) {
+  //     return;
+  //   }
+
+  //   final data = state.value;
+  //   if (data == null) {
+  //     return;
+  //   }
+
+  //   final id = data.createdExpenseId;
+  //   if (id == null) {
+  //     return;
+  //   }
+
+  //   widget.onSuccess();
+  // }
+
+  void _onListenCreateMonthDailyBudgetControllerProvider(
+    AsyncValue<CreateMonthDailyBudgetControllerState?>? os,
+    AsyncValue<CreateMonthDailyBudgetControllerState?> ns,
   ) {
-    final state = ns;
+    final AsyncValue<CreateMonthDailyBudgetControllerState?> state = ns;
     if (state is! AsyncData) {
       return;
     }
 
-    final data = state.value;
-    if (data == null) {
-      return;
-    }
-
-    final id = data.createdExpenseId;
-    if (id == null) {
+    final CreateMonthDailyBudgetControllerState? stateData = state.value;
+    if (stateData == null) {
       return;
     }
 
     widget.onSuccess();
   }
 }
+
 
 // class AddMonthDailyBudget2 extends ConsumerWidget {
 //   const AddMonthDailyBudget2({super.key});
