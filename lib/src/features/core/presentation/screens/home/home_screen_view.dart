@@ -20,7 +20,7 @@ class HomeScreenView extends ConsumerWidget {
   HomeScreenView({super.key});
 
   late final GetMonthDailyBudgetControllerProvider
-      getCurrentMonthDailyBudgetControllerProvider =
+      getMonthDailyBudgetControllerProviderInstance =
       getMonthDailyBudgetControllerProvider(DateTime.now());
 
   @override
@@ -29,7 +29,7 @@ class HomeScreenView extends ConsumerWidget {
     WidgetRef ref,
   ) {
     ref.listen(
-        getCurrentMonthDailyBudgetControllerProvider,
+        getMonthDailyBudgetControllerProviderInstance,
         (os, ns) => _onListenDailyBudgetProvider(
               os,
               ns,
@@ -43,7 +43,7 @@ class HomeScreenView extends ConsumerWidget {
         child: Builder(
           builder: (context) {
             final AsyncValue<GetMonthDailyBudgetControllerState> state =
-                ref.watch(getCurrentMonthDailyBudgetControllerProvider);
+                ref.watch(getMonthDailyBudgetControllerProviderInstance);
 
             return state.when(
               loading: () {
@@ -165,7 +165,8 @@ class HomeScreenView extends ConsumerWidget {
               onSuccess: () {
                 Navigator.of(context).pop();
                 ref
-                    .read(getCurrentMonthDailyBudgetControllerProvider.notifier)
+                    .read(
+                        getMonthDailyBudgetControllerProviderInstance.notifier)
                     .onLoadBudget();
               },
             ),
