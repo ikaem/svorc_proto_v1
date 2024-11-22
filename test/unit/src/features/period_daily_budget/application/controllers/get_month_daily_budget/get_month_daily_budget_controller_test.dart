@@ -55,9 +55,9 @@ void main() {
                   )).thenAnswer((_) async => null);
 
               // final provider = getMonthDailyBudgetControllerProvider()
-              final provider =
+              final GetMonthDailyBudgetControllerProvider provider =
                   getMonthDailyBudgetControllerProvider(DateTime.now());
-              await Future.delayed(Duration.zero);
+              // await Future.delayed(Duration.zero);
 
               // complete initial .build() call
               await container.read(provider.future);
@@ -76,11 +76,13 @@ void main() {
                 listener.call,
                 fireImmediately: true,
               );
-              await Future.delayed(Duration.zero);
+              // TODO this is not needed in this case when calling .onLoadBudget()
+              // await Future.delayed(Duration.zero);
 
               // call .onLoadBudget()
               await container.read(provider.notifier).onLoadBudget();
 
+              // then
               verifyInOrder([
                 () => listener(
                       null,
