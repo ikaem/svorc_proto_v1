@@ -76,12 +76,12 @@ class HomeScreenView extends ConsumerWidget {
                     HomeScreenBalances(
                       currentMonthDailyBudget: budget,
                     ),
-                    // SizedBox(
-                    //   height: 15,
-                    // ),
-                    // Expanded(
-                    //   child: HomeScreenRecentExpenses(),
-                    // ),
+                    const SizedBox(
+                      height: 15,
+                    ),
+                    const Expanded(
+                      child: HomeScreenRecentExpenses(),
+                    ),
                   ],
                 );
               },
