@@ -13,15 +13,6 @@ import 'package:svorc_proto_v1/src/features/reports/domain/values/month_balances
 import 'package:svorc_proto_v1/src/features/reports/utils/helpers/month_balance_calculation_helper.dart';
 import 'package:svorc_proto_v1/src/wrappers/get_it/get_it_wrapper.dart';
 
-final PeriodDailyBudgetModel currentMonthDailyBudgetModel =
-    PeriodDailyBudgetModel(
-  id: 1,
-  periodStart: DateTime.now(),
-  periodEnd: DateTime.now().add(const Duration(days: 30)),
-  amount: 1000,
-  period: Period.month,
-);
-
 void main() {
   final _MockExpensesRepository expensesRepository = _MockExpensesRepository();
 
@@ -64,7 +55,7 @@ void main() {
 
               final GetCurrentMonthBalancesControllerProvider provider =
                   getCurrentMonthBalancesControllerProvider(
-                      currentMonthDailyBudgetModel);
+                      _currentMonthDailyBudgetModel);
               // await Future.delayed(Duration.zero);
 
               // complete initial .build() call
@@ -86,12 +77,12 @@ void main() {
               final MonthBalanceCalculationHelper calculator =
                   MonthBalanceCalculationHelper(
                 monthExpenses: [],
-                dailyBudget: currentMonthDailyBudgetModel.amount,
-                monthDate: currentMonthDailyBudgetModel.periodStart,
+                dailyBudget: _currentMonthDailyBudgetModel.amount,
+                monthDate: _currentMonthDailyBudgetModel.periodStart,
               );
 
               final MonthBalancesValue balances = MonthBalancesValue(
-                currentMonthDailyBudget: currentMonthDailyBudgetModel,
+                currentMonthDailyBudget: _currentMonthDailyBudgetModel,
                 currentWeekBalance: calculator.weekBalance,
                 currentMonthBalance: calculator.monthBalance,
                 currentDayBalance: calculator.todayBalance,
@@ -172,7 +163,7 @@ void main() {
 
               final GetCurrentMonthBalancesControllerProvider provider =
                   getCurrentMonthBalancesControllerProvider(
-                      currentMonthDailyBudgetModel);
+                      _currentMonthDailyBudgetModel);
               // await Future.delayed(Duration.zero);
 
               // complete initial .build() call
@@ -192,12 +183,12 @@ void main() {
               final MonthBalanceCalculationHelper calculator =
                   MonthBalanceCalculationHelper(
                 monthExpenses: expenses,
-                dailyBudget: currentMonthDailyBudgetModel.amount,
-                monthDate: currentMonthDailyBudgetModel.periodStart,
+                dailyBudget: _currentMonthDailyBudgetModel.amount,
+                monthDate: _currentMonthDailyBudgetModel.periodStart,
               );
 
               final MonthBalancesValue balances = MonthBalancesValue(
-                currentMonthDailyBudget: currentMonthDailyBudgetModel,
+                currentMonthDailyBudget: _currentMonthDailyBudgetModel,
                 currentWeekBalance: calculator.weekBalance,
                 currentMonthBalance: calculator.monthBalance,
                 currentDayBalance: calculator.todayBalance,
@@ -269,7 +260,7 @@ void main() {
               // when
               container.listen(
                 getCurrentMonthBalancesControllerProvider(
-                    currentMonthDailyBudgetModel),
+                    _currentMonthDailyBudgetModel),
                 listener.call,
                 fireImmediately: true,
               );
@@ -332,7 +323,7 @@ void main() {
               // when
               container.listen(
                 getCurrentMonthBalancesControllerProvider(
-                    currentMonthDailyBudgetModel),
+                    _currentMonthDailyBudgetModel),
                 listener.call,
                 fireImmediately: true,
               );
@@ -342,12 +333,12 @@ void main() {
               final MonthBalanceCalculationHelper calculator =
                   MonthBalanceCalculationHelper(
                 monthExpenses: expenses,
-                dailyBudget: currentMonthDailyBudgetModel.amount,
-                monthDate: currentMonthDailyBudgetModel.periodStart,
+                dailyBudget: _currentMonthDailyBudgetModel.amount,
+                monthDate: _currentMonthDailyBudgetModel.periodStart,
               );
 
               final MonthBalancesValue balances = MonthBalancesValue(
-                currentMonthDailyBudget: currentMonthDailyBudgetModel,
+                currentMonthDailyBudget: _currentMonthDailyBudgetModel,
                 currentWeekBalance: calculator.weekBalance,
                 currentMonthBalance: calculator.monthBalance,
                 currentDayBalance: calculator.todayBalance,
@@ -395,3 +386,12 @@ class _FakeGetExpensesFilterValue extends Fake
 
 class _FakeGetCurrentMonthBalancesControllerStateData extends Fake
     implements GetCurrentMonthBalancesControllerStateData {}
+
+final PeriodDailyBudgetModel _currentMonthDailyBudgetModel =
+    PeriodDailyBudgetModel(
+  id: 1,
+  periodStart: DateTime.now(),
+  periodEnd: DateTime.now().add(const Duration(days: 30)),
+  amount: 1000,
+  period: Period.month,
+);
