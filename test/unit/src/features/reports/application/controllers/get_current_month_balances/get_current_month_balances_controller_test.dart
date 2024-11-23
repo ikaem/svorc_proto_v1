@@ -74,6 +74,7 @@ void main() {
 
               await container.read(provider.notifier).onLoadBalances();
 
+              // then
               final MonthBalanceCalculationHelper calculator =
                   MonthBalanceCalculationHelper(
                 monthExpenses: [],
