@@ -26,6 +26,8 @@ class GetRecentExpensesController extends _$GetRecentExpensesController {
       final GetRecentExpensesControllerStateData controllerStateData =
           await _loadExpenses();
 
+      // throw UnimplementedError();
+
       return controllerStateData;
     } catch (e) {
       log("Error loading recent expenses: $e");
