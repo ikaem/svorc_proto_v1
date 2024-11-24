@@ -26,4 +26,9 @@ abstract interface class PeriodDailyBudgetsLocalDataSource {
   Future<PeriodDailyBudgetLocalEntityValue?> getPeriodDailyBudgetById({
     required int id,
   });
+
+  Future<List<PeriodDailyBudgetLocalEntityValue>>
+      getPeriodDailyBudgetsByPeriod({
+    required Period period,
+  });
 }

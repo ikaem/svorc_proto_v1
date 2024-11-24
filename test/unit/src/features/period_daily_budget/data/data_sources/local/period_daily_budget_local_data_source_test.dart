@@ -131,6 +131,143 @@ void main() {
       );
 
       group(
+        "getPeriodDailyBudgetsByPeriod",
+        () {
+          test(
+            "given matching existing [PeriodDailyBudgetLocalEntity]s"
+            "when [.getPeriodDailyBudgetsByPeriod] is called"
+            "then should retun expected [PeriodDailyBudgetLocalEntity]s",
+            () async {
+              // setup
+              final List<NewPeriodDailyBudgetLocalValue>
+                  periodDailyBudgetValues = List.generate(
+                3,
+                (index) => NewPeriodDailyBudgetLocalValue(
+                  amount: 100,
+                  period: Period.month,
+                  // dummy values to avoid unique constraint issues
+                  periodStart: DateTime.now().add(Duration(days: index * 30)),
+                  periodEnd:
+                      DateTime.now().add(Duration(days: (index + 1) * 30)),
+                ),
+              );
+
+              // given
+              final Iterable<PeriodDailyBudgetLocalEntityCompanion> companions =
+                  periodDailyBudgetValues.map(
+                (value) => PeriodDailyBudgetLocalEntityCompanion.insert(
+                  periodStart: value.periodStart,
+                  periodEnd: value.periodEnd,
+                  amount: value.amount,
+                  period: value.period,
+                ),
+              );
+              await testDatabaseWrapper.databaseWrapper.periodDailyBudgetRepo
+                  .insertAll(companions);
+
+              // when
+              final List<PeriodDailyBudgetLocalEntityValue> periodDailyBudgets =
+                  await periodDailyBudgetLocalDataSource
+                      .getPeriodDailyBudgetsByPeriod(period: Period.month);
+
+              // then
+              final expectedPeriodDailyBudgets =
+                  periodDailyBudgetValues.asMap().entries.map(
+                (entry) {
+                  return PeriodDailyBudgetLocalEntityValue(
+                    id: entry.key + 1,
+                    periodStart: entry.value.periodStart.normalizedToSeconds,
+                    periodEnd: entry.value.periodEnd.normalizedToSeconds,
+                    amount: entry.value.amount,
+                    period: entry.value.period,
+                  );
+                },
+              ).toList();
+
+              expect(periodDailyBudgets, equals(expectedPeriodDailyBudgets));
+            },
+          );
+
+          test(
+            "given some matching existing [PeriodDailyBudgetLocalEntity]s"
+            "when [.getPeriodDailyBudgetsByPeriod] is called"
+            "then should retun expected [PeriodDailyBudgetLocalEntity]s",
+            () async {
+              // setup
+              final List<NewPeriodDailyBudgetLocalValue>
+                  monthPeriodDailyBudgetValues = List.generate(
+                3,
+                (index) => NewPeriodDailyBudgetLocalValue(
+                  amount: 100,
+                  period: Period.month,
+                  // dummy values to avoid unique constraint issues
+                  periodStart: DateTime.now().add(Duration(days: index * 30)),
+                  periodEnd:
+                      DateTime.now().add(Duration(days: (index + 1) * 30)),
+                ),
+              );
+
+              final List<NewPeriodDailyBudgetLocalValue>
+                  weekPeriodDailyBudgetValues = List.generate(
+                3,
+                (index) => NewPeriodDailyBudgetLocalValue(
+                  amount: 100,
+                  period: Period.week,
+                  // dummy values to avoid unique constraint issues
+                  periodStart: DateTime.now().add(Duration(days: index * 7)),
+                  periodEnd:
+                      DateTime.now().add(Duration(days: (index + 1) * 7)),
+                ),
+              );
+
+              final periodDailyBudgetValues = [
+                ...monthPeriodDailyBudgetValues,
+                ...weekPeriodDailyBudgetValues,
+              ];
+
+              // given
+              final Iterable<PeriodDailyBudgetLocalEntityCompanion> companions =
+                  periodDailyBudgetValues.map(
+                (value) => PeriodDailyBudgetLocalEntityCompanion.insert(
+                  periodStart: value.periodStart,
+                  periodEnd: value.periodEnd,
+                  amount: value.amount,
+                  period: value.period,
+                ),
+              );
+              await testDatabaseWrapper.databaseWrapper.periodDailyBudgetRepo
+                  .insertAll(companions);
+
+              // when
+              final List<PeriodDailyBudgetLocalEntityValue> periodDailyBudgets =
+                  await periodDailyBudgetLocalDataSource
+                      .getPeriodDailyBudgetsByPeriod(period: Period.month);
+
+              // then
+              final List<PeriodDailyBudgetLocalEntityValue>
+                  expectedPeriodDailyBudgets =
+                  monthPeriodDailyBudgetValues.asMap().entries.map(
+                (entry) {
+                  return PeriodDailyBudgetLocalEntityValue(
+                    id: entry.key + 1,
+                    periodStart: entry.value.periodStart.normalizedToSeconds,
+                    periodEnd: entry.value.periodEnd.normalizedToSeconds,
+                    amount: entry.value.amount,
+                    period: entry.value.period,
+                  );
+                },
+              ).toList();
+
+              expect(periodDailyBudgets, equals(expectedPeriodDailyBudgets));
+
+              // cleanup
+              print(periodDailyBudgets);
+            },
+          );
+        },
+      );
+
+      group(
         "getPeriodDailyBudgetByDateAndPeriod",
         () {
           test(
@@ -191,7 +328,7 @@ void main() {
           test(
             "given non-matching existing [PeriodDailyBudgetLocalEntity]"
             "when [.getPeriodDailyBudgetByDateAndPeriod] is called"
-            "then should return expected [PeriodDailyBudgetLocalEntity]",
+            "then should return null",
             () async {
               // setup
               const year = 2024;

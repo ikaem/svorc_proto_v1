@@ -56,6 +56,25 @@ class PeriodDailyBudgetsLocalDataSourceImpl
     return updatedId;
   }
 
+  @override
+  Future<List<PeriodDailyBudgetLocalEntityValue>>
+      getPeriodDailyBudgetsByPeriod({
+    required Period period,
+  }) async {
+    final select = _databaseWrapper.periodDailyBudgetRepo.select();
+    final budgetSelect = select
+      ..where((tbl) => tbl.period.equals(period.index));
+
+    final entitiesData = await budgetSelect.get();
+    final entitiesValue = entitiesData
+        .map((entityData) =>
+            PeriodDailyBudgetConverters.toEntityValueFromEntityData(
+                entityData: entityData))
+        .toList();
+
+    return entitiesValue;
+  }
+
 // get period daily budget
   @override
   Future<PeriodDailyBudgetLocalEntityValue?>
