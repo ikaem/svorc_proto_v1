@@ -1,14 +1,8 @@
-edit budget
-- for now, we have logic to update period daily budget
--- we pass id and amout
--- this means that we need first to fetch the period budget
--- which means that we need to fetch all period budgets
--- and then from this we can make UI where we offer existing budgets - months
-
-2. ok, so lets create a logic where we fetch all period budgets
-- we pass period
-- and we should probabl sort thenm
-
-- we have repo
-- and we will have use case that fetches all mongh daily budgets
-- and data source and and repository will be fetching period daily budgets
+1. repository to get all period daily budgets by period
+2. use case for month
+3. controller for month
+4. will need to create ui creator for this
+- we will take all existing budgets
+- need to ocnvert them to some kind of month values - so will need to get name and year for this
+- need to create month selectors
+- and then take value from this to add to the ui
