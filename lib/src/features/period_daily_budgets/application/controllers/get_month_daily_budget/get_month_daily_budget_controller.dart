@@ -27,7 +27,8 @@ class GetMonthDailyBudgetController extends _$GetMonthDailyBudgetController {
     // TODO check if anything needs to be disposed of
 
     try {
-      final controllerState = await _loadBudget();
+      final GetMonthDailyBudgetControllerState controllerState =
+          await _loadBudget();
       // throw UnimplementedError();
       return controllerState;
     } catch (e) {

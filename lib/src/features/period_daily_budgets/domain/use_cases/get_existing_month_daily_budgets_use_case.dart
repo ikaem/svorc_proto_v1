@@ -3,9 +3,7 @@ import 'package:svorc_proto_v1/src/features/period_daily_budgets/domain/models/p
 import 'package:svorc_proto_v1/src/features/period_daily_budgets/domain/repositories/period_daily_budgets_repository.dart';
 
 class GetExistingMonthDailyBudgetsUseCase {
-  const GetExistingMonthDailyBudgetsUseCase({
-    required PeriodDailyBudgetsRepository periodDailyBudgetsRepository,
-  }) : _periodDailyBudgetsRepository = periodDailyBudgetsRepository;
+  GetExistingMonthDailyBudgetsUseCase(this._periodDailyBudgetsRepository);
 
   final PeriodDailyBudgetsRepository _periodDailyBudgetsRepository;
 

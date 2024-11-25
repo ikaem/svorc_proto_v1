@@ -11,8 +11,7 @@ void main() {
 
 // tested class
   final GetExistingMonthDailyBudgetsUseCase useCase =
-      GetExistingMonthDailyBudgetsUseCase(
-          periodDailyBudgetsRepository: periodDailyBudgetsRepository);
+      GetExistingMonthDailyBudgetsUseCase(periodDailyBudgetsRepository);
 
   setUpAll(() {
     registerFallbackValue(Period.month);

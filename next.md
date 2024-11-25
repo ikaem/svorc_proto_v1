@@ -6,3 +6,8 @@
 - need to ocnvert them to some kind of month values - so will need to get name and year for this
 - need to create month selectors
 - and then take value from this to add to the ui
+
+
+
+1. next - finish testing the cotnroller
+2. figure out a way how to create ui from budgets
