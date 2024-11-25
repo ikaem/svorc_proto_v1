@@ -177,12 +177,77 @@ void main() {
       );
 
       group(
+        "getPeriodDailyBudgetsByPeriod",
+        () {
+          test(
+            "given [period]"
+            "when [getPeriodDailyBudgetsByPeriod] is called "
+            "then should call [PeriodDailyBudgetLocalDataSource.getPeriodDailyBudgetsByPeriod] with expected arguments and return expected value",
+            () async {
+              // setup
+              final entityValues = List.generate(
+                3,
+                (index) => PeriodDailyBudgetLocalEntityValue(
+                  id: index + 1,
+                  periodStart: DateTime.now(),
+                  periodEnd: DateTime.now(),
+                  amount: 100,
+                  period: Period.month,
+                ),
+              );
+
+              when(
+                () => periodDailyBudgetLocalDataSource
+                    .getPeriodDailyBudgetsByPeriod(
+                  period: any(named: "period"),
+                ),
+              ).thenAnswer(
+                (_) async => entityValues,
+              );
+
+              // given
+              const Period period = Period.month;
+
+              // when
+              final List<PeriodDailyBudgetModel> models =
+                  await repository.getPeriodDailyBudgetsByPeriod(
+                period: period,
+              );
+
+              // then
+              final List<PeriodDailyBudgetModel> expectedModels = entityValues
+                  .map(
+                    (entityValue) => PeriodDailyBudgetModel(
+                      id: entityValue.id,
+                      periodStart: entityValue.periodStart,
+                      periodEnd: entityValue.periodEnd,
+                      amount: entityValue.amount,
+                      period: entityValue.period,
+                    ),
+                  )
+                  .toList();
+
+              verify(
+                () => periodDailyBudgetLocalDataSource
+                    .getPeriodDailyBudgetsByPeriod(
+                  period: period,
+                ),
+              ).called(1);
+              expect(models, equals(expectedModels));
+
+              // cleanup
+            },
+          );
+        },
+      );
+
+      group(
         'getPeriodDailyBudgetByDateAndPeriod',
         () {
           test(
             "given [date] and [period]"
             "when [getPeriodDailyBudgetByDateAndPeriod] is called "
-            "then should call [PeriodDailyBudgetLocalDataSource.getPeriodDailyBudgetByDateAndPeriod] with expected arguments and return expected valuue",
+            "then should call [PeriodDailyBudgetLocalDataSource.getPeriodDailyBudgetByDateAndPeriod] with expected arguments and return expected value",
             () async {
               // setup
               final entityValue = PeriodDailyBudgetLocalEntityValue(

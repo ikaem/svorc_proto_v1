@@ -22,4 +22,8 @@ abstract interface class PeriodDailyBudgetsRepository {
   Future<PeriodDailyBudgetModel?> getPeriodDailyBudgetById({
     required int id,
   });
+
+  Future<List<PeriodDailyBudgetModel>> getPeriodDailyBudgetsByPeriod({
+    required Period period,
+  });
 }

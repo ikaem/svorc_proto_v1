@@ -3,6 +3,7 @@ import 'package:svorc_proto_v1/src/features/period_daily_budgets/data/entities/l
 import 'package:svorc_proto_v1/src/features/period_daily_budgets/domain/models/period_daily_budget_model.dart';
 import 'package:svorc_proto_v1/src/features/period_daily_budgets/domain/repositories/period_daily_budgets_repository.dart';
 import 'package:svorc_proto_v1/src/features/period_daily_budgets/domain/values/new_period_daily_budget_local_value.dart';
+import 'package:svorc_proto_v1/src/features/period_daily_budgets/domain/values/period_daily_budget_local_entity_value.dart';
 import 'package:svorc_proto_v1/src/features/period_daily_budgets/utils/converters/period_daily_budget_converters.dart';
 
 class PeriodDailyBudgetsRepositoryImpl implements PeriodDailyBudgetsRepository {
@@ -64,5 +65,21 @@ class PeriodDailyBudgetsRepositoryImpl implements PeriodDailyBudgetsRepository {
       id: id,
     );
     return updatedId;
+  }
+
+  @override
+  Future<List<PeriodDailyBudgetModel>> getPeriodDailyBudgetsByPeriod(
+      {required Period period}) async {
+    final List<PeriodDailyBudgetLocalEntityValue> entityValues =
+        await _periodDailyBudgetLocalDataSource.getPeriodDailyBudgetsByPeriod(
+            period: period);
+
+    final List<PeriodDailyBudgetModel> models = entityValues.map((entityValue) {
+      final model = PeriodDailyBudgetConverters.toModelFromEntityValue(
+          entityValue: entityValue);
+      return model;
+    }).toList();
+
+    return models;
   }
 }
