@@ -1,20 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:svorc_proto_v1/src/features/core/presentation/widgets/dialog_wrapper.dart';
-import 'package:svorc_proto_v1/src/features/core/presentation/widgets/home/add_month_daily_budget_dialog.dart';
 import 'package:svorc_proto_v1/src/features/core/presentation/widgets/home/home_screen_balances.dart';
 import 'package:svorc_proto_v1/src/features/core/presentation/widgets/home/home_screen_recent_expenses.dart';
 import 'package:svorc_proto_v1/src/features/core/presentation/widgets/home/home_screen_top_buttons.dart';
-import 'package:svorc_proto_v1/src/features/expenses/application/bloc/cubits/get_recent_expenses/get_recent_expenses_cubit.dart';
-import 'package:svorc_proto_v1/src/features/expenses/domain/repositories/expenses_repository.dart';
-import 'package:svorc_proto_v1/src/features/expenses/domain/use_cases/get_recent_expenses_use_case.dart';
-import 'package:svorc_proto_v1/src/features/period_daily_budgets/application/bloc/cubits/get_month_daily_budget/get_month_daily_budget_cubit.dart';
 import 'package:svorc_proto_v1/src/features/period_daily_budgets/application/controllers/get_month_daily_budget/get_month_daily_budget_controller.dart';
 import 'package:svorc_proto_v1/src/features/period_daily_budgets/domain/models/period_daily_budget_model.dart';
 import 'package:svorc_proto_v1/src/features/period_daily_budgets/presentation/widgets/add_month_daily_budget.dart';
-import 'package:svorc_proto_v1/src/features/reports/application/bloc/cubits/get_current_month_balances/get_current_month_balances_cubit.dart';
-import 'package:svorc_proto_v1/src/features/reports/domain/use_cases/get_month_balances_use_case.dart';
 
 class HomeScreenView extends ConsumerWidget {
   HomeScreenView({super.key});

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:svorc_proto_v1/src/features/core/presentation/widgets/home/add_expense.dart';
 import 'package:svorc_proto_v1/src/features/core/presentation/widgets/home/edit_month_daily_budget.dart';
+import 'package:svorc_proto_v1/src/features/core/presentation/widgets/modal_bottom_sheet_wrapper.dart';
+import 'package:svorc_proto_v1/src/features/period_daily_budgets/presentation/widgets/edit_month_daily_budget_new.dart';
 import 'package:svorc_proto_v1/src/features/reports/presentation/screens/balance_report_screen.dart';
 
 class HomeScreenTopButtons extends StatelessWidget {
@@ -63,30 +65,40 @@ class HomeScreenTopButtons extends StatelessWidget {
                   GestureDetector(
                     onTap: () {
                       showModalBottomSheet(
-                        // NOTE: TOOK from here https://stackoverflow.com/a/57515977/9661910
-                        // and here https://stackoverflow.com/a/75572237/9661910
-                        // TODO use this if there is anything scrollable
                         isScrollControlled: true,
                         isDismissible: false,
                         context: context,
                         builder: (context) {
-                          // TODO create ModalBottomSheetWrapper in same style as DialogWrapper
-                          return Container(
-                            // height: 200,
-                            color: Colors.white,
-                            // padding: const EdgeInsets.all(15.0),
-                            padding: EdgeInsets.only(
-                              bottom: MediaQuery.of(context).viewInsets.bottom,
-                              top: 15,
-                              left: 15,
-                              right: 15,
-                            ),
-                            // child: const _HomeScreenAddExpense(),
-                            // child: const Text("Edit Budget"),
-                            child: const EditMonthDailyBudget(),
-                          );
+                          return const ModalBottomSheetWrapper(
+                              child: EditMonthDailyBudgetNew());
                         },
                       );
+
+                      // showModalBottomSheet(
+                      //   // NOTE: TOOK from here https://stackoverflow.com/a/57515977/9661910
+                      //   // and here https://stackoverflow.com/a/75572237/9661910
+                      //   // TODO use this if there is anything scrollable
+                      //   isScrollControlled: true,
+                      //   isDismissible: false,
+                      //   context: context,
+                      //   builder: (context) {
+                      //     // TODO create ModalBottomSheetWrapper in same style as DialogWrapper
+                      //     return Container(
+                      //       // height: 200,
+                      //       color: Colors.white,
+                      //       // padding: const EdgeInsets.all(15.0),
+                      //       padding: EdgeInsets.only(
+                      //         bottom: MediaQuery.of(context).viewInsets.bottom,
+                      //         top: 15,
+                      //         left: 15,
+                      //         right: 15,
+                      //       ),
+                      //       // child: const _HomeScreenAddExpense(),
+                      //       // child: const Text("Edit Budget"),
+                      //       child: const EditMonthDailyBudget(),
+                      //     );
+                      //   },
+                      // );
                     },
                     child: Row(
                       children: [

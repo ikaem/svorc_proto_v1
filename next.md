@@ -1,13 +1,12 @@
-1. repository to get all period daily budgets by period
-2. use case for month
-3. controller for month
-4. will need to create ui creator for this
-- we will take all existing budgets
-- need to ocnvert them to some kind of month values - so will need to get name and year for this
-- need to create month selectors
-- and then take value from this to add to the ui
+1. ok, so we need
+1. existing month daily budget selector
+2. it should accept
+    1. list of budgets
+    2. and on select
+        1. select
 
 
 
-1. next - finish testing the cotnroller
-2. figure out a way how to create ui from budgets
+so to do
+- edit budget new
+- and existing month daily budget selector
