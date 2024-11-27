@@ -41,19 +41,168 @@ void main() {
         "onLoadBudgets",
         () {
           test(
-            "given [PeriodDailyBudgetsRepository].getExpenses getPeriodDailyBudgetsByPeriod"
+            "given [PeriodDailyBudgetsRepository].getExpenses getPeriodDailyBudgetsByPeriod throws"
             "when [.onLoadBudgets()] is called"
             "then should emit states in particular order",
             () async {
               // setup
+              final ProviderContainer container = ProviderContainer();
+
+              when(
+                () =>
+                    periodDailyBudgetsRepository.getPeriodDailyBudgetsByPeriod(
+                  period: any(named: "period"),
+                ),
+              ).thenAnswer((_) async => []);
+
+              // complete initial .build() call
+              await container
+                  .read(getExistingMonthDailyBudgetsControllerProvider.future);
 
               // given
+              when(
+                () =>
+                    periodDailyBudgetsRepository.getPeriodDailyBudgetsByPeriod(
+                  period: any(named: "period"),
+                ),
+              ).thenThrow(Exception("error"));
 
               // when
+              container.listen(
+                getExistingMonthDailyBudgetsControllerProvider,
+                listener.call,
+                fireImmediately: true,
+              );
+
+              await container
+                  .read(getExistingMonthDailyBudgetsControllerProvider.notifier)
+                  .onLoadBudgets();
 
               // then
+              verifyInOrder([
+                () => listener(
+                      null,
+                      const AsyncValue<
+                              GetExistingMonthDailyBudgetsControllerStateData>.data(
+                          GetExistingMonthDailyBudgetsControllerStateData(
+                              existingMonthDailyBudgets: [])),
+                    ),
+                () => listener(
+                      const AsyncValue<
+                              GetExistingMonthDailyBudgetsControllerStateData>.data(
+                          GetExistingMonthDailyBudgetsControllerStateData(
+                              existingMonthDailyBudgets: [])),
+                      any(
+                          that: isA<
+                              AsyncLoading<
+                                  GetExistingMonthDailyBudgetsControllerStateData>>()),
+                    ),
+                () => listener(
+                      any(
+                          that: isA<
+                              AsyncLoading<
+                                  GetExistingMonthDailyBudgetsControllerStateData>>()),
+                      any(
+                          that: isA<
+                              AsyncError<
+                                  GetExistingMonthDailyBudgetsControllerStateData>>()),
+                    ),
+              ]);
+              verifyNoMoreInteractions(listener);
 
               // cleanup
+              addTearDown(() {
+                container.dispose();
+              });
+            },
+          );
+
+          test(
+            "given [PeriodDailyBudgetsRepository].getExpenses getPeriodDailyBudgetsByPeriod returns normally"
+            "when [.onLoadBudgets()] is called"
+            "then should emit states in particular order",
+            () async {
+              // setup
+              final ProviderContainer container = ProviderContainer();
+
+              when(
+                () =>
+                    periodDailyBudgetsRepository.getPeriodDailyBudgetsByPeriod(
+                  period: any(named: "period"),
+                ),
+              ).thenAnswer((_) async => []);
+
+              // complete initial .build() call
+              await container
+                  .read(getExistingMonthDailyBudgetsControllerProvider.future);
+
+              // given
+              final budgets = List.generate(
+                3,
+                (i) => PeriodDailyBudgetModel(
+                  id: i,
+                  period: Period.month,
+                  periodEnd: DateTime.now(),
+                  periodStart: DateTime.now(),
+                  amount: 100,
+                ),
+              );
+              when(
+                () =>
+                    periodDailyBudgetsRepository.getPeriodDailyBudgetsByPeriod(
+                  period: any(named: "period"),
+                ),
+              ).thenAnswer((_) async => budgets);
+
+              // when
+              container.listen(
+                getExistingMonthDailyBudgetsControllerProvider,
+                listener.call,
+                fireImmediately: true,
+              );
+
+              await container
+                  .read(getExistingMonthDailyBudgetsControllerProvider.notifier)
+                  .onLoadBudgets();
+
+              // then
+              verifyInOrder([
+                () => listener(
+                      null,
+                      const AsyncValue<
+                              GetExistingMonthDailyBudgetsControllerStateData>.data(
+                          GetExistingMonthDailyBudgetsControllerStateData(
+                              existingMonthDailyBudgets: [])),
+                    ),
+                () => listener(
+                      const AsyncValue<
+                              GetExistingMonthDailyBudgetsControllerStateData>.data(
+                          GetExistingMonthDailyBudgetsControllerStateData(
+                              existingMonthDailyBudgets: [])),
+                      any(
+                          that: isA<
+                              AsyncLoading<
+                                  GetExistingMonthDailyBudgetsControllerStateData>>()),
+                    ),
+                () => listener(
+                      any(
+                          that: isA<
+                              AsyncLoading<
+                                  GetExistingMonthDailyBudgetsControllerStateData>>()),
+                      AsyncValue<
+                          GetExistingMonthDailyBudgetsControllerStateData>.data(
+                        GetExistingMonthDailyBudgetsControllerStateData(
+                          existingMonthDailyBudgets: budgets,
+                        ),
+                      ),
+                    ),
+              ]);
+              verifyNoMoreInteractions(listener);
+
+              // cleanup
+              addTearDown(() {
+                container.dispose();
+              });
             },
           );
         },
