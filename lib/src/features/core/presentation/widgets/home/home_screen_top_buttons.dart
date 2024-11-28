@@ -69,8 +69,12 @@ class HomeScreenTopButtons extends StatelessWidget {
                         isDismissible: false,
                         context: context,
                         builder: (context) {
-                          return const ModalBottomSheetWrapper(
-                              child: EditMonthDailyBudgetNew());
+                          return ModalBottomSheetWrapper(
+                            child: EditMonthDailyBudgetNew(
+                              onCancelEdit: () => Navigator.of(context).pop(),
+                              onSaveEdit: () => Navigator.of(context).pop(),
+                            ),
+                          );
                         },
                       );
 

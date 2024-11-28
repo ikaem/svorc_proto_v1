@@ -207,7 +207,7 @@ class _MonthSelectorState extends State<MonthSelector> {
               GestureDetector(
                 onTap: () {
                   // Navigator.pop(context);
-                  widget.onMonthSelection(_selectedMonth);
+                  // widget.onMonthSelection(_selectedMonth);
                 },
                 child: const Column(
                   children: [
@@ -225,7 +225,7 @@ class _MonthSelectorState extends State<MonthSelector> {
               GestureDetector(
                 onTap: () {
                   // Navigator.pop(context);
-                  widget.onMonthSelection(null);
+                  // widget.onMonthSelection(null);
                 },
                 child: const Column(
                   children: [
