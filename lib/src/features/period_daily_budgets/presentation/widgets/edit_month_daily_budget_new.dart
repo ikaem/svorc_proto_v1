@@ -33,12 +33,15 @@ class EditMonthDailyBudgetNew extends StatelessWidget {
               context: context,
               builder: (context) {
                 // TODO temp only
-                final existingBudgets =
-                    _getTempExistingMonthDailyBudgetsValue();
+                // final existingBudgets =
+                //     _getTempExistingMonthDailyBudgetsValue();
+
+                final tempBudgets = _getTempExistingMonthDailyBudgets();
 
                 return DialogWrapper(
                   child: ExistingMonthDailyBudgetsSelector(
-                    existingMonthDailyBudgetsValue: existingBudgets,
+                    // existingMonthDailyBudgetsValue: existingBudgets,
+                    existingMonthDailyBudgets: tempBudgets,
                     onCancelSelect: () {
                       Navigator.of(context).pop();
                     },
@@ -105,6 +108,40 @@ class ExistingMonthDailyBudgetsValue extends Equatable {
 
   @override
   List<Object?> get props => [_budgets];
+}
+
+List<PeriodDailyBudgetModel> _getTempExistingMonthDailyBudgets() {
+  final monthNumbers = List.generate(12, (index) => index + 1);
+
+  final monthDatesThisYear = monthNumbers
+      .map((monthNumber) => DateTime(DateTime.now().year, monthNumber))
+      .toList();
+
+  final monthDatesPrevYear = monthNumbers
+      .getRange(5, 12)
+      .map((monthNumber) => DateTime(DateTime.now().year - 1, monthNumber))
+      .toList();
+
+  final monthDates = [
+    ...monthDatesThisYear,
+    ...monthDatesPrevYear,
+  ];
+
+  final budgets = monthDates.map((date) {
+    final extremes = PeriodExtremesMomentsCalculator.calculateMonthMoments(
+        monthIndex: date.month, year: date.year);
+    return PeriodDailyBudgetModel(
+      amount: 100,
+      id: date.month,
+      period: extremes.period,
+      periodStart: extremes.periodStart,
+      periodEnd: extremes.periodEnd,
+
+      // periodEnd: date.add(duration)
+    );
+  }).toList();
+
+  return budgets;
 }
 
 ExistingMonthDailyBudgetsValue _getTempExistingMonthDailyBudgetsValue() {

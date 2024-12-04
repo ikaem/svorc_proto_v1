@@ -2,40 +2,41 @@ import 'dart:ffi';
 
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:svorc_proto_v1/src/features/period_daily_budgets/application/controllers/month_daily_budgets_selector/month_daily_budgets_selector_controller.dart';
 import 'package:svorc_proto_v1/src/features/period_daily_budgets/domain/models/period_daily_budget_model.dart';
 import 'package:svorc_proto_v1/src/features/period_daily_budgets/presentation/widgets/edit_month_daily_budget_new.dart';
 import 'package:svorc_proto_v1/src/features/period_daily_budgets/utils/helpers/period_extremes_moments_calculator.dart';
 
 // TODO create controller for this that will keep state
 
-class ExistingMonthDailyBudgetsSelector extends StatefulWidget {
-  const ExistingMonthDailyBudgetsSelector({
+// TODO maybe this can be a stateless widget - we will see
+class ExistingMonthDailyBudgetsSelector extends ConsumerWidget {
+  ExistingMonthDailyBudgetsSelector({
     super.key,
     // required this.budgets,
-    required this.existingMonthDailyBudgetsValue,
+    // required this.existingMonthDailyBudgetsValue,
+    required this.existingMonthDailyBudgets,
     required this.onCancelSelect,
     required this.onSelect,
   });
 
-  final ExistingMonthDailyBudgetsValue existingMonthDailyBudgetsValue;
+  // final ExistingMonthDailyBudgetsValue existingMonthDailyBudgetsValue;
+  final List<PeriodDailyBudgetModel> existingMonthDailyBudgets;
   final VoidCallback onCancelSelect;
   // TODO this will initially need to send selected bugdet to the edit widget
   final Function(PeriodDailyBudgetModel) onSelect;
 
-  @override
-  State<ExistingMonthDailyBudgetsSelector> createState() =>
-      _ExistingMonthDailyBudgetsSelectorState();
-}
-
-class _ExistingMonthDailyBudgetsSelectorState
-    extends State<ExistingMonthDailyBudgetsSelector> {
-  late PeriodDailyBudgetModel _selectedBudget =
-      widget.existingMonthDailyBudgetsValue.thisMonthBudget;
-  late int _selectedYear =
-      widget.existingMonthDailyBudgetsValue.thisMonthBudget.periodStart.year;
+  // late PeriodDailyBudgetModel _selectedBudget =
+  late final MonthDailyBudgetsSelectorControllerProvider
+      _monthDailyBudgetsSelectorControllerProviderInstance =
+      MonthDailyBudgetsSelectorControllerProvider(existingMonthDailyBudgets);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final state =
+        ref.watch(_monthDailyBudgetsSelectorControllerProviderInstance);
+
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
@@ -58,7 +59,11 @@ class _ExistingMonthDailyBudgetsSelectorState
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             IconButton(
-              onPressed: _onSetPrevYear,
+              // onPressed: _onSetPrevYear,
+              onPressed: ref
+                  .read(_monthDailyBudgetsSelectorControllerProviderInstance
+                      .notifier)
+                  .onSetPrevYear,
               icon: const Icon(
                 Icons.arrow_back_ios,
                 color: Colors.grey,
@@ -70,13 +75,21 @@ class _ExistingMonthDailyBudgetsSelectorState
                 scrollDirection: Axis.horizontal,
                 child: Row(
                   children:
-                      widget.existingMonthDailyBudgetsValue.years.map((year) {
-                    final isCurrentYearSelected = year == _selectedYear;
+                      // widget.existingMonthDailyBudgetsValue.years.map((year) {
+                      state.years.map((year) {
+                    final isCurrentYearSelected = year == state.selectedYear;
                     return GestureDetector(
+                      // onTap: () {
+                      //   // setState(() {
+                      //   //   _selectedYear = year;
+                      //   // });
+                      // },
                       onTap: () {
-                        setState(() {
-                          _selectedYear = year;
-                        });
+                        ref
+                            .read(
+                                _monthDailyBudgetsSelectorControllerProviderInstance
+                                    .notifier)
+                            .onSetYear(year);
                       },
                       child: Padding(
                         padding: const EdgeInsets.all(8.0),
@@ -96,7 +109,11 @@ class _ExistingMonthDailyBudgetsSelectorState
               ),
             ),
             IconButton(
-              onPressed: _onSetNextYear,
+              // onPressed: _onSetNextYear,
+              onPressed: ref
+                  .read(_monthDailyBudgetsSelectorControllerProviderInstance
+                      .notifier)
+                  .onSetNextYear,
               icon: const Icon(
                 Icons.arrow_forward_ios,
                 color: Colors.grey,
@@ -109,8 +126,10 @@ class _ExistingMonthDailyBudgetsSelectorState
           height: 10,
         ),
         Builder(builder: (context) {
-          final items = widget.existingMonthDailyBudgetsValue
-              .getBudgetsForYear(_selectedYear);
+          // final items = widget.existingMonthDailyBudgetsValue
+          //     .getBudgetsForYear(_selectedYear);
+
+          final items = state.selectedYearBudgets;
 
           return SizedBox(
             height: 250,
@@ -132,25 +151,29 @@ class _ExistingMonthDailyBudgetsSelectorState
                 );
                 return GestureDetector(
                   onTap: () {
-                    setState(() {
-                      _selectedBudget = item;
-                    });
+                    ref
+                        .read(
+                            _monthDailyBudgetsSelectorControllerProviderInstance
+                                .notifier)
+                        .onSetBudget(item);
                   },
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: DecoratedBox(
                       decoration: BoxDecoration(
                           // color: Colors.grey.shade200,
-                          color: _selectedBudget == item
+                          color: state.selectedBudget == item
                               ? Colors.blue
                               : Colors.grey.shade200,
                           borderRadius: BorderRadius.circular(4)),
                       child: Center(
                         child: Text(
                           monthMoments.periodName,
-                          style: const TextStyle(
-                              // color
-                              ),
+                          style: TextStyle(
+                            color: state.selectedBudget == item
+                                ? Colors.white
+                                : Colors.black,
+                          ),
                         ),
                       ),
                     ),
@@ -211,45 +234,45 @@ class _ExistingMonthDailyBudgetsSelectorState
   }
 
   // TODO this will go into the controller
-  void _onSetNextYear() {
-    final years = widget.existingMonthDailyBudgetsValue.years;
+  // void _onSetNextYear() {
+  //   // final years = widget.existingMonthDailyBudgetsValue.years;
 
-    // now get length of this
-    final yearsLength = years.length;
+  //   // // now get length of this
+  //   // final yearsLength = years.length;
 
-    if (yearsLength == 0) return;
-    if (yearsLength == 1) return;
+  //   // if (yearsLength == 0) return;
+  //   // if (yearsLength == 1) return;
 
-    // now we know there are more than 1 item
-    // check if index of current year is bigger than lenght
-    final currentYearIndex = years.indexOf(_selectedYear);
-    if (currentYearIndex >= years.length - 1) return;
+  //   // // now we know there are more than 1 item
+  //   // // check if index of current year is bigger than lenght
+  //   // final currentYearIndex = years.indexOf(_selectedYear);
+  //   // if (currentYearIndex >= years.length - 1) return;
 
-    // now we know current year is not the last one
-    final nextYearIndex = currentYearIndex + 1;
-    final nextYear = years[nextYearIndex];
+  //   // // now we know current year is not the last one
+  //   // final nextYearIndex = currentYearIndex + 1;
+  //   // final nextYear = years[nextYearIndex];
 
-    setState(() {
-      _selectedYear = nextYear;
-    });
-  }
+  //   // setState(() {
+  //   //   _selectedYear = nextYear;
+  //   // });
+  // }
 
-  void _onSetPrevYear() {
-    final years = widget.existingMonthDailyBudgetsValue.years;
+  // void _onSetPrevYear() {
+  //   // final years = widget.existingMonthDailyBudgetsValue.years;
 
-    final currentYearIndex = years.indexOf(_selectedYear);
+  //   // final currentYearIndex = years.indexOf(_selectedYear);
 
-    // if it is first element, return
-    if (currentYearIndex == 0) return;
+  //   // // if it is first element, return
+  //   // if (currentYearIndex == 0) return;
 
-    // now it is not first element
-    final prevYearIndex = currentYearIndex - 1;
-    final prevYear = years[prevYearIndex];
+  //   // // now it is not first element
+  //   // final prevYearIndex = currentYearIndex - 1;
+  //   // final prevYear = years[prevYearIndex];
 
-    setState(() {
-      _selectedYear = prevYear;
-    });
-  }
+  //   // setState(() {
+  //   //   _selectedYear = prevYear;
+  //   // });
+  // }
 }
 
 // how should we make selector of years
