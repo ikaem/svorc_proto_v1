@@ -81,12 +81,14 @@ class ExistingMonthDailyBudgetsValue extends Equatable {
   final List<PeriodDailyBudgetModel> _budgets;
 
   List<int> get years =>
-      _budgets.map((e) => e.periodStart.year).toSet().toList();
+      _budgets.map((e) => e.periodStart.year).toSet().toList()..sort();
 
   List<PeriodDailyBudgetModel> getBudgetsForYear(int year) {
     return _budgets
         .where((element) => element.periodStart.year == year)
         .toList();
+    // TODO this will need to be sorted
+    // ..sort();
   }
 
   PeriodDailyBudgetModel get thisMonthBudget {
