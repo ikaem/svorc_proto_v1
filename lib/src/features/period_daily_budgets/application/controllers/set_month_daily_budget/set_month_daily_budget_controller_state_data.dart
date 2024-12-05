@@ -1,7 +1,22 @@
 part of "set_month_daily_budget_controller.dart";
 
-class SetMonthDailyBudgetControllerStateData extends Equatable {
-  const SetMonthDailyBudgetControllerStateData({
+sealed class SetMonthDailyBudgetControllerStateData extends Equatable {
+  @override
+  // TODO: implement props
+  List<Object> get props => [];
+}
+
+class SetMonthDailyBudgetControllerStateDataNoBudgetsProvided
+    extends SetMonthDailyBudgetControllerStateData {
+  SetMonthDailyBudgetControllerStateDataNoBudgetsProvided();
+
+  @override
+  List<Object> get props => [];
+}
+
+class SetMonthDailyBudgetControllerStateDataSelections
+    extends SetMonthDailyBudgetControllerStateData {
+  SetMonthDailyBudgetControllerStateDataSelections({
     required this.selectedBudget,
     required this.selectedYear,
     required this.years,

@@ -9,8 +9,9 @@ class _SetMonthDailyBudgetControllerValue extends Equatable {
 
   final List<PeriodDailyBudgetModel> _budgets;
 
-  List<int> get years =>
-      _budgets.map((e) => e.periodStart.year).toSet().toList()..sort();
+  List<int> get years {
+    return _budgets.map((e) => e.periodStart.year).toSet().toList()..sort();
+  }
 
   PeriodDailyBudgetModel get thisMonthBudget {
     final DateTime now = DateTime.now();

@@ -37,200 +37,406 @@ class ExistingMonthDailyBudgetsSelector extends ConsumerWidget {
     final state =
         ref.watch(_monthDailyBudgetsSelectorControllerProviderInstance);
 
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        const Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(
-              "SELECT MONTH",
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ],
+    return switch (state) {
+      // TODO: Handle this case.
+      SetMonthDailyBudgetControllerStateDataNoBudgetsProvided() => const Center(
+          child: Text("No budgets provided"),
         ),
-        const SizedBox(
-          height: 10,
-        ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      // TODO: Handle this case.
+      // SetMonthDailyBudgetControllerStateDataSelections() => Column(
+      // NOTE: both od these are legit
+      SetMonthDailyBudgetControllerStateDataSelections selectionsState =>
+        Column(
+          mainAxisSize: MainAxisSize.min,
           children: [
-            IconButton(
-              // onPressed: _onSetPrevYear,
-              onPressed: ref
-                  .read(_monthDailyBudgetsSelectorControllerProviderInstance
-                      .notifier)
-                  .onSetPrevYear,
-              icon: const Icon(
-                Icons.arrow_back_ios,
-                color: Colors.grey,
-                size: 20,
-              ),
+            const Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  "SELECT MONTH",
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ],
             ),
-            Center(
-              child: SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: Row(
-                  children:
-                      // widget.existingMonthDailyBudgetsValue.years.map((year) {
-                      state.years.map((year) {
-                    final isCurrentYearSelected = year == state.selectedYear;
+            const SizedBox(
+              height: 10,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                IconButton(
+                  // onPressed: _onSetPrevYear,
+                  onPressed: ref
+                      .read(_monthDailyBudgetsSelectorControllerProviderInstance
+                          .notifier)
+                      .onSetPrevYear,
+                  icon: const Icon(
+                    Icons.arrow_back_ios,
+                    color: Colors.grey,
+                    size: 20,
+                  ),
+                ),
+                Center(
+                  child: SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: Row(
+                      children:
+                          // widget.existingMonthDailyBudgetsValue.years.map((year) {
+                          state.years.map((year) {
+                        final isCurrentYearSelected =
+                            year == state.selectedYear;
+                        return GestureDetector(
+                          // onTap: () {
+                          //   // setState(() {
+                          //   //   _selectedYear = year;
+                          //   // });
+                          // },
+                          onTap: () {
+                            ref
+                                .read(
+                                    _monthDailyBudgetsSelectorControllerProviderInstance
+                                        .notifier)
+                                .onSetYear(year);
+                          },
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Text(
+                              year.toString(),
+                              style: TextStyle(
+                                fontWeight: isCurrentYearSelected
+                                    ? FontWeight.bold
+                                    : FontWeight.normal,
+                                fontSize: 24,
+                              ),
+                            ),
+                          ),
+                        );
+                      }).toList(),
+                    ),
+                  ),
+                ),
+                IconButton(
+                  // onPressed: _onSetNextYear,
+                  onPressed: ref
+                      .read(_monthDailyBudgetsSelectorControllerProviderInstance
+                          .notifier)
+                      .onSetNextYear,
+                  icon: const Icon(
+                    Icons.arrow_forward_ios,
+                    color: Colors.grey,
+                    size: 20,
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            Builder(builder: (context) {
+              // final items = widget.existingMonthDailyBudgetsValue
+              //     .getBudgetsForYear(_selectedYear);
+
+              final items = state.selectedYearBudgets;
+
+              return SizedBox(
+                height: 250,
+                child: GridView.builder(
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 3,
+                    childAspectRatio: 2.0,
+                    mainAxisSpacing: 8,
+                    crossAxisSpacing: 8,
+                  ),
+                  itemCount: items.length,
+                  itemBuilder: (context, index) {
+                    final item = items[index];
+
+                    final monthMoments =
+                        PeriodExtremesMomentsCalculator.calculateMonthMoments(
+                      monthIndex: item.periodStart.month,
+                      year: item.periodStart.year,
+                    );
                     return GestureDetector(
-                      // onTap: () {
-                      //   // setState(() {
-                      //   //   _selectedYear = year;
-                      //   // });
-                      // },
                       onTap: () {
                         ref
                             .read(
                                 _monthDailyBudgetsSelectorControllerProviderInstance
                                     .notifier)
-                            .onSetYear(year);
+                            .onSetBudget(item);
                       },
                       child: Padding(
                         padding: const EdgeInsets.all(8.0),
-                        child: Text(
-                          year.toString(),
-                          style: TextStyle(
-                            fontWeight: isCurrentYearSelected
-                                ? FontWeight.bold
-                                : FontWeight.normal,
-                            fontSize: 24,
+                        child: DecoratedBox(
+                          decoration: BoxDecoration(
+                              // color: Colors.grey.shade200,
+                              color: state.selectedBudget == item
+                                  ? Colors.blue
+                                  : Colors.grey.shade200,
+                              borderRadius: BorderRadius.circular(4)),
+                          child: Center(
+                            child: Text(
+                              monthMoments.periodName,
+                              style: TextStyle(
+                                color: state.selectedBudget == item
+                                    ? Colors.white
+                                    : Colors.black,
+                              ),
+                            ),
                           ),
                         ),
                       ),
                     );
-                  }).toList(),
-                ),
-              ),
-            ),
-            IconButton(
-              // onPressed: _onSetNextYear,
-              onPressed: ref
-                  .read(_monthDailyBudgetsSelectorControllerProviderInstance
-                      .notifier)
-                  .onSetNextYear,
-              icon: const Icon(
-                Icons.arrow_forward_ios,
-                color: Colors.grey,
-                size: 20,
-              ),
-            ),
-          ],
-        ),
-        const SizedBox(
-          height: 10,
-        ),
-        Builder(builder: (context) {
-          // final items = widget.existingMonthDailyBudgetsValue
-          //     .getBudgetsForYear(_selectedYear);
-
-          final items = state.selectedYearBudgets;
-
-          return SizedBox(
-            height: 250,
-            child: GridView.builder(
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 3,
-                childAspectRatio: 2.0,
-                mainAxisSpacing: 8,
-                crossAxisSpacing: 8,
-              ),
-              itemCount: items.length,
-              itemBuilder: (context, index) {
-                final item = items[index];
-
-                final monthMoments =
-                    PeriodExtremesMomentsCalculator.calculateMonthMoments(
-                  monthIndex: item.periodStart.month,
-                  year: item.periodStart.year,
-                );
-                return GestureDetector(
-                  onTap: () {
-                    ref
-                        .read(
-                            _monthDailyBudgetsSelectorControllerProviderInstance
-                                .notifier)
-                        .onSetBudget(item);
                   },
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: DecoratedBox(
-                      decoration: BoxDecoration(
-                          // color: Colors.grey.shade200,
-                          color: state.selectedBudget == item
-                              ? Colors.blue
-                              : Colors.grey.shade200,
-                          borderRadius: BorderRadius.circular(4)),
-                      child: Center(
-                        child: Text(
-                          monthMoments.periodName,
-                          style: TextStyle(
-                            color: state.selectedBudget == item
-                                ? Colors.white
-                                : Colors.black,
-                          ),
+                ),
+              );
+            }),
+            const SizedBox(
+              height: 40,
+            ),
+            Center(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  GestureDetector(
+                    onTap: () {
+                      // Navigator.pop(context);
+                      // widget.onMonthSelection(_selectedMonth);
+                    },
+                    child: const Column(
+                      children: [
+                        Icon(
+                          Icons.check_box,
+                          size: 40,
                         ),
-                      ),
+                        Text("Save"),
+                      ],
                     ),
                   ),
-                );
-              },
+                  const SizedBox(
+                    width: 40,
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      // Navigator.pop(context);
+                      // widget.onMonthSelection(null);
+                    },
+                    child: const Column(
+                      children: [
+                        Icon(
+                          Icons.close,
+                          size: 40,
+                        ),
+                        Text("Cancel"),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
             ),
-          );
-        }),
-        const SizedBox(
-          height: 40,
-        ),
-        Center(
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              GestureDetector(
-                onTap: () {
-                  // Navigator.pop(context);
-                  // widget.onMonthSelection(_selectedMonth);
-                },
-                child: const Column(
-                  children: [
-                    Icon(
-                      Icons.check_box,
-                      size: 40,
-                    ),
-                    Text("Save"),
-                  ],
-                ),
-              ),
-              const SizedBox(
-                width: 40,
-              ),
-              GestureDetector(
-                onTap: () {
-                  // Navigator.pop(context);
-                  // widget.onMonthSelection(null);
-                },
-                child: const Column(
-                  children: [
-                    Icon(
-                      Icons.close,
-                      size: 40,
-                    ),
-                    Text("Cancel"),
-                  ],
-                ),
-              ),
-            ],
-          ),
-        ),
-        const SizedBox(
-          height: 40,
-        ),
-      ],
-    );
+            const SizedBox(
+              height: 40,
+            ),
+          ],
+        )
+    };
+
+    // return Column(
+    //   mainAxisSize: MainAxisSize.min,
+    //   children: [
+    //     const Row(
+    //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    //       children: [
+    //         Text(
+    //           "SELECT MONTH",
+    //           style: TextStyle(
+    //             fontSize: 16,
+    //             fontWeight: FontWeight.bold,
+    //           ),
+    //         ),
+    //       ],
+    //     ),
+    //     const SizedBox(
+    //       height: 10,
+    //     ),
+    //     Row(
+    //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    //       children: [
+    //         IconButton(
+    //           // onPressed: _onSetPrevYear,
+    //           onPressed: ref
+    //               .read(_monthDailyBudgetsSelectorControllerProviderInstance
+    //                   .notifier)
+    //               .onSetPrevYear,
+    //           icon: const Icon(
+    //             Icons.arrow_back_ios,
+    //             color: Colors.grey,
+    //             size: 20,
+    //           ),
+    //         ),
+    //         Center(
+    //           child: SingleChildScrollView(
+    //             scrollDirection: Axis.horizontal,
+    //             child: Row(
+    //               children:
+    //                   // widget.existingMonthDailyBudgetsValue.years.map((year) {
+    //                   state.years.map((year) {
+    //                 final isCurrentYearSelected = year == state.selectedYear;
+    //                 return GestureDetector(
+    //                   // onTap: () {
+    //                   //   // setState(() {
+    //                   //   //   _selectedYear = year;
+    //                   //   // });
+    //                   // },
+    //                   onTap: () {
+    //                     ref
+    //                         .read(
+    //                             _monthDailyBudgetsSelectorControllerProviderInstance
+    //                                 .notifier)
+    //                         .onSetYear(year);
+    //                   },
+    //                   child: Padding(
+    //                     padding: const EdgeInsets.all(8.0),
+    //                     child: Text(
+    //                       year.toString(),
+    //                       style: TextStyle(
+    //                         fontWeight: isCurrentYearSelected
+    //                             ? FontWeight.bold
+    //                             : FontWeight.normal,
+    //                         fontSize: 24,
+    //                       ),
+    //                     ),
+    //                   ),
+    //                 );
+    //               }).toList(),
+    //             ),
+    //           ),
+    //         ),
+    //         IconButton(
+    //           // onPressed: _onSetNextYear,
+    //           onPressed: ref
+    //               .read(_monthDailyBudgetsSelectorControllerProviderInstance
+    //                   .notifier)
+    //               .onSetNextYear,
+    //           icon: const Icon(
+    //             Icons.arrow_forward_ios,
+    //             color: Colors.grey,
+    //             size: 20,
+    //           ),
+    //         ),
+    //       ],
+    //     ),
+    //     const SizedBox(
+    //       height: 10,
+    //     ),
+    //     Builder(builder: (context) {
+    //       // final items = widget.existingMonthDailyBudgetsValue
+    //       //     .getBudgetsForYear(_selectedYear);
+
+    //       final items = state.selectedYearBudgets;
+
+    //       return SizedBox(
+    //         height: 250,
+    //         child: GridView.builder(
+    //           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+    //             crossAxisCount: 3,
+    //             childAspectRatio: 2.0,
+    //             mainAxisSpacing: 8,
+    //             crossAxisSpacing: 8,
+    //           ),
+    //           itemCount: items.length,
+    //           itemBuilder: (context, index) {
+    //             final item = items[index];
+
+    //             final monthMoments =
+    //                 PeriodExtremesMomentsCalculator.calculateMonthMoments(
+    //               monthIndex: item.periodStart.month,
+    //               year: item.periodStart.year,
+    //             );
+    //             return GestureDetector(
+    //               onTap: () {
+    //                 ref
+    //                     .read(
+    //                         _monthDailyBudgetsSelectorControllerProviderInstance
+    //                             .notifier)
+    //                     .onSetBudget(item);
+    //               },
+    //               child: Padding(
+    //                 padding: const EdgeInsets.all(8.0),
+    //                 child: DecoratedBox(
+    //                   decoration: BoxDecoration(
+    //                       // color: Colors.grey.shade200,
+    //                       color: state.selectedBudget == item
+    //                           ? Colors.blue
+    //                           : Colors.grey.shade200,
+    //                       borderRadius: BorderRadius.circular(4)),
+    //                   child: Center(
+    //                     child: Text(
+    //                       monthMoments.periodName,
+    //                       style: TextStyle(
+    //                         color: state.selectedBudget == item
+    //                             ? Colors.white
+    //                             : Colors.black,
+    //                       ),
+    //                     ),
+    //                   ),
+    //                 ),
+    //               ),
+    //             );
+    //           },
+    //         ),
+    //       );
+    //     }),
+    //     const SizedBox(
+    //       height: 40,
+    //     ),
+    //     Center(
+    //       child: Row(
+    //         mainAxisAlignment: MainAxisAlignment.center,
+    //         children: [
+    //           GestureDetector(
+    //             onTap: () {
+    //               // Navigator.pop(context);
+    //               // widget.onMonthSelection(_selectedMonth);
+    //             },
+    //             child: const Column(
+    //               children: [
+    //                 Icon(
+    //                   Icons.check_box,
+    //                   size: 40,
+    //                 ),
+    //                 Text("Save"),
+    //               ],
+    //             ),
+    //           ),
+    //           const SizedBox(
+    //             width: 40,
+    //           ),
+    //           GestureDetector(
+    //             onTap: () {
+    //               // Navigator.pop(context);
+    //               // widget.onMonthSelection(null);
+    //             },
+    //             child: const Column(
+    //               children: [
+    //                 Icon(
+    //                   Icons.close,
+    //                   size: 40,
+    //                 ),
+    //                 Text("Cancel"),
+    //               ],
+    //             ),
+    //           ),
+    //         ],
+    //       ),
+    //     ),
+    //     const SizedBox(
+    //       height: 40,
+    //     ),
+    //   ],
+    // );
   }
 
   // TODO this will go into the controller
