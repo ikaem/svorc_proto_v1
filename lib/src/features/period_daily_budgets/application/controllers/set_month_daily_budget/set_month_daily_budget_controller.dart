@@ -3,31 +3,31 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:svorc_proto_v1/src/features/period_daily_budgets/domain/models/period_daily_budget_model.dart';
 import 'package:svorc_proto_v1/src/features/period_daily_budgets/utils/helpers/period_extremes_moments_calculator.dart';
 
-part "month_daily_budgets_selector_controller_state_data.dart";
-part "month_daily_budgets_selector_controller.g.dart";
-part "month_daily_budgets_selector_controller_value.dart";
+part "set_month_daily_budget_controller_state_data.dart";
+part "set_month_daily_budget_controller.g.dart";
+part "set_month_daily_budget_controller_value.dart";
 
 @riverpod
-class MonthDailyBudgetsSelectorController
-    extends _$MonthDailyBudgetsSelectorController {
+class SetMonthDailyBudgetController extends _$SetMonthDailyBudgetController {
   // TODO not sure - maybe it can
 
-  late final _MonthDailyBudgetsSelectorControllerValue
+  late final _SetMonthDailyBudgetControllerValue
       _monthDailyBudgetsSelectorControllerValue;
 
 // TODO no need to be async value - we will always have actual data
   @override
-  MonthDailyBudgetsSelectorControllerStateData build(
+  SetMonthDailyBudgetControllerStateData build(
     List<PeriodDailyBudgetModel> budgets,
   ) {
     // final Existing
+    // TODO all this should be renamed to match class name
     _monthDailyBudgetsSelectorControllerValue =
-        _MonthDailyBudgetsSelectorControllerValue(
+        _SetMonthDailyBudgetControllerValue(
       budgets: budgets,
     );
 
-    final MonthDailyBudgetsSelectorControllerStateData stateData =
-        MonthDailyBudgetsSelectorControllerStateData(
+    final SetMonthDailyBudgetControllerStateData stateData =
+        SetMonthDailyBudgetControllerStateData(
       selectedBudget: _monthDailyBudgetsSelectorControllerValue.thisMonthBudget,
       selectedYear: _monthDailyBudgetsSelectorControllerValue
           .thisMonthBudget.periodStart.year,
@@ -48,7 +48,7 @@ class MonthDailyBudgetsSelectorController
     final newSelectedYearBudgets = _monthDailyBudgetsSelectorControllerValue
         .getBudgetsForYear(newSelectedYear);
 
-    state = MonthDailyBudgetsSelectorControllerStateData(
+    state = SetMonthDailyBudgetControllerStateData(
       selectedBudget: newSelectedBudget,
       selectedYear: newSelectedYear,
       years: newYears,
@@ -64,7 +64,7 @@ class MonthDailyBudgetsSelectorController
     final newSelectedYearBudgets =
         _monthDailyBudgetsSelectorControllerValue.getBudgetsForYear(year);
 
-    state = MonthDailyBudgetsSelectorControllerStateData(
+    state = SetMonthDailyBudgetControllerStateData(
       selectedBudget: newSelectedBudget,
       selectedYear: newSelectedYear,
       years: newYears,
@@ -93,7 +93,7 @@ class MonthDailyBudgetsSelectorController
     final newSelectedYearBudgets =
         _monthDailyBudgetsSelectorControllerValue.getBudgetsForYear(nextYear);
 
-    state = MonthDailyBudgetsSelectorControllerStateData(
+    state = SetMonthDailyBudgetControllerStateData(
       selectedBudget: newSelectedBudget,
       selectedYear: newSelectedYear,
       years: newYears,
@@ -122,7 +122,7 @@ class MonthDailyBudgetsSelectorController
     final newSelectedYearBudgets =
         _monthDailyBudgetsSelectorControllerValue.getBudgetsForYear(prevYear);
 
-    state = MonthDailyBudgetsSelectorControllerStateData(
+    state = SetMonthDailyBudgetControllerStateData(
       selectedBudget: newSelectedBudget,
       selectedYear: newSelectedYear,
       years: newYears,

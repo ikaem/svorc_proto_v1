@@ -1,7 +1,7 @@
-part of "month_daily_budgets_selector_controller.dart";
+part of "set_month_daily_budget_controller.dart";
 
-class MonthDailyBudgetsSelectorControllerStateData extends Equatable {
-  const MonthDailyBudgetsSelectorControllerStateData({
+class SetMonthDailyBudgetControllerStateData extends Equatable {
+  const SetMonthDailyBudgetControllerStateData({
     required this.selectedBudget,
     required this.selectedYear,
     required this.years,

@@ -3,7 +3,7 @@ import 'dart:ffi';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:svorc_proto_v1/src/features/period_daily_budgets/application/controllers/month_daily_budgets_selector/month_daily_budgets_selector_controller.dart';
+import 'package:svorc_proto_v1/src/features/period_daily_budgets/application/controllers/set_month_daily_budget/set_month_daily_budget_controller.dart';
 import 'package:svorc_proto_v1/src/features/period_daily_budgets/domain/models/period_daily_budget_model.dart';
 import 'package:svorc_proto_v1/src/features/period_daily_budgets/presentation/widgets/edit_month_daily_budget_new.dart';
 import 'package:svorc_proto_v1/src/features/period_daily_budgets/utils/helpers/period_extremes_moments_calculator.dart';
@@ -28,9 +28,9 @@ class ExistingMonthDailyBudgetsSelector extends ConsumerWidget {
   final Function(PeriodDailyBudgetModel) onSelect;
 
   // late PeriodDailyBudgetModel _selectedBudget =
-  late final MonthDailyBudgetsSelectorControllerProvider
+  late final SetMonthDailyBudgetControllerProvider
       _monthDailyBudgetsSelectorControllerProviderInstance =
-      MonthDailyBudgetsSelectorControllerProvider(existingMonthDailyBudgets);
+      setMonthDailyBudgetControllerProvider(existingMonthDailyBudgets);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

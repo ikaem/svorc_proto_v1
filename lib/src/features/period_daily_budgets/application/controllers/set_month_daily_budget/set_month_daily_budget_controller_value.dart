@@ -1,8 +1,9 @@
-part of "month_daily_budgets_selector_controller.dart";
+part of "set_month_daily_budget_controller.dart";
 
+// TODO not sure this is good name for this class
 // TODO move to values - or leave here?
-class _MonthDailyBudgetsSelectorControllerValue extends Equatable {
-  const _MonthDailyBudgetsSelectorControllerValue({
+class _SetMonthDailyBudgetControllerValue extends Equatable {
+  const _SetMonthDailyBudgetControllerValue({
     required List<PeriodDailyBudgetModel> budgets,
   }) : _budgets = budgets;
 
