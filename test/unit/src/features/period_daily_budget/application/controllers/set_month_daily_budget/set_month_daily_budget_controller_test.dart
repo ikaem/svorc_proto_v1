@@ -77,7 +77,7 @@ void main() {
 
               // given
               final List<PeriodDailyBudgetModel> budgets = List.generate(
-                3,
+                12,
                 (i) {
                   final month = i + 1;
                   final date = DateTime(DateTime.now().year, month, 1);
@@ -104,19 +104,35 @@ void main() {
               );
 
               // then
+              final SetMonthDailyBudgetControllerStateDataSelections
+                  expectedStateData =
+                  SetMonthDailyBudgetControllerStateDataSelections(
+                selectedBudget: budgets.firstWhere(
+                  (element) =>
+                      element.periodStart.month == DateTime.now().month,
+                ),
+                selectedYear: budgets
+                    .firstWhere(
+                      (element) =>
+                          element.periodStart.month == DateTime.now().month,
+                    )
+                    .periodStart
+                    .year,
+                years: budgets.map((e) => e.periodStart.year).toSet().toList(),
+                selectedYearBudgets: budgets,
+              );
 
-              // verifyInOrder([
-              //   () => mockListener(
-              //         null,
-              //         SetMonthDailyBudgetControllerStateDataNoBudgetsProvided(),
-              //       ),
-              // ]);
-              // verifyNoMoreInteractions(
-              //   mockListener,
-              // );
+              verifyInOrder([
+                () => mockListener(
+                      null,
+                      expectedStateData,
+                    ),
+              ]);
+              verifyNoMoreInteractions(
+                mockListener,
+              );
 
               // cleanup
-              print("cleanup");
               addTearDown(
                 () {
                   container.dispose();
@@ -126,6 +142,193 @@ void main() {
           );
         },
       );
+
+      group(
+        "onSetBudget()",
+        () {
+          test(
+            "given [PeriodDailyBudgetModel] "
+            "when [onSetBudget] is called"
+            "then should emit particular state",
+            () async {
+              // setup
+              final ProviderContainer container = ProviderContainer();
+
+              final List<PeriodDailyBudgetModel> budgets = List.generate(
+                12,
+                (i) {
+                  final month = i + 1;
+                  final date = DateTime(DateTime.now().year, month, 1);
+                  final extremes =
+                      PeriodExtremesMomentsCalculator.calculateMonthMoments(
+                          monthIndex: date.month, year: date.year);
+                  return PeriodDailyBudgetModel(
+                    id: i + 1,
+                    periodStart: extremes.periodStart,
+                    periodEnd: extremes.periodEnd,
+                    amount: 1000,
+                    period: Period.month,
+                  );
+                },
+              );
+              final SetMonthDailyBudgetControllerProvider providerInstance =
+                  setMonthDailyBudgetControllerProvider(budgets);
+
+              // TODO testing with reading subscription
+              final ProviderSubscription<SetMonthDailyBudgetControllerStateData>
+                  subscription = container.listen(
+                providerInstance,
+                (prevState, newState) {},
+                // TODO not needed
+                // fireImmediately: true,
+              );
+
+              // given
+              final budget = budgets.firstWhere(
+                (element) => element.periodStart.month == 2,
+              );
+
+              // when
+              container.read(providerInstance.notifier).onSetBudget(
+                    budget,
+                  );
+
+              final SetMonthDailyBudgetControllerStateData state =
+                  subscription.read();
+
+              final SetMonthDailyBudgetControllerStateDataSelections
+                  expectedState =
+                  SetMonthDailyBudgetControllerStateDataSelections(
+                selectedBudget: budget,
+                selectedYear: budget.periodStart.year,
+                years: budgets.map((e) => e.periodStart.year).toSet().toList(),
+                selectedYearBudgets: budgets,
+              );
+
+              // then
+              expect(
+                state,
+                equals(expectedState),
+              );
+
+              // cleanup
+              addTearDown(
+                () {
+                  container.dispose();
+                },
+              );
+            },
+          );
+        },
+      );
+
+      group(
+        "onSetYear()",
+        () {
+          test(
+            "given [year] "
+            "when [onSetYear] is called"
+            "then should emit particular state",
+            () async {
+              // setup
+              final ProviderContainer container = ProviderContainer();
+
+              final List<PeriodDailyBudgetModel> thisYearBudgets =
+                  List.generate(
+                12,
+                (i) {
+                  final month = i + 1;
+                  final date = DateTime(DateTime.now().year, month, 1);
+                  final extremes =
+                      PeriodExtremesMomentsCalculator.calculateMonthMoments(
+                          monthIndex: date.month, year: date.year);
+                  return PeriodDailyBudgetModel(
+                    id: i + 1,
+                    periodStart: extremes.periodStart,
+                    periodEnd: extremes.periodEnd,
+                    amount: 1000,
+                    period: Period.month,
+                  );
+                },
+              );
+
+              final List<PeriodDailyBudgetModel> nextYearBudgets =
+                  List.generate(
+                12,
+                (i) {
+                  final month = i + 1;
+                  final date = DateTime(DateTime.now().year + 1, month, 1);
+                  final extremes =
+                      PeriodExtremesMomentsCalculator.calculateMonthMoments(
+                          monthIndex: date.month, year: date.year);
+                  return PeriodDailyBudgetModel(
+                    id: i + 1,
+                    periodStart: extremes.periodStart,
+                    periodEnd: extremes.periodEnd,
+                    amount: 1000,
+                    period: Period.month,
+                  );
+                },
+              );
+
+              final List<PeriodDailyBudgetModel> budgets = [
+                ...thisYearBudgets,
+                ...nextYearBudgets,
+              ];
+
+              final SetMonthDailyBudgetControllerProvider providerInstance =
+                  setMonthDailyBudgetControllerProvider(budgets);
+
+              // TODO testing with reading subscription
+              final ProviderSubscription<SetMonthDailyBudgetControllerStateData>
+                  subscription = container.listen(
+                providerInstance,
+                (prevState, newState) {},
+                // TODO not needed
+                // fireImmediately: true,
+              );
+
+              // given
+              final year = DateTime.now().year + 1;
+
+              // when
+              container.read(providerInstance.notifier).onSetYear(
+                    year,
+                  );
+
+              // then
+              final expectedState =
+                  SetMonthDailyBudgetControllerStateDataSelections(
+                selectedBudget: budgets.firstWhere(
+                  (element) =>
+                      element.periodStart.month == DateTime.now().month,
+                ),
+                selectedYear: year,
+                years: budgets.map((e) => e.periodStart.year).toSet().toList(),
+                selectedYearBudgets: nextYearBudgets,
+              );
+
+              final SetMonthDailyBudgetControllerStateData state =
+                  subscription.read();
+
+              expect(
+                state,
+                equals(expectedState),
+              );
+
+              // cleanup
+              addTearDown(
+                () {
+                  container.dispose();
+                },
+              );
+            },
+          );
+        },
+      );
+
+      // TODO missing tests for on set next year
+      // TODO missing tests for on set prev year
     },
   );
 }

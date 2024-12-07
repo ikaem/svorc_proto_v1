@@ -27,6 +27,8 @@ class SetMonthDailyBudgetController extends _$SetMonthDailyBudgetController {
 
     // final Existing
     // TODO all this should be renamed to match class name
+    // TODO this could throw potentially if current month does not exist in provided budgets
+    // TODO handle this in future
     _monthDailyBudgetsSelectorControllerValue =
         _SetMonthDailyBudgetControllerValue(
       budgets: budgets,
