@@ -7,7 +7,7 @@ part of 'set_month_daily_budget_controller.dart';
 // **************************************************************************
 
 String _$setMonthDailyBudgetControllerHash() =>
-    r'd78a6b45946004c480b9484d81531f8ccf31263a';
+    r'add741f3ec98713f42e3922d1d1e95d62cfce6e1';
 
 /// Copied from Dart SDK
 class _SystemHash {
