@@ -212,32 +212,6 @@ class SetMonthDailyBudgetController extends _$SetMonthDailyBudgetController {
           selectedYearBudgets: newSelectedYearBudgets,
         );
     }
-
-    // final years = _monthDailyBudgetsSelectorControllerValue.years;
-
-    // final selectedYear = state.selectedYear;
-
-    // final selectedYearIndex = years.indexOf(selectedYear);
-
-    // // if it is first element, return
-    // if (selectedYearIndex == 0) return;
-
-    // // now it is not first element
-    // final prevYearIndex = selectedYearIndex - 1;
-    // final prevYear = years[prevYearIndex];
-
-    // final newSelectedBudget = state.selectedBudget;
-    // final newSelectedYear = prevYear;
-    // final newYears = _monthDailyBudgetsSelectorControllerValue.years;
-    // final newSelectedYearBudgets =
-    //     _monthDailyBudgetsSelectorControllerValue.getBudgetsForYear(prevYear);
-
-    // state = SetMonthDailyBudgetControllerStateDataSelections(
-    //   selectedBudget: newSelectedBudget,
-    //   selectedYear: newSelectedYear,
-    //   years: newYears,
-    //   selectedYearBudgets: newSelectedYearBudgets,
-    // );
   }
 }
 

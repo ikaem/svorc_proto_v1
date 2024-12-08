@@ -59,11 +59,14 @@ class HomeScreenView extends ConsumerWidget {
                 }
 
                 return Column(
+                  mainAxisSize: MainAxisSize.min,
                   children: [
                     // TODO revert this
-                    const Padding(
-                      padding: EdgeInsets.all(15),
-                      child: HomeScreenTopButtons(),
+                    Padding(
+                      padding: const EdgeInsets.all(15),
+                      child: HomeScreenTopButtons(
+                        currentMonthDailyBudget: budget,
+                      ),
                     ),
                     HomeScreenBalances(
                       currentMonthDailyBudget: budget,

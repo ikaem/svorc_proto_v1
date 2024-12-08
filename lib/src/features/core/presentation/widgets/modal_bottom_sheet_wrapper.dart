@@ -15,7 +15,10 @@ class ModalBottomSheetWrapper extends StatelessWidget {
       color: Colors.white,
       // padding: const EdgeInsets.all(15.0),
       padding: EdgeInsets.only(
+        // bottom: MediaQuery.of(context).viewInsets.bottom + 50,
+        // TODO this causes overdflow when keyboard is shown - come back to it
         bottom: MediaQuery.of(context).viewInsets.bottom,
+        // bottom: 15,
         top: 15,
         left: 15,
         right: 15,

@@ -27,6 +27,7 @@ class ExistingMonthDailyBudgetsSelector extends ConsumerWidget {
   // TODO this will initially need to send selected bugdet to the edit widget
   final Function(PeriodDailyBudgetModel) onSelect;
 
+  // TODO there is a bug here - if we
   // late PeriodDailyBudgetModel _selectedBudget =
   late final SetMonthDailyBudgetControllerProvider
       _monthDailyBudgetsSelectorControllerProviderInstance =
@@ -202,8 +203,7 @@ class ExistingMonthDailyBudgetsSelector extends ConsumerWidget {
                 children: [
                   GestureDetector(
                     onTap: () {
-                      // Navigator.pop(context);
-                      // widget.onMonthSelection(_selectedMonth);
+                      onSelect(state.selectedBudget);
                     },
                     child: const Column(
                       children: [
@@ -222,6 +222,7 @@ class ExistingMonthDailyBudgetsSelector extends ConsumerWidget {
                     onTap: () {
                       // Navigator.pop(context);
                       // widget.onMonthSelection(null);
+                      onCancelSelect();
                     },
                     child: const Column(
                       children: [

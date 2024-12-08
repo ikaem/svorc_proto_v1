@@ -22,6 +22,7 @@ class HomeScreenRecentExpenses extends ConsumerWidget {
       child: Padding(
         padding: const EdgeInsets.all(15.0),
         child: Column(
+          mainAxisSize: MainAxisSize.min,
           children: [
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,

@@ -2,13 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:svorc_proto_v1/src/features/core/presentation/widgets/home/add_expense.dart';
 import 'package:svorc_proto_v1/src/features/core/presentation/widgets/home/edit_month_daily_budget.dart';
 import 'package:svorc_proto_v1/src/features/core/presentation/widgets/modal_bottom_sheet_wrapper.dart';
+import 'package:svorc_proto_v1/src/features/period_daily_budgets/domain/models/period_daily_budget_model.dart';
 import 'package:svorc_proto_v1/src/features/period_daily_budgets/presentation/widgets/edit_month_daily_budget_new.dart';
 import 'package:svorc_proto_v1/src/features/reports/presentation/screens/balance_report_screen.dart';
 
 class HomeScreenTopButtons extends StatelessWidget {
   const HomeScreenTopButtons({
     super.key,
+    required this.currentMonthDailyBudget,
   });
+
+  final PeriodDailyBudgetModel currentMonthDailyBudget;
 
   @override
   Widget build(BuildContext context) {
@@ -19,6 +23,7 @@ class HomeScreenTopButtons extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         // mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
+          // TODO all of these should be extracted in their own widgets
           Flexible(
             child: Container(
               decoration: BoxDecoration(
@@ -71,8 +76,10 @@ class HomeScreenTopButtons extends StatelessWidget {
                         builder: (context) {
                           return ModalBottomSheetWrapper(
                             child: EditMonthDailyBudgetNew(
-                              onCancelEdit: () => Navigator.of(context).pop(),
-                              onSaveEdit: () => Navigator.of(context).pop(),
+                              // onCancelEdit: () => Navigator.of(context).pop(),
+                              // onSaveEdit: () => Navigator.of(context).pop(),
+                              onClose: () => Navigator.of(context).pop(),
+                              currentMonthDailyBudget: currentMonthDailyBudget,
                             ),
                           );
                         },
