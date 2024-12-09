@@ -8,7 +8,8 @@ part "update_month_daily_budget_controller_state_data.dart";
 part "update_month_daily_budget_controller.g.dart";
 
 @riverpod
-class EditMonthDailyBudgetController extends _$EditMonthDailyBudgetController {
+class UpdateMonthDailyBudgetController
+    extends _$UpdateMonthDailyBudgetController {
   final PeriodDailyBudgetsRepository _periodDailyBudgetsRepository =
       GetItWrapper.get<PeriodDailyBudgetsRepository>();
 
