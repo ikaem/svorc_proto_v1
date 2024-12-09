@@ -66,6 +66,10 @@ class HomeScreenView extends ConsumerWidget {
                       padding: const EdgeInsets.all(15),
                       child: HomeScreenTopButtons(
                         currentMonthDailyBudget: budget,
+                        onLoadCurrentMonthDailyBudget: ref
+                            .read(getMonthDailyBudgetControllerProviderInstance
+                                .notifier)
+                            .onLoadBudget,
                       ),
                     ),
                     HomeScreenBalances(

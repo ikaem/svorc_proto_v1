@@ -1,29 +1,18 @@
 // TODO remove this new eventually
+import 'dart:developer';
+import 'dart:math' hide log;
+
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:svorc_proto_v1/src/features/core/presentation/widgets/dialog_wrapper.dart';
 import 'package:svorc_proto_v1/src/features/period_daily_budgets/application/controllers/get_existing_month_daily_budgets/get_existing_month_daily_budgets_controller.dart';
-import 'package:svorc_proto_v1/src/features/period_daily_budgets/data/entities/local/period_daily_budget/period_daily_budget_local_entity.dart';
+import 'package:svorc_proto_v1/src/features/period_daily_budgets/application/controllers/get_month_daily_budget/get_month_daily_budget_controller.dart';
+import 'package:svorc_proto_v1/src/features/period_daily_budgets/application/controllers/update_month_daily_budget/update_month_daily_budget_controller.dart';
 import 'package:svorc_proto_v1/src/features/period_daily_budgets/domain/models/period_daily_budget_model.dart';
 import 'package:svorc_proto_v1/src/features/period_daily_budgets/presentation/widgets/existing_month_daily_budgets_selector.dart';
 import 'package:svorc_proto_v1/src/features/period_daily_budgets/utils/helpers/period_extremes_moments_calculator.dart';
-
-class S extends ConsumerStatefulWidget {
-  const S({super.key});
-
-  @override
-  ConsumerState<ConsumerStatefulWidget> createState() => _SState();
-}
-
-class _SState extends ConsumerState<S> {
-  @override
-  Widget build(BuildContext context) {
-    return Container();
-  }
-}
 
 class EditMonthDailyBudgetNew extends ConsumerStatefulWidget {
   const EditMonthDailyBudgetNew({
@@ -58,6 +47,7 @@ class _EditMonthDailyBudgetNewState
     // TODO: implement initState
     super.initState();
 
+    // TODO move to separate method
     _selectedBudget = widget.currentMonthDailyBudget;
     _amountTextEditingController = TextEditingController.fromValue(
       TextEditingValue(
@@ -72,6 +62,36 @@ class _EditMonthDailyBudgetNewState
             widget.currentMonthDailyBudget.periodStart),
       ),
     );
+
+    // TODO test
+    ref.listenManual(
+      updateMonthDailyBudgetControllerProvider,
+      (_, currentState) {
+        currentState.when(
+          data: (data) {
+            if (data == null) {
+              log("message: data is null: $data");
+              return;
+            }
+
+            log("message: data is not null: $data");
+
+            widget.onClose();
+
+            // TODO maybe here we can call get current month budget or something
+            // TODO this does not work
+            // ref.read(getMonthDailyBudgetControllerProvider(DateTime.now()));
+          },
+          error: (error, stackTrace) {
+            log("message: error: $error");
+          },
+          loading: () {
+            log("message: loading");
+          },
+        );
+      },
+      fireImmediately: true,
+    );
   }
 
   @override
@@ -82,6 +102,8 @@ class _EditMonthDailyBudgetNewState
     // TODO this late will have to be used to:
     // - get current month budget
     // - set state of text editing controller
+
+    // ref.listen();
 
     return Column(
       mainAxisSize: MainAxisSize.min,
@@ -190,6 +212,7 @@ class _EditMonthDailyBudgetNewState
 
                   TextField(
                     controller: _amountTextEditingController,
+                    keyboardType: TextInputType.number,
                     decoration: const InputDecoration(
                       labelText: "AMOUNT",
                       hintText: "Enter amount",
@@ -210,6 +233,29 @@ class _EditMonthDailyBudgetNewState
                           onTap: () {
                             // TODO this will use the controlkler
                             // and then we will have i guess .listenManual or .listen on controlelr provider to edit the budget
+
+                            final valueString =
+                                _amountTextEditingController.text;
+                            final value = int.tryParse(valueString);
+
+                            if (value == null) {
+                              // TODO this is not even visible because of keyboard
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  content: Text("Invalid amount"),
+                                ),
+                              );
+                              return;
+                            }
+
+                            ref
+                                .read(updateMonthDailyBudgetControllerProvider
+                                    .notifier)
+                                .onUpdateBudget(
+                                  // amount: Random().nextInt(1000),
+                                  amount: value,
+                                  id: _selectedBudget.id,
+                                );
                           },
                           child: const Column(
                             children: [

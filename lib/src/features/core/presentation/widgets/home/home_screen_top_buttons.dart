@@ -10,9 +10,12 @@ class HomeScreenTopButtons extends StatelessWidget {
   const HomeScreenTopButtons({
     super.key,
     required this.currentMonthDailyBudget,
+    required this.onLoadCurrentMonthDailyBudget,
   });
 
   final PeriodDailyBudgetModel currentMonthDailyBudget;
+  // TODO maybe this is silly
+  final VoidCallback onLoadCurrentMonthDailyBudget;
 
   @override
   Widget build(BuildContext context) {
@@ -56,9 +59,10 @@ class HomeScreenTopButtons extends StatelessWidget {
                   const SizedBox(
                     height: 5,
                   ),
-                  const Text(
-                    "6 EUR",
-                    style: TextStyle(
+                  Text(
+                    // TODO if add EUR , there is overflow - fix it
+                    "${currentMonthDailyBudget.amount}",
+                    style: const TextStyle(
                       fontSize: 24,
                       // color: Colors.grey.shade600,
                       fontWeight: FontWeight.bold,
@@ -78,7 +82,14 @@ class HomeScreenTopButtons extends StatelessWidget {
                             child: EditMonthDailyBudgetNew(
                               // onCancelEdit: () => Navigator.of(context).pop(),
                               // onSaveEdit: () => Navigator.of(context).pop(),
-                              onClose: () => Navigator.of(context).pop(),
+                              onClose: () {
+                                // TODO this is a bit silly
+                                // maybe top button this could call its own stuff, so only top button is reloaded.
+                                // this way, everything is reloaded. come back to this
+                                onLoadCurrentMonthDailyBudget();
+                                Navigator.of(context).pop();
+                                // TODO
+                              },
                               currentMonthDailyBudget: currentMonthDailyBudget,
                             ),
                           );

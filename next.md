@@ -1,3 +1,4 @@
-1. test update budget controller
-2. use update budget controller in widget
-3. use current budget in top buttons
+1. add expense
+2. close diaolog when added
+3. should probably refresh recent expenses somehow
+- so maybe we should have a stream - we will see
