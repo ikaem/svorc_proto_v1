@@ -33,6 +33,158 @@ void main() {
   group(
     "$ExpensesLocalDataSource",
     () {
+      // TODO test only
+      group(
+        "watchExpenses",
+        () {
+          test(
+            "given <pre-condition to the test>"
+            "when <behavior we are specifying>"
+            "then should <state we expect to happen>",
+            () async {
+              // setup
+              final expenses = List.generate(12, (index) {
+                return ExpenseLocalEntityCompanion.insert(
+                  id: Value(index + 1),
+                  date: DateTime.now().add(Duration(seconds: index)),
+                  amount: (index + 1) * 100,
+                  categoryId: 1,
+                  note: Value("note ${index + 1}"),
+                  createdAt: Value(
+                    DateTime.now().add(Duration(seconds: index)),
+                  ),
+                  updatedAt: Value(
+                    DateTime.now().add(Duration(seconds: index)),
+                  ),
+                );
+              });
+
+              final stream = expensesLocalDataSource.watchExpenses(
+                filter: const GetExpensesFilterValue(),
+              );
+
+              final expectedValue1 = ExpenseLocalEntityData(
+                id: expenses[0].id.value,
+                date: expenses[0].date.value.normalizedToSeconds,
+                amount: expenses[0].amount.value,
+                categoryId: expenses[0].categoryId.value,
+                note: expenses[0].note.value,
+                createdAt: expenses[0].createdAt.value.normalizedToSeconds,
+                updatedAt: expenses[0].updatedAt.value.normalizedToSeconds,
+              );
+
+              final expectedValue2 = ExpenseLocalEntityData(
+                id: expenses[1].id.value,
+                date: expenses[1].date.value.normalizedToSeconds,
+                amount: expenses[1].amount.value,
+                categoryId: expenses[1].categoryId.value,
+                note: expenses[1].note.value,
+                createdAt: expenses[1].createdAt.value.normalizedToSeconds,
+                updatedAt: expenses[1].updatedAt.value.normalizedToSeconds,
+              );
+
+              final expensesData = expenses.map((e) {
+                return ExpenseLocalEntityData(
+                  id: e.id.value,
+                  date: e.date.value.normalizedToSeconds,
+                  amount: e.amount.value,
+                  categoryId: e.categoryId.value,
+                  note: e.note.value,
+                  createdAt: e.createdAt.value.normalizedToSeconds,
+                  updatedAt: e.updatedAt.value.normalizedToSeconds,
+                );
+              }).toList();
+
+              final lastFive = expensesData.reversed.take(5).toList();
+
+              // expectLater(
+              //   stream,
+              //   emits(
+              //     [expectedValue1],
+              //   ),
+              //   // emits(expectedValue),
+              // );
+
+              expectLater(
+                stream,
+                emitsInOrder(
+                  [
+                    lastFive,
+                    // [expectedValue1],
+                    // [expectedValue2, expectedValue1],
+                  ],
+                ),
+                // emits(expectedValue),
+              );
+
+              await testDatabaseWrapper.databaseWrapper.expenseRepo
+                  .insertAll(expenses);
+
+              // testDatabaseWrapper.databaseWrapper.expenseRepo
+              //     .insertOne(expenses[0]);
+
+              // await Future.delayed(const Duration(seconds: 1));
+
+              // testDatabaseWrapper.databaseWrapper.expenseRepo
+              //     .insertOne(expenses[1]);
+
+              // final subscription = stream.listen((event) {
+              //   print("event: $event");
+              // });
+
+              // print("what");
+
+              // await testDatabaseWrapper.databaseWrapper.expenseRepo
+              //     .insertAll(expenses);
+
+              // testDatabaseWrapper.databaseWrapper.expenseRepo
+              //     .insertOne(expenses[0]);
+
+              // await Future.delayed(const Duration(seconds: 1));
+
+              // testDatabaseWrapper.databaseWrapper.expenseRepo
+              //     .insertOne(expenses[1]);
+
+              // await Future.delayed(const Duration(seconds: 1));
+
+              // testDatabaseWrapper.databaseWrapper.expenseRepo
+              //     .insertOne(expenses[2]);
+
+              // await Future.delayed(const Duration(seconds: 1));
+
+              // testDatabaseWrapper.databaseWrapper.expenseRepo
+              //     .insertOne(expenses[3]);
+
+              // await Future.delayed(const Duration(seconds: 1));
+
+              // testDatabaseWrapper.databaseWrapper.expenseRepo
+              //     .insertOne(expenses[4]);
+
+              // await Future.delayed(const Duration(seconds: 1));
+
+              // testDatabaseWrapper.databaseWrapper.expenseRepo
+              //     .insertOne(expenses[5]);
+
+              // await Future.delayed(const Duration(seconds: 1));
+
+              // testDatabaseWrapper.databaseWrapper.expenseRepo
+              //     .insertOne(expenses[6]);
+
+              // await Future.delayed(const Duration(seconds: 1));
+
+              // -----------------------------------
+
+              // given
+
+              // when
+
+              // then
+
+              // cleanup
+            },
+          );
+        },
+      );
       group(
         "createExpense",
         () {

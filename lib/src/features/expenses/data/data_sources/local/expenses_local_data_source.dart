@@ -1,6 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:svorc_proto_v1/src/features/expenses/domain/values/expense_local_entity_value.dart';
 import 'package:svorc_proto_v1/src/features/expenses/domain/values/new_expense_local_value.dart';
+import 'package:svorc_proto_v1/src/wrappers/drift/drift_app_database/drift_app_database.dart';
 
 abstract interface class ExpensesLocalDataSource {
 // create expense
@@ -22,6 +23,10 @@ abstract interface class ExpensesLocalDataSource {
 // get expenses - for now without filtering
 // TODO v1.1 - add filtering value class to be used here
   Future<List<ExpenseLocalEntityValue>> getExpenses({
+    required GetExpensesFilterValue filter,
+  });
+
+  Stream<List<ExpenseLocalEntityData>> watchExpenses({
     required GetExpensesFilterValue filter,
   });
 

@@ -1,4 +1,4 @@
-1. add expense
-2. close diaolog when added
-3. should probably refresh recent expenses somehow
-- so maybe we should have a stream - we will see
+1. need controller that listens to db expenses 
+-- we want to listen and return only 5 most recent expenses
+
+2. first we need data source

@@ -102,6 +102,26 @@ class ExpensesLocalDataSourceImpl implements ExpensesLocalDataSource {
     return entityValue; */
   }
 
+// TODO temp test
+  @override
+  Stream<List<ExpenseLocalEntityData>> watchExpenses({
+    required GetExpensesFilterValue filter,
+  }) {
+    // TODO: implement watchExpenses
+    // throw UnimplementedError();
+
+    final select = _databaseWrapper.expenseRepo.select();
+
+    final limitedSelect = select
+      ..limit(5)
+      ..orderBy(
+          [(t) => OrderingTerm(expression: t.date, mode: OrderingMode.desc)]);
+
+    final stream = limitedSelect.watch();
+
+    return stream;
+  }
+
   @override
   Future<List<ExpenseLocalEntityValue>> getExpenses({
     required GetExpensesFilterValue filter,
@@ -211,6 +231,7 @@ class ExpensesLocalDataSourceImpl implements ExpensesLocalDataSource {
     final updatedId = await updateExpense.write(updatedCompanion);
     return updatedId;
   }
+
 // create expense
 
 // update expense - allow to update amount, date, category, note
