@@ -80,6 +80,7 @@ class ExpenseBriefItem extends StatelessWidget {
               width: 10,
             ),
             if (note != null)
+              // TODO there is a bug it seems - note is eiter not stored correctly when save epnse, or not oresneted or something..
               Text(
                 // "Some note that is a bit longer for testing",
                 note!,
