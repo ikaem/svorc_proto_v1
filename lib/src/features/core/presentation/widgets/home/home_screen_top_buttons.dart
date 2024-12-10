@@ -65,16 +65,7 @@ class _AddExpense extends StatelessWidget {
           isDismissible: false,
           context: context,
           builder: (context) {
-            return Container(
-              // height: 200,
-              color: Colors.white,
-              // padding: const EdgeInsets.all(15.0),
-              padding: EdgeInsets.only(
-                bottom: MediaQuery.of(context).viewInsets.bottom,
-                top: 15,
-                left: 15,
-                right: 15,
-              ),
+            return ModalBottomSheetWrapper(
               child: AddExpense(
                 onClose: () => Navigator.of(context).pop(),
               ),
@@ -125,16 +116,6 @@ class _BalanceReport extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        // final nowDate = DateTime.now();
-
-        // DateTime.april;
-
-        // final january = DateTime(2024, 1, 1);
-        // // final firstMillisecondOfJanuary = DateTime(
-        // //     january.year, january.month, january.day, 0, 0, 0, 0);
-
-        // print("nowDate: $nowDate");
-
         Navigator.of(context).push(
           MaterialPageRoute(
             builder: (context) {
@@ -233,6 +214,8 @@ class _CurrentMonthDailyBudget extends StatelessWidget {
           GestureDetector(
             onTap: () {
               showModalBottomSheet(
+                // TODO these should maybe also be part of some function that wrapps showModalBottomSheet, and we use it?
+
                 isScrollControlled: true,
                 isDismissible: false,
                 context: context,
