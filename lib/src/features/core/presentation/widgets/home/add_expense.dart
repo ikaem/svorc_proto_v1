@@ -1,16 +1,12 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:svorc_proto_v1/src/features/categories/domain/models/category_model.dart';
 import 'package:svorc_proto_v1/src/features/core/utilities/helpers/date_picker_helper.dart';
 import 'package:svorc_proto_v1/src/features/core/utilities/helpers/time_picker_helper.dart';
-import 'package:svorc_proto_v1/src/features/expenses/application/bloc/cubits/create_expense/create_expense_cubit.dart';
-import 'package:svorc_proto_v1/src/features/expenses/domain/repositories/expenses_repository.dart';
-import 'package:svorc_proto_v1/src/features/expenses/domain/use_cases/create_expense_use_case.dart';
+import 'package:svorc_proto_v1/src/features/expenses/application/controllers/create_expense/create_expense_controller.dart';
 
-class AddExpense extends StatefulWidget {
+class AddExpense extends ConsumerStatefulWidget {
   const AddExpense({
     super.key,
     required this.onClose,
@@ -19,52 +15,54 @@ class AddExpense extends StatefulWidget {
   final VoidCallback onClose;
 
   @override
-  State<AddExpense> createState() => _AddExpenseState();
+  ConsumerState<AddExpense> createState() => _AddExpenseState();
 }
 
-class _AddExpenseState extends State<AddExpense> {
-  // TODO this will need to be retrieved from another cubit - and it could hold some state maybe for the future
+class _AddExpenseState extends ConsumerState<AddExpense> {
+  // TODO lets keep this for now
   late CategoryModel _selectedCategory = _tempCategories.first;
 
-// TODO this is clumsy - we should be handling this in one place
+  // TODO maybe this can be handled in a controller as well - do it later
   DateTime _selectedDate = DateTime.now();
   late final TextEditingController _dateController =
       TextEditingController.fromValue(
     TextEditingValue(
-      text: DateFormat("dd/MM/yyyy").format(
-        DateTime.now(),
-      ),
-      // text: _selectedDate.toIso8601String(),
+      text: _getFormattedDate(DateTime.now()),
     ),
   );
 
-  // TODO create initial value from current time, so can be reused later for pickers as initial time and date
-  TimeOfDay _selectedTime = TimeOfDay.fromDateTime(DateTime.now());
+  late TimeOfDay _selectedTime = TimeOfDay.fromDateTime(_selectedDate);
   late final TextEditingController _timeController =
       TextEditingController.fromValue(
     TextEditingValue(
-        // text: DateFormat("HH:mm").format(
-        //   DateTime.now(),
-        // ),
-        // text: TimeOfDay.now().format(context),
-        text: _selectedTime.format(context)),
+      text: _getFormattedTime(_selectedTime),
+    ),
   );
 
+  // TODO we could intialize this from initi state, like in editmonthdailybudget -> new
   final TextEditingController _amountController = TextEditingController();
-
-  // TODO temp
-
-  // TODO we will see how category will be provided - will need to retrieve categories from db
-
   final TextEditingController _noteController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
 
-    // _dateController.addListener((e) {
+    // TODO extract to a method
 
-    // });
+    ref.listenManual(createExpenseControllerProvider, (_, currentState) {
+      currentState.when(
+        data: (data) {
+// if(data == null)
+
+          final id = data.createdExpenseId;
+          if (id == null) return;
+
+          widget.onClose();
+        },
+        error: (error, stackTrace) => null,
+        loading: () => null,
+      );
+    });
   }
 
   @override
@@ -75,13 +73,18 @@ class _AddExpenseState extends State<AddExpense> {
     super.dispose();
   }
 
+  // TODO move below
+
+  String _getFormattedDate(DateTime date) {
+    return DateFormat("dd/MM/yyyy").format(date);
+  }
+
+  String _getFormattedTime(TimeOfDay time) {
+    return time.format(context);
+  }
+
   @override
   Widget build(BuildContext context) {
-    // final TimeOfDay time = TimeOfDay.now();
-    // final formatedTimeOf = time.format(context);
-
-    // log("Time: $formatedTimeOf");
-
 // TODO lets try provide and consume blocs in the same widget
     return Builder(builder: (context) {
       return Column(
@@ -143,10 +146,10 @@ class _AddExpenseState extends State<AddExpense> {
 
                         if (date == null) return;
 
-                        _dateController.text =
-                            DateFormat("dd/MM/yyyy").format(date);
-                        _selectedDate = date;
-                        setState(() {});
+                        setState(() {
+                          _dateController.text = _getFormattedDate(date);
+                          _selectedDate = date;
+                        });
                       },
                     ),
                   ),
@@ -172,8 +175,12 @@ class _AddExpenseState extends State<AddExpense> {
                         if (!context.mounted) return;
 
                         if (time == null) return;
-                        _timeController.text = time.format(context);
-                        _selectedTime = time;
+                        // _timeController.text = time.format(context);
+
+                        setState(() {
+                          _timeController.text = _getFormattedTime(time);
+                          _selectedTime = time;
+                        });
                       },
                     ),
                   ),
@@ -206,7 +213,6 @@ class _AddExpenseState extends State<AddExpense> {
                   );
 
                   setState(() {
-                    // _selectedCategory = value!;
                     _selectedCategory = category;
                   });
                 },
@@ -244,6 +250,8 @@ class _AddExpenseState extends State<AddExpense> {
                     // TODO this could be called maybe in listener of state
                     // TODO this should be all validate and such
                     final value = int.tryParse(_amountController.text);
+                    if (value == null) return;
+
                     final date = _selectedDate;
                     final time = _selectedTime;
 
@@ -258,18 +266,14 @@ class _AddExpenseState extends State<AddExpense> {
                       time.minute,
                     );
 
-                    if (value == null) return;
-
-                    // context.read<CreateExpenseCubit>().onCreateExpense(
-                    //       amount: value,
-                    //       categoryId: categoryId,
-                    //       date: normalizedDateTime,
-                    //       note: note,
-                    //     );
-
-                    // widget.onClose();
-                    print(
-                        "Amount: $value, Date: $date, Time: $time, Category: $categoryId, Note: $note");
+                    ref
+                        .read(createExpenseControllerProvider.notifier)
+                        .onCreateExpense(
+                          date: normalizedDateTime,
+                          amount: value,
+                          categoryId: categoryId,
+                          note: note,
+                        );
                   },
                   child: const Column(
                     children: [
@@ -286,7 +290,7 @@ class _AddExpenseState extends State<AddExpense> {
                 ),
                 GestureDetector(
                   onTap: () {
-                    Navigator.pop(context);
+                    widget.onClose();
                   },
                   child: const Column(
                     children: [

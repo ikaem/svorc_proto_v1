@@ -17,6 +17,7 @@ class CreateExpenseController extends _$CreateExpenseController {
 
   @override
   AsyncValue<CreateExpenseControllerState> build() {
+    // TODO maybe this can be null initially - so it will be async value <null>
     return const AsyncValue<CreateExpenseControllerState>.data(
       CreateExpenseControllerState(createdExpenseId: null),
     );
