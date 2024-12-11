@@ -26,7 +26,7 @@ abstract interface class ExpensesLocalDataSource {
     required GetExpensesFilterValue filter,
   });
 
-  Stream<List<ExpenseLocalEntityData>> watchExpenses({
+  Stream<List<ExpenseLocalEntityValue>> watchExpenses({
     required GetExpensesFilterValue filter,
   });
 

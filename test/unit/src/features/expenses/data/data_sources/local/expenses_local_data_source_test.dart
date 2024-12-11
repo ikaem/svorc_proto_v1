@@ -38,12 +38,171 @@ void main() {
         "watchExpenses",
         () {
           test(
-            "given <pre-condition to the test>"
-            "when <behavior we are specifying>"
-            "then should <state we expect to happen>",
+            "given no [ExpenseLocalEntity]s in database"
+            "when [.watchExpenses] is called"
+            "then should return stream with an event of empty list",
             () async {
               // setup
-              final expenses = List.generate(12, (index) {
+
+              // given
+
+              // when
+              final stream = expensesLocalDataSource.watchExpenses(
+                filter: const GetExpensesFilterValue(
+                  limit: 5,
+                ),
+              );
+
+              // then
+              expectLater(
+                stream,
+                emits(
+                  [],
+                ),
+              );
+
+              // cleanup
+            },
+          );
+
+          test(
+            "given existing [ExpenseLocalEntity]s in database"
+            "when [.watchExpenses] is called"
+            "then should return stream with expected [List<ExpenseLocalEntityValue>] event",
+            () async {
+              // setup
+              final companions = List.generate(12, (index) {
+                return ExpenseLocalEntityCompanion.insert(
+                  id: Value(index + 1),
+                  date: DateTime.now().add(Duration(seconds: index)),
+                  amount: (index + 1) * 100,
+                  categoryId: 1,
+                  note: Value("note ${index + 1}"),
+                  createdAt: Value(
+                    DateTime.now().add(Duration(seconds: index)),
+                  ),
+                  updatedAt: Value(
+                    DateTime.now().add(Duration(seconds: index)),
+                  ),
+                );
+              });
+
+              // given
+              await testDatabaseWrapper.databaseWrapper.expenseRepo
+                  .insertAll(companions);
+
+              // when
+
+              final stream = expensesLocalDataSource.watchExpenses(
+                filter: const GetExpensesFilterValue(
+                    // limit: 5,
+                    ),
+              );
+
+              // then
+              final expectedEntityValues = companions
+                  .map(
+                    (e) => ExpenseLocalEntityValue(
+                      id: e.id.value,
+                      amount: e.amount.value,
+                      date: e.date.value.normalizedToSeconds,
+                      category: const CategoryLocalEntityValue(
+                        id: 1,
+                        name: "general",
+                      ),
+                      note: e.note.value,
+                    ),
+                  )
+                  .toList()
+                  // TODO because we order by desc date
+                  .reversed
+                  .toList();
+              // .toList();
+
+              // final lastFive = expectedEntityValues.take(5).toList();
+
+              expectLater(
+                stream,
+                emits(
+                  expectedEntityValues,
+                ),
+              );
+
+              // cleanup
+            },
+          );
+          test(
+            "given existing [ExpenseLocalEntity]s in database"
+            "when [.watchExpenses] is called with limit specified"
+            "then should return stream with expected [List<ExpenseLocalEntityValue>] event",
+            () async {
+              // setup
+              final companions = List.generate(12, (index) {
+                return ExpenseLocalEntityCompanion.insert(
+                  id: Value(index + 1),
+                  date: DateTime.now().add(Duration(seconds: index)),
+                  amount: (index + 1) * 100,
+                  categoryId: 1,
+                  note: Value("note ${index + 1}"),
+                  createdAt: Value(
+                    DateTime.now().add(Duration(seconds: index)),
+                  ),
+                  updatedAt: Value(
+                    DateTime.now().add(Duration(seconds: index)),
+                  ),
+                );
+              });
+
+              // when
+
+              final stream = expensesLocalDataSource.watchExpenses(
+                filter: const GetExpensesFilterValue(
+                  limit: 5,
+                ),
+              );
+              // then
+              final expectedEntityValues = companions
+                  .map(
+                    (e) => ExpenseLocalEntityValue(
+                      id: e.id.value,
+                      amount: e.amount.value,
+                      date: e.date.value.normalizedToSeconds,
+                      category: const CategoryLocalEntityValue(
+                        id: 1,
+                        name: "general",
+                      ),
+                      note: e.note.value,
+                    ),
+                  )
+                  .toList()
+                  // TODO because we order by desc date
+                  .reversed;
+              // .toList();
+
+              final lastFive = expectedEntityValues.take(5).toList();
+
+              expectLater(
+                stream,
+                emits(
+                  lastFive,
+                ),
+              );
+
+              // given
+              await testDatabaseWrapper.databaseWrapper.expenseRepo
+                  .insertAll(companions);
+
+              // cleanup
+            },
+          );
+
+          test(
+            "given [watchExpenses] has already emited an event"
+            "when new [ExpenseLocalEntity] is added to database"
+            "then should emit new expected event",
+            () async {
+              // setup
+              final companions = List.generate(2, (index) {
                 return ExpenseLocalEntityCompanion.insert(
                   id: Value(index + 1),
                   date: DateTime.now().add(Duration(seconds: index)),
@@ -60,42 +219,125 @@ void main() {
               });
 
               final stream = expensesLocalDataSource.watchExpenses(
-                filter: const GetExpensesFilterValue(),
+                filter: const GetExpensesFilterValue(
+                  limit: 5,
+                ),
               );
 
-              final expectedValue1 = ExpenseLocalEntityData(
-                id: expenses[0].id.value,
-                date: expenses[0].date.value.normalizedToSeconds,
-                amount: expenses[0].amount.value,
-                categoryId: expenses[0].categoryId.value,
-                note: expenses[0].note.value,
-                createdAt: expenses[0].createdAt.value.normalizedToSeconds,
-                updatedAt: expenses[0].updatedAt.value.normalizedToSeconds,
+              // stream.listen((event) {
+              //   print("event: $event");
+              // });
+
+              // given
+              // then
+              final expectedFirstValue = ExpenseLocalEntityValue(
+                id: companions.first.id.value,
+                amount: companions.first.amount.value,
+                date: companions.first.date.value.normalizedToSeconds,
+                category: const CategoryLocalEntityValue(
+                  id: 1,
+                  name: "general",
+                ),
+                note: companions.first.note.value,
               );
 
-              final expectedValue2 = ExpenseLocalEntityData(
-                id: expenses[1].id.value,
-                date: expenses[1].date.value.normalizedToSeconds,
-                amount: expenses[1].amount.value,
-                categoryId: expenses[1].categoryId.value,
-                note: expenses[1].note.value,
-                createdAt: expenses[1].createdAt.value.normalizedToSeconds,
-                updatedAt: expenses[1].updatedAt.value.normalizedToSeconds,
+              final expectedLastValue = ExpenseLocalEntityValue(
+                id: companions.last.id.value,
+                amount: companions.last.amount.value,
+                date: companions.last.date.value.normalizedToSeconds,
+                category: const CategoryLocalEntityValue(
+                  id: 1,
+                  name: "general",
+                ),
+                note: companions.last.note.value,
               );
 
-              final expensesData = expenses.map((e) {
-                return ExpenseLocalEntityData(
-                  id: e.id.value,
-                  date: e.date.value.normalizedToSeconds,
-                  amount: e.amount.value,
-                  categoryId: e.categoryId.value,
-                  note: e.note.value,
-                  createdAt: e.createdAt.value.normalizedToSeconds,
-                  updatedAt: e.updatedAt.value.normalizedToSeconds,
+              expectLater(
+                stream,
+                emitsInOrder(
+                  [
+                    [expectedFirstValue],
+                    [expectedLastValue, expectedFirstValue],
+                  ],
+                ),
+              );
+              await testDatabaseWrapper.databaseWrapper.expenseRepo
+                  .insertOne(companions.first);
+
+              // when
+              await testDatabaseWrapper.databaseWrapper.expenseRepo
+                  .insertOne(companions.last);
+
+              // await Future.delayed(const Duration(seconds: 1));
+
+              // cleanup
+            },
+          );
+
+// TODO this is experemintes one -
+
+// TODO use min and max date
+          test(
+            "given <pre-condition to the test>"
+            "when <behavior we are specifying>"
+            "then should <state we expect to happen>",
+            () async {
+              // setup
+              final companions = List.generate(12, (index) {
+                return ExpenseLocalEntityCompanion.insert(
+                  id: Value(index + 1),
+                  date: DateTime.now().add(Duration(seconds: index)),
+                  amount: (index + 1) * 100,
+                  categoryId: 1,
+                  note: Value("note ${index + 1}"),
+                  createdAt: Value(
+                    DateTime.now().add(Duration(seconds: index)),
+                  ),
+                  updatedAt: Value(
+                    DateTime.now().add(Duration(seconds: index)),
+                  ),
                 );
-              }).toList();
+              });
 
-              final lastFive = expensesData.reversed.take(5).toList();
+              final stream = expensesLocalDataSource.watchExpenses(
+                filter: const GetExpensesFilterValue(
+                  limit: 5,
+                ),
+              );
+
+              // final expectedValue1 = ExpenseLocalEntityData(
+              //   id: expenses[0].id.value,
+              //   date: expenses[0].date.value.normalizedToSeconds,
+              //   amount: expenses[0].amount.value,
+              //   categoryId: expenses[0].categoryId.value,
+              //   note: expenses[0].note.value,
+              //   createdAt: expenses[0].createdAt.value.normalizedToSeconds,
+              //   updatedAt: expenses[0].updatedAt.value.normalizedToSeconds,
+              // );
+
+              // final expectedValue2 = ExpenseLocalEntityData(
+              //   id: expenses[1].id.value,
+              //   date: expenses[1].date.value.normalizedToSeconds,
+              //   amount: expenses[1].amount.value,
+              //   categoryId: expenses[1].categoryId.value,
+              //   note: expenses[1].note.value,
+              //   createdAt: expenses[1].createdAt.value.normalizedToSeconds,
+              //   updatedAt: expenses[1].updatedAt.value.normalizedToSeconds,
+              // );
+
+              // final expensesData = expenses.map((e) {
+              //   return ExpenseLocalEntityData(
+              //     id: e.id.value,
+              //     date: e.date.value.normalizedToSeconds,
+              //     amount: e.amount.value,
+              //     categoryId: e.categoryId.value,
+              //     note: e.note.value,
+              //     createdAt: e.createdAt.value.normalizedToSeconds,
+              //     updatedAt: e.updatedAt.value.normalizedToSeconds,
+              //   );
+              // }).toList();
+
+              // final lastFive = expensesData.reversed.take(5).toList();
 
               // expectLater(
               //   stream,
@@ -104,71 +346,96 @@ void main() {
               //   ),
               //   // emits(expectedValue),
               // );
+              final expectedEntityValues = companions
+                  .map(
+                    (e) => ExpenseLocalEntityValue(
+                      id: e.id.value,
+                      amount: e.amount.value,
+                      date: e.date.value.normalizedToSeconds,
+                      category: const CategoryLocalEntityValue(
+                        id: 1,
+                        name: "general",
+                      ),
+                      note: e.note.value,
+                    ),
+                  )
+                  .toList()
+                  // TODO because we order by desc date
+                  .reversed;
+              // .toList();
 
-              expectLater(
-                stream,
-                emitsInOrder(
-                  [
-                    lastFive,
-                    // [expectedValue1],
-                    // [expectedValue2, expectedValue1],
-                  ],
-                ),
-                // emits(expectedValue),
-              );
+              final lastFive = expectedEntityValues.take(5).toList();
 
-              await testDatabaseWrapper.databaseWrapper.expenseRepo
-                  .insertAll(expenses);
+              final firstElem = await stream.first;
 
+              print("what");
+
+              // expectLater(
+              //   stream,
+              //   emitsInOrder(
+              //     [
+              //       [],
+              //       // lastFive,
+              //       // [expectedValue1],
+              //       // [expectedValue2, expectedValue1],
+              //     ],
+              //   ),
+              //   // emits(expectedValue),
+              // );
+
+              // await testDatabaseWrapper.databaseWrapper.expenseRepo
+              //     .insertAll(companions);
+
+// --------------- this works
               // testDatabaseWrapper.databaseWrapper.expenseRepo
-              //     .insertOne(expenses[0]);
+              //     .insertOne(companions[0]);
 
               // await Future.delayed(const Duration(seconds: 1));
 
               // testDatabaseWrapper.databaseWrapper.expenseRepo
-              //     .insertOne(expenses[1]);
+              //     .insertOne(companions[1]);
 
               // final subscription = stream.listen((event) {
               //   print("event: $event");
               // });
 
-              // print("what");
+              print("what");
 
               // await testDatabaseWrapper.databaseWrapper.expenseRepo
-              //     .insertAll(expenses);
+              //     .insertAll(companions);
 
               // testDatabaseWrapper.databaseWrapper.expenseRepo
-              //     .insertOne(expenses[0]);
+              //     .insertOne(companions[0]);
 
               // await Future.delayed(const Duration(seconds: 1));
 
               // testDatabaseWrapper.databaseWrapper.expenseRepo
-              //     .insertOne(expenses[1]);
+              //     .insertOne(companions[1]);
 
               // await Future.delayed(const Duration(seconds: 1));
 
               // testDatabaseWrapper.databaseWrapper.expenseRepo
-              //     .insertOne(expenses[2]);
+              //     .insertOne(companions[2]);
 
               // await Future.delayed(const Duration(seconds: 1));
 
               // testDatabaseWrapper.databaseWrapper.expenseRepo
-              //     .insertOne(expenses[3]);
+              //     .insertOne(companions[3]);
 
               // await Future.delayed(const Duration(seconds: 1));
 
               // testDatabaseWrapper.databaseWrapper.expenseRepo
-              //     .insertOne(expenses[4]);
+              //     .insertOne(companions[4]);
 
               // await Future.delayed(const Duration(seconds: 1));
 
               // testDatabaseWrapper.databaseWrapper.expenseRepo
-              //     .insertOne(expenses[5]);
+              //     .insertOne(companions[5]);
 
               // await Future.delayed(const Duration(seconds: 1));
 
               // testDatabaseWrapper.databaseWrapper.expenseRepo
-              //     .insertOne(expenses[6]);
+              //     .insertOne(companions[6]);
 
               // await Future.delayed(const Duration(seconds: 1));
 

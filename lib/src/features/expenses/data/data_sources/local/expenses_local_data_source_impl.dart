@@ -104,7 +104,7 @@ class ExpensesLocalDataSourceImpl implements ExpensesLocalDataSource {
 
 // TODO temp test
   @override
-  Stream<List<ExpenseLocalEntityData>> watchExpenses({
+  Stream<List<ExpenseLocalEntityValue>> watchExpenses({
     required GetExpensesFilterValue filter,
   }) {
     // TODO: implement watchExpenses
@@ -112,14 +112,72 @@ class ExpensesLocalDataSourceImpl implements ExpensesLocalDataSource {
 
     final select = _databaseWrapper.expenseRepo.select();
 
-    final limitedSelect = select
-      ..limit(5)
-      ..orderBy(
-          [(t) => OrderingTerm(expression: t.date, mode: OrderingMode.desc)]);
+    final joinedSelect = select.join([
+      leftOuterJoin(
+        _databaseWrapper.categoryRepo,
+        _databaseWrapper.categoryRepo.id.equalsExp(
+          _databaseWrapper.expenseRepo.categoryId,
+        ),
+      ),
+    ]);
 
-    final stream = limitedSelect.watch();
+    final minDate = filter.minDate;
+    final maxDate = filter.maxDate;
+    final limit = filter.limit;
+
+    joinedSelect.orderBy([
+      OrderingTerm(
+        expression: _databaseWrapper.expenseRepo.date,
+        // TODO if needed, it is easy to add orderBy to filter
+        mode: OrderingMode.desc,
+      ),
+    ]);
+
+    if (minDate != null) {
+      final minDateExpression =
+          _databaseWrapper.expenseRepo.date.isBiggerOrEqualValue(minDate);
+
+      joinedSelect.where(minDateExpression);
+    }
+
+    if (maxDate != null) {
+      final maxDateExpression =
+          _databaseWrapper.expenseRepo.date.isSmallerOrEqualValue(maxDate);
+
+      joinedSelect.where(maxDateExpression);
+    }
+
+    if (limit != null) {
+      joinedSelect.limit(limit);
+    }
+
+    final stream = joinedSelect.map((row) {
+      final expenseData = row.readTable(_databaseWrapper.expenseRepo);
+      final categoryData = row.readTable(_databaseWrapper.categoryRepo);
+
+      final entityValue = ExpensesConverters.toEntityValueFromEntityData(
+        expenseEntityData: expenseData,
+        categoryEntityData: categoryData,
+      );
+
+      return entityValue;
+    }).watch();
+
+    // stream.first;
 
     return stream;
+
+    // TODO this is ok if we are not joining
+    // final limitedSelect = select
+    //   ..limit(5)
+    //   ..orderBy(
+    //       [(t) => OrderingTerm(expression: t.date, mode: OrderingMode.desc)]);
+
+    // final stream = limitedSelect.watch();
+
+    // return stream;
+
+    // return Stream.fromIterable([]);
   }
 
   @override
@@ -166,6 +224,7 @@ class ExpensesLocalDataSourceImpl implements ExpensesLocalDataSource {
       // });
     }
 
+// TODO why is this not below max data
     joinedSelect.orderBy(
       [
         OrderingTerm(
