@@ -19,6 +19,10 @@ abstract interface class ExpensesRepository {
     required GetExpensesFilterValue filter,
   });
 
+  Stream<List<ExpenseModel>> watchExpenses({
+    required GetExpensesFilterValue filter,
+  });
+
   Future<ExpenseModel?> getExpenseById({
     required int id,
   });

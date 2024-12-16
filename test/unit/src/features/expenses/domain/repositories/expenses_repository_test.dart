@@ -131,6 +131,86 @@ void main() {
       );
 
       group(
+        "watchExpenses",
+        () {
+          test(
+            "given filter arguments"
+            "when [watchExpenses] is called"
+            "then should call [ExpensesLocalDataSource.watchExpenses] with expected arguments and return expected Stream<List<ExpenseModel>>",
+            () async {
+              // setup
+              final List<ExpenseLocalEntityValue> expenseEntityValues =
+                  List.generate(
+                3,
+                (index) => ExpenseLocalEntityValue(
+                  id: index,
+                  amount: index,
+                  date: DateTime.now(),
+                  category: const CategoryLocalEntityValue(
+                    id: 1,
+                    name: "general",
+                  ),
+                  note: "note$index",
+                ),
+              );
+
+              final Stream<List<ExpenseLocalEntityValue>> stream =
+                  Stream.fromIterable(
+                [
+                  expenseEntityValues,
+                ],
+              );
+
+              when(() => expensesLocalDataSource.watchExpenses(
+                  filter: any(named: "filter"))).thenAnswer((_) => stream);
+              // TODO we could do this as well
+              // ).thenAnswer((_) async* {
+              //   yield expenseEntityValues;
+              // });
+
+              // given
+              const filter = GetExpensesFilterValue();
+
+              // when
+              final Stream<List<ExpenseModel>> streamOfModels =
+                  repository.watchExpenses(
+                filter: filter,
+              );
+
+              // then
+              final expectedExpenseModels = expenseEntityValues
+                  .map(
+                    (e) => ExpenseModel(
+                      id: e.id,
+                      amount: e.amount,
+                      date: e.date,
+                      category: CategoryModel(
+                        id: e.category.id,
+                        name: e.category.name,
+                      ),
+                      note: e.note,
+                    ),
+                  )
+                  .toList();
+
+              verify(
+                () => expensesLocalDataSource.watchExpenses(
+                  filter: filter,
+                ),
+              ).called(1);
+
+              expect(
+                streamOfModels,
+                emits(expectedExpenseModels),
+              );
+
+              // cleanup
+            },
+          );
+        },
+      );
+
+      group(
         "getExpenses",
         () {
           // TODO tests for filters will be needed here
