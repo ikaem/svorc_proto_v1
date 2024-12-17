@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:svorc_proto_v1/src/features/expenses/application/bloc/cubits/get_recent_expenses/get_recent_expenses_cubit.dart';
 import 'package:svorc_proto_v1/src/features/expenses/application/controllers/get_recent_expenses/get_recent_expenses_controller.dart';
+import 'package:svorc_proto_v1/src/features/expenses/application/controllers/watch_recent_expenses/watch_recent_expenses_controller.dart';
 import 'package:svorc_proto_v1/src/features/expenses/domain/models/expense_model.dart';
 import 'package:svorc_proto_v1/src/features/expenses/presentation/expenses_screen.dart';
 import 'package:svorc_proto_v1/src/features/expenses/presentation/widgets/expense_brief_item.dart';
@@ -67,12 +68,16 @@ class HomeScreenRecentExpenses extends ConsumerWidget {
               height: 10,
             ),
             Builder(builder: (context) {
-              final AsyncValue<GetRecentExpensesControllerStateData> state =
-                  ref.watch(getRecentExpensesControllerProvider);
+              // TODO detele get recent expenses maybe? maybe not needed - we will see
+              // final AsyncValue<GetRecentExpensesControllerStateData> state =
+              //     ref.watch(getRecentExpensesControllerProvider);
+
+              final state = ref.watch(watchRecentExpensesControllerProvider);
 
               return state.when(
                 data: (data) {
-                  final List<ExpenseModel> expenses = data.expenses;
+                  final List<ExpenseModel> expenses = data?.expenses ?? [];
+
                   if (expenses.isEmpty) {
                     return const Center(
                       child: Text("No recent expenses"),
