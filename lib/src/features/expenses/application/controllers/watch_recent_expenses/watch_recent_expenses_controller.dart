@@ -31,7 +31,11 @@ class WatchRecentExpensesController extends _$WatchRecentExpensesController {
 // TODO try
     ref.onDispose(_onDispose);
 
-    Future.delayed(Duration.zero, _onSubscribeToStream);
+    // doing this to make sure that null state comes before state by stream data
+    Future.delayed(
+      Duration.zero,
+      _onSubscribeToStream,
+    );
 
     return const AsyncValue.data(null);
   }
@@ -41,7 +45,7 @@ class WatchRecentExpensesController extends _$WatchRecentExpensesController {
 
     _expensesSubscription = expensesStream.listen(
       (List<ExpenseModel> expenses) {
-        state = AsyncValue<WatchRecentExpensesControllerStateData>.data(
+        state = AsyncValue<WatchRecentExpensesControllerStateData?>.data(
           WatchRecentExpensesControllerStateData(
             expenses: expenses,
           ),
@@ -49,7 +53,7 @@ class WatchRecentExpensesController extends _$WatchRecentExpensesController {
       },
       onError: (Object error, StackTrace stackTrace) {
         // TODO not sure if this is good here
-        state = AsyncValue<WatchRecentExpensesControllerStateData>.error(
+        state = AsyncValue<WatchRecentExpensesControllerStateData?>.error(
           error,
           // making .current to match .build() rethrow state signature
           StackTrace.current,

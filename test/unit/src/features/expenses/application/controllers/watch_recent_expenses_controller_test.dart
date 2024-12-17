@@ -57,24 +57,27 @@ void main() {
                 listener.call,
                 fireImmediately: true,
               );
-
               await Future.delayed(Duration.zero);
 
               // then
-              final captured = verifyInOrder([
+              verifyInOrder([
                 () => listener(
-                      captureAny(),
-                      captureAny(),
+                      null,
+                      const AsyncData<WatchRecentExpensesControllerStateData?>(
+                        null,
+                      ),
                     ),
                 () => listener(
-                      captureAny(),
-                      captureAny(),
+                      const AsyncData<WatchRecentExpensesControllerStateData?>(
+                        null,
+                      ),
+                      AsyncData<WatchRecentExpensesControllerStateData?>(
+                        WatchRecentExpensesControllerStateData(
+                          expenses: expenses,
+                        ),
+                      ),
                     ),
-                // () => listener(
-                //       captureAny(),
-                //       captureAny(),
-                //     ),
-              ]).captured;
+              ]);
 
               verifyNoMoreInteractions(listener);
 
@@ -85,18 +88,165 @@ void main() {
               });
             },
           );
+
+          // test when stram changes - just - maybe have some delay?
+
+          test(
+            "given [WatchRecentExpensesController] has already emitted state with list of [ExpenseModel]"
+            "when [ExpensesRepository].watchExpenses emits new data"
+            "then should have the [WatchRecentExpensesController] emit new state",
+            () async {
+              // setup
+              final ProviderContainer container = ProviderContainer();
+
+              // given
+              final Stream<List<ExpenseModel>> stream =
+                  _generateDelayedStream();
+
+              when(() => expensesRepository.watchExpenses(
+                  filter: any(named: "filter"))).thenAnswer((_) => stream);
+
+              // when
+              container.listen(
+                watchRecentExpensesControllerProvider,
+                listener.call,
+                fireImmediately: true,
+              );
+
+              await Future.delayed(const Duration(milliseconds: 200));
+
+              // then
+              final List<ExpenseModel> firstBatch = expenses.sublist(0, 3);
+              final List<ExpenseModel> secondBatch = expenses.sublist(0, 5);
+
+              // final captured = verifyInOrder([
+              //   () => listener(
+              //         captureAny(),
+              //         captureAny(),
+              //       ),
+              //   () => listener(
+              //         captureAny(),
+              //         captureAny(),
+              //       ),
+              //   () => listener(
+              //         captureAny(),
+              //         captureAny(),
+              //       ),
+              // ]).captured;
+
+              verifyInOrder([
+                () => listener(
+                      null,
+                      const AsyncData<WatchRecentExpensesControllerStateData?>(
+                        null,
+                      ),
+                    ),
+                () => listener(
+                      const AsyncData<WatchRecentExpensesControllerStateData?>(
+                        null,
+                      ),
+                      AsyncData<WatchRecentExpensesControllerStateData?>(
+                        WatchRecentExpensesControllerStateData(
+                          expenses: firstBatch,
+                        ),
+                      ),
+                    ),
+                () => listener(
+                      AsyncData<WatchRecentExpensesControllerStateData?>(
+                        WatchRecentExpensesControllerStateData(
+                          expenses: firstBatch,
+                        ),
+                      ),
+                      AsyncData<WatchRecentExpensesControllerStateData?>(
+                        WatchRecentExpensesControllerStateData(
+                          expenses: secondBatch,
+                        ),
+                      ),
+                    ),
+              ]);
+
+              verifyNoMoreInteractions(listener);
+
+              // cleanup
+              addTearDown(() {
+                container.dispose();
+              });
+            },
+          );
+
+          test(
+            "given [ExpensesRepository].watchExpenses emits error"
+            "when [WatchRecentExpensesController].build() is called"
+            "then should emit states in particular order",
+            () async {
+              // setup
+              final ProviderContainer container = ProviderContainer();
+
+              // given
+              final Stream<List<ExpenseModel>> stream = _generateDelayedStream(
+                true,
+              );
+
+              when(() => expensesRepository.watchExpenses(
+                  filter: any(named: "filter"))).thenAnswer((_) => stream);
+
+              // when
+              container.listen(
+                watchRecentExpensesControllerProvider,
+                listener.call,
+                fireImmediately: true,
+              );
+
+              await Future.delayed(const Duration(milliseconds: 200));
+
+              // then
+              final List<ExpenseModel> firstBatch = expenses.sublist(0, 3);
+
+              verifyInOrder([
+                () => listener(
+                      null,
+                      const AsyncData<WatchRecentExpensesControllerStateData?>(
+                        null,
+                      ),
+                    ),
+                () => listener(
+                      const AsyncData<WatchRecentExpensesControllerStateData?>(
+                        null,
+                      ),
+                      AsyncData<WatchRecentExpensesControllerStateData?>(
+                        WatchRecentExpensesControllerStateData(
+                          expenses: firstBatch,
+                        ),
+                      ),
+                    ),
+                () => listener(
+                      AsyncData<WatchRecentExpensesControllerStateData?>(
+                        WatchRecentExpensesControllerStateData(
+                          expenses: firstBatch,
+                        ),
+                      ),
+                      any(
+                          that: isA<
+                              AsyncError<
+                                  WatchRecentExpensesControllerStateData?>>()),
+                    ),
+              ]);
+
+              verifyNoMoreInteractions(listener);
+
+              // cleanup
+              addTearDown(() {
+                container.dispose();
+              });
+            },
+          );
         },
       );
     },
   );
 
-  // test initial state - initial values in stream
+  // TODO test that subscription is cacncelled somehow - maybe mark it as visible for testing - but how to close provider manually, and then check if subscriptiion is cancelled
 
-  // test if stream emits error
-
-  // test that subscription is cacncelled somehow - maybe mark it as visible for testing - but how to close provider manually, and then check if subscriptiion is cancelled
-
-  // test when stram changes - just - maybe have some delay?
 // TODO testing only -----------
   test(
     "given <pre-condition to the test>"
@@ -105,7 +255,7 @@ void main() {
     () async {
       // setup
 
-      final stream = generateDelayedStream();
+      final stream = _generateDelayedStream();
 
       final firstBatch = expenses.sublist(0, 3);
       final secondBatch = expenses.sublist(0, 5);
@@ -164,16 +314,19 @@ final List<ExpenseModel> expenses = List.generate(
   ),
 );
 
-Stream<List<ExpenseModel>> generateDelayedStream() async* {
+Stream<List<ExpenseModel>> _generateDelayedStream([
+  bool shouldThrow = false,
+]) async* {
   final firstBatch = expenses.sublist(0, 3);
   final secondBatch = expenses.sublist(0, 5);
 
   yield firstBatch;
 
-  // await Future.delayed(const Duration(seconds: 1));
+  await Future.delayed(const Duration(milliseconds: 100));
+
+  if (shouldThrow) {
+    throw Exception("Error");
+  }
 
   yield secondBatch;
-
-  // throw
-  // throw Exception("Error");
 }
