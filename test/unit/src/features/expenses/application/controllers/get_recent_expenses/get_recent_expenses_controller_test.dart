@@ -6,6 +6,7 @@ import 'package:svorc_proto_v1/src/features/expenses/application/controllers/get
 import 'package:svorc_proto_v1/src/features/expenses/data/data_sources/local/expenses_local_data_source.dart';
 import 'package:svorc_proto_v1/src/features/expenses/domain/models/expense_model.dart';
 import 'package:svorc_proto_v1/src/features/expenses/domain/repositories/expenses_repository.dart';
+import 'package:svorc_proto_v1/src/features/expenses/domain/values/get_expenses_filter_value.dart';
 import 'package:svorc_proto_v1/src/features/reports/application/controllers/get_current_month_balances/get_current_month_balances_controller.dart';
 import 'package:svorc_proto_v1/src/wrappers/get_it/get_it_wrapper.dart';
 

@@ -7,6 +7,7 @@ import 'package:svorc_proto_v1/src/features/expenses/domain/models/expense_model
 import 'package:svorc_proto_v1/src/features/expenses/domain/repositories/expenses_repository.dart';
 import 'package:svorc_proto_v1/src/features/expenses/domain/repositories/expenses_repository_impl.dart';
 import 'package:svorc_proto_v1/src/features/expenses/domain/values/expense_local_entity_value.dart';
+import 'package:svorc_proto_v1/src/features/expenses/domain/values/get_expenses_filter_value.dart';
 import 'package:svorc_proto_v1/src/features/expenses/domain/values/new_expense_local_value.dart';
 
 void main() {

@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:svorc_proto_v1/src/features/expenses/domain/values/expense_local_entity_value.dart';
+import 'package:svorc_proto_v1/src/features/expenses/domain/values/get_expenses_filter_value.dart';
 import 'package:svorc_proto_v1/src/features/expenses/domain/values/new_expense_local_value.dart';
 import 'package:svorc_proto_v1/src/wrappers/drift/drift_app_database/drift_app_database.dart';
 
@@ -39,20 +40,4 @@ abstract interface class ExpensesLocalDataSource {
   Future<int> deleteExpense({
     required int id,
   });
-}
-
-// TODO move to values folder
-class GetExpensesFilterValue extends Equatable {
-  const GetExpensesFilterValue({
-    this.minDate,
-    this.maxDate,
-    this.limit,
-  });
-
-  final DateTime? minDate;
-  final DateTime? maxDate;
-  final int? limit;
-
-  @override
-  List<Object?> get props => [minDate, maxDate];
 }

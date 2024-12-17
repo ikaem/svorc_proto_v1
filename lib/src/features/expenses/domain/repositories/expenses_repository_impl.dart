@@ -3,6 +3,7 @@ import 'package:svorc_proto_v1/src/features/expenses/data/data_sources/local/exp
 import 'package:svorc_proto_v1/src/features/expenses/domain/models/expense_model.dart';
 import 'package:svorc_proto_v1/src/features/expenses/domain/repositories/expenses_repository.dart';
 import 'package:svorc_proto_v1/src/features/expenses/domain/values/expense_local_entity_value.dart';
+import 'package:svorc_proto_v1/src/features/expenses/domain/values/get_expenses_filter_value.dart';
 import 'package:svorc_proto_v1/src/features/expenses/domain/values/new_expense_local_value.dart';
 import 'package:svorc_proto_v1/src/features/expenses/utils/converters/expenses_converters.dart';
 import 'package:svorc_proto_v1/src/wrappers/drift/drift_app_database/drift_app_database.dart';

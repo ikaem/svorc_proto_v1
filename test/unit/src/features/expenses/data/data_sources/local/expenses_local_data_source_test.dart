@@ -4,6 +4,7 @@ import 'package:svorc_proto_v1/src/features/categories/domain/values/category_lo
 import 'package:svorc_proto_v1/src/features/expenses/data/data_sources/local/expenses_local_data_source.dart';
 import 'package:svorc_proto_v1/src/features/expenses/data/data_sources/local/expenses_local_data_source_impl.dart';
 import 'package:svorc_proto_v1/src/features/expenses/domain/values/expense_local_entity_value.dart';
+import 'package:svorc_proto_v1/src/features/expenses/domain/values/get_expenses_filter_value.dart';
 import 'package:svorc_proto_v1/src/features/expenses/domain/values/new_expense_local_value.dart';
 import 'package:svorc_proto_v1/src/features/expenses/utils/converters/expenses_converters.dart';
 import 'package:svorc_proto_v1/src/features/period_daily_budgets/utils/extensions/date_time_extensions.dart';

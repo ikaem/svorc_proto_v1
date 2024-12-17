@@ -5,6 +5,7 @@ import 'package:svorc_proto_v1/src/features/expenses/data/data_sources/local/exp
 import 'package:svorc_proto_v1/src/features/expenses/domain/models/expense_model.dart';
 import 'package:svorc_proto_v1/src/features/expenses/domain/repositories/expenses_repository.dart';
 import 'package:svorc_proto_v1/src/features/expenses/domain/use_cases/get_recent_expenses_use_case.dart';
+import 'package:svorc_proto_v1/src/features/expenses/domain/values/get_expenses_filter_value.dart';
 
 void main() {
   final ExpensesRepository expensesRepository = _MockExpensesRepository();
