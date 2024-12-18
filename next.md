@@ -1,4 +1,8 @@
-1. finsih tes use case
+1. 
+- actually test controller
+-- test appending data 
+-- test when error
+-- test whhen no error
 
 
 

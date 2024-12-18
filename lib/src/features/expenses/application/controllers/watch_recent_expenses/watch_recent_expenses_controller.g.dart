@@ -7,7 +7,7 @@ part of 'watch_recent_expenses_controller.dart';
 // **************************************************************************
 
 String _$watchRecentExpensesControllerHash() =>
-    r'1955c9292f6185f6fa5158874eb08b5ce4bc4d57';
+    r'75f4238a2a20fbe719a3dd535fa093ec24bbceb4';
 
 /// See also [WatchRecentExpensesController].
 @ProviderFor(WatchRecentExpensesController)
